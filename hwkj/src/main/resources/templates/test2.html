@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/demo/demo.css">
+    <script type="text/javascript" src="easyUi/jquery.min.js"></script>
+    <script type="text/javascript" src="easyUi/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="easyUi/locale/easyui-lang-zh_CN.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<input id="txtNumber" name="txtNumber" type="text" />
+<input id="btnValidation" name="btnValidation" type="button" value="校验" onclick="validation()" />
+验证结果：<label id="labResult" ></label>
+<div>
+    <div>
+        <!--<input class="easyui-validatebox"/>-->
+    </div>
+
+    <script type="text/javascript">
+        /*$(function () {
+            //var reg=/^[0-9 |3 |-3]/;
+            var reg = /^(\-|\+)?\d+(\.\d+)?$/;
+            $.extend($.fn.validatebox.defaults.rules,{
+                minLength:{
+                    validator:function () {
+                        
+                    }
+                },
+                message:'提示信息',
+            })
+        })*/
+        function validation() {
+            var val = document.getElementById("txtNumber").value;
+            var regu = /^(\-|\+)?\d+(\.\d+)?$/;
+            if (val != "") {
+                if (!regu.test(val)) {
+                    document.getElementById("labResult").style.color = "red";
+                    document.getElementById("labResult").innerHTML = "验证失败！";
+                } else {
+                    document.getElementById("labResult").style.color = "green";
+                    document.getElementById("labResult").innerHTML = "验证成功！";
+                }
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

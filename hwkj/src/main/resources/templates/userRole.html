@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <input type="text" id="job_Number" class="easyui-textbox" style="width: 240px;height: 25px" label="员工工号:">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" id="role_Name" class="easyui-textbox" style="width: 240px;height: 25px" label="角色名称:">
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <!--<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newUserRole()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;-->
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <!--<a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;-->
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="job_Number" class="easyui-textbox" style="width: 280px;height: 25px" readonly="readonly"  label="员工工号:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="queryRole_Name" name="role_Name" class="easyui-combobox" style="width: 280px;height: 25px" required="true" data-options="valueField:'role_Name',textField:'role_Name'" label="角色名称:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="user_Role_Id" type="hidden" class="easyui-textbox"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryUserRoleFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    /*if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }*/
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    /*if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }*/
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'user_Role_Id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'job_Number',title:'员工工号',width:'50%',align:'center',titleAlign: true},
+                        {field:'role_Name',title:'角色名称',width:'50%',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryUserRole.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Job_Number:$("#job_Number").val(),Role_Name:$("#role_Name").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page,rows,Job_Number,Role_Name) {//分页触发
+                 findOption(page,rows,Job_Number,Role_Name);
+                }
+            })
+        })
+    });
+    function findOption(page,rows,Job_Number,Role_Name)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Job_Number:Job_Number,Role_Name:Role_Name});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryUserRole.do",
+            data : {
+                page : page,
+                rows : rows,
+                Job_Number:Job_Number,
+                Role_Name:Role_Name,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var User_Role_Id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            if(checked.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+                return ;
+            }
+            url = 'userRoleUpdate.do';
+            $.ajax({
+                url:"queryAllRole.do",
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    $("#queryRole_Name").combobox("loadData",data.listRole);
+                },
+            })
+        }
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息", "更新数据成功!", "info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="NoUpdateOrExist"){
+                    $.messager.alert("提示信息", "请选择更新内容或更新的数据已存在!", "warning");
+                }
+                else {
+                    $.messager.alert("提示信息", "更新数据失败,请稍后尝试或联系管理员!", "error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息", "更新数据失败,请稍后尝试或联系管理员!", "error");
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            User_Role_Id=[];
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                User_Role_Id.push(item.user_Role_Id);
+            });
+            url = 'userRoleRemove.do';
+        }
+    }
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{User_Role_Id:User_Role_Id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                };
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+</script>
+</body>
+</html>

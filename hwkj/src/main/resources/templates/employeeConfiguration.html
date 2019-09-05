@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body easyui-layout>
+<div title="" data-options="region:'north'" style="width: 980px;height: 80px">
+    <div>
+        <h1 style="text-align: center;font-size: 24px;font-family: 微软雅黑">欢迎进入海潍员工配置界面</h1>
+    </div>
+</div>
+<div data-options="region:'center'">
+    <div>
+        <form>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" id="name" name="name" style="width: 230px" required="true" label="姓名:">
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" id="job_Number" name="job_Number" style="width: 230px" required="true" label="工号:">
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" type="password" id="password" name="password" style="width: 230px" required="true" label="密码:">
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-textbox" id="macAddress" name="macAddress" style="width: 230px" required="true" label="电脑物理地址:">
+            </div>
+            <div style="margin-bottom:20px">
+                <span>HomePage:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>HR:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <input class="easyui-checkbox" id="OrgData" name="OrgData" value="hr.do" label="OrgData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-checkbox" id="TitleData" name="TitleData" value="titleData.do" label="TitleData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-checkbox" id="EmployeePersonalData" name="EmployeePersonalData" value="employeePersonalData.do" label="EmployeePersonalData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-checkbox" id="EmployeeDepartmentData" name="EmployeeDepartmentData" value="employeeDepartmentData.do" label="EmployeeDepartmentData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-checkbox" id="EmployeeQualificationData" name="EmployeeQualificationData" value="" label="EmployeeQualificationData">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-checkbox" id="EmployeePerformance" name="EmployeePerformance" value="" label="EmployeePerformance">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="easyui-checkbox" id="EmployeeDataSearch" name="EmployeeDataSearch" value="employeeDataSearch.do" label="EmployeeDataSearch">
+            </div>
+            <div style="margin-bottom:20px">
+                <span>CRM:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Project:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Engineering:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Quote:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>PO:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Forecast:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>PIR:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>WO:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>QA:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>WH:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Production:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Logistics:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>Service:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <span>PM:</span>
+            </div>
+            <div style="margin-bottom:20px">
+                <input id="button" class="easyui-textbox" type="button" iconCls="icon-ok" value="Save"  style="width: 90px ;"/>
+                <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="Save()" style="width:90px">Save</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    function Save() {
+        $.ajax({
+            url:"saveEmployeeConfiguration.do",
+            type:"post",
+            data:{
+                name:$("#name").val(),
+                job_Number:$("#job_Number").val(),
+                password:$("#password").val(),
+                macAddress:$("#macAddress").val(),
+                OrgData:$("#OrgData").val(),
+                TitleData:$("#TitleData").val(),
+                EmployeePersonalData:$("#EmployeePersonalData").val(),
+                EmployeeDepartmentData:$("#EmployeeDepartmentData").val(),
+                EmployeeQualificationData:$("#EmployeeQualificationData").val(),
+                EmployeePerformance:$("#EmployeePerformance").val(),
+                EmployeeDataSearch:$("#EmployeeDataSearch").val(),
+            },
+            dataType:"json",
+            success:function (data) {
+
+            },
+            error:function (err) {
+
+            },
+        })
+    }
+</script>
+</body>
+</html>

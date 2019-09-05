@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.Engineering.MachineDataDao">
+    <insert id="insertMachineData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.Engineering.MachineData">
+        insert into hwkj_machine_data
+        (Machine_Name,Machine_Type,Brand,Model_Number,Size,Country_Origin,Described,
+        Machine_Tool_Accuracy_Grade,Max_Machining_Size,Min_Machining_Size,Track_Travel,
+        Machining_Product,Equipment_Advantages,Tool_Magazine_Type,Spindle_Cone_Hole_Type,
+        Speed_Type,Speed_Unit,Max_Speed,Max_Pressure,Air_Type,Rated_Pressure,Unit_Gas_Consumption,
+        Rated_Voltage,Current_Rating,Power_Rating,Contour_Size,Weight,Manufacturer_Abbreviation,
+        Factory_Time,Life_Cycle_State,Drawing,Specification,Photo,Remark,Creator,Create_Date)
+        values
+        (#{Machine_Name},#{Machine_Type},#{Brand},#{Model_Number},#{Size},#{Country_Origin},#{Described},
+        #{Machine_Tool_Accuracy_Grade},#{Max_Machining_Size},#{Min_Machining_Size},#{Track_Travel},
+        #{Machining_Product},#{Equipment_Advantages},#{Tool_Magazine_Type},#{Spindle_Cone_Hole_Type},
+        #{Speed_Type},#{Speed_Unit},#{Max_Speed},#{Max_Pressure},#{Air_Type},#{Rated_Pressure},#{Unit_Gas_Consumption},
+        #{Rated_Voltage},#{Current_Rating},#{Power_Rating},#{Contour_Size},#{Weight},#{Manufacturer_Abbreviation},
+        #{Factory_Time},#{Life_Cycle_State},#{Drawing},#{Specification},#{Photo},#{Remark},
+        #{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteMachineData">
+        delete from hwkj_machine_data where Id=#{Id}
+    </delete>
+    <update id="updateMachineData" parameterType="hwkj.hwkj.entity.Engineering.MachineData">
+        update hwkj_machine_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Machine_Name!=null and Machine_Name!=''">Machine_Name=#{Machine_Name},</if>
+            <if test="Machine_Type!=null and Machine_Type!=''">Machine_Type=#{Machine_Type},</if>
+            <if test="Brand!=null and Brand!=''">Brand=#{Brand},</if>
+            <if test="Model_Number!=null and Model_Number!=''">Model_Number=#{Model_Number},</if>
+            <if test="Size!=null and Size!=''">Size=#{Size},</if>
+            <if test="Country_Origin!=null and Country_Origin!=''">Country_Origin=#{Country_Origin},</if>
+            <if test="Described!=null and Described!=''">Described=#{Described},</if>
+            <if test="Machine_Tool_Accuracy_Grade!=null and Machine_Tool_Accuracy_Grade!=''">Machine_Tool_Accuracy_Grade=#{Machine_Tool_Accuracy_Grade},</if>
+            <if test="Max_Machining_Size!=null and Max_Machining_Size!=''">Max_Machining_Size=#{Max_Machining_Size},</if>
+            <if test="Min_Machining_Size!=null and Min_Machining_Size!=''">Min_Machining_Size=#{Min_Machining_Size},</if>
+            <if test="Track_Travel!=null and Track_Travel!=''">Track_Travel=#{Track_Travel},</if>
+            <if test="Machining_Product!=null and Machining_Product!=''">Machining_Product=#{Machining_Product},</if>
+            <if test="Equipment_Advantages!=null and Equipment_Advantages!=''">Equipment_Advantages=#{Equipment_Advantages},</if>
+            <if test="Tool_Magazine_Type!=null and Tool_Magazine_Type!=''">Tool_Magazine_Type=#{Tool_Magazine_Type},</if>
+            <if test="Spindle_Cone_Hole_Type!=null and Spindle_Cone_Hole_Type!=''">Spindle_Cone_Hole_Type=#{Spindle_Cone_Hole_Type},</if>
+            <if test="Speed_Type!=null and Speed_Type!=''">Speed_Type=#{Speed_Type},</if>
+            <if test="Speed_Unit!=null and Speed_Unit!=''">Speed_Unit=#{Speed_Unit},</if>
+            <if test="Max_Speed!=null and Max_Speed!=''">Max_Speed=#{Max_Speed},</if>
+            <if test="Max_Pressure!=null and Max_Pressure!=''">Max_Pressure=#{Max_Pressure},</if>
+            <if test="Air_Type!=null and Air_Type!=''">Air_Type=#{Air_Type},</if>
+            <if test="Rated_Pressure!=null and Rated_Pressure!=''">Rated_Pressure=#{Rated_Pressure},</if>
+            <if test="Unit_Gas_Consumption!=null and Unit_Gas_Consumption!=''">Unit_Gas_Consumption=#{Unit_Gas_Consumption},</if>
+            <if test="Rated_Voltage!=null and Rated_Voltage!=''">Rated_Voltage=#{Rated_Voltage},</if>
+            <if test="Current_Rating!=null and Current_Rating!=''">Current_Rating=#{Current_Rating},</if>
+            <if test="Power_Rating!=null and Power_Rating!=''">Power_Rating=#{Power_Rating},</if>
+            <if test="Contour_Size!=null and Contour_Size!=''">Contour_Size=#{Contour_Size},</if>
+            <if test="Weight!=null and Weight!=''">Weight=#{Weight},</if>
+            <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">Manufacturer_Abbreviation=#{Manufacturer_Abbreviation},</if>
+            <if test="Factory_Time!=null and Factory_Time!=''">Factory_Time=#{Factory_Time},</if>
+            <if test="Life_Cycle_State!=null and Life_Cycle_State!=''">Life_Cycle_State=#{Life_Cycle_State},</if>
+            <if test="Drawing!=null and Drawing!=''">Drawing=#{Drawing},</if>
+            <if test="Specification!=null and Specification!=''">Specification=#{Specification},</if>
+            <if test="Photo!=null and Photo!=''">Photo=#{Photo},</if>
+            <if test="Remark!=null and Remark!=''">Remark=#{Remark},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryMachineDataList" resultType="hwkj.hwkj.entity.Engineering.MachineData">
+        select * from hwkj_machine_data where 1=1
+        <if test="machineDataPageModel.page!=null and machineDataPageModel.rows!=null"></if>
+        <if test="machineData.Machine_Type!=null and machineData.Machine_Type!=''">and Machine_Type=#{machineData.Machine_Type}</if>
+        <if test="machineData.Machine_Name!=null and machineData.Machine_Name!=''">and Machine_Name=#{machineData.Machine_Name}</if>
+        <if test="machineData.Brand!=null and machineData.Brand!=''">and Brand=#{machineData.Brand}</if>
+        <if test="machineData.Model_Number!=null and machineData.Model_Number!=''">and Model_Number=#{machineData.Model_Number}</if>
+        <if test="machineData.Size!=null and machineData.Size!=''">and Size=#{machineData.Size}</if>
+        order by Id limit #{machineDataPageModel.startRow},#{machineDataPageModel.rows}
+    </select>
+    <select id="queryMachineDataCount" resultType="int">
+        select count(*) from hwkj_machine_data where 1=1
+        <if test="machineDataPageModel.page!=null and machineDataPageModel.rows!=null"></if>
+        <if test="machineData.Machine_Type!=null and machineData.Machine_Type!=''">and Machine_Type=#{machineData.Machine_Type}</if>
+        <if test="machineData.Machine_Name!=null and machineData.Machine_Name!=''">and Machine_Name=#{machineData.Machine_Name}</if>
+        <if test="machineData.Brand!=null and machineData.Brand!=''">and Brand=#{machineData.Brand}</if>
+        <if test="machineData.Model_Number!=null and machineData.Model_Number!=''">and Model_Number=#{machineData.Model_Number}</if>
+        <if test="machineData.Size!=null and machineData.Size!=''">and Size=#{machineData.Size}</if>
+    </select>
+    <select id="queryMachineDataById" resultType="hwkj.hwkj.entity.Engineering.MachineData">
+        select * from hwkj_machine_data where Id=#{Id}
+    </select>
+    <select id="queryMachineDataForDownLoadAll" resultType="hwkj.hwkj.entity.Engineering.MachineData">
+        select * from hwkj_machine_data where 1=1
+        <if test="machineData.Machine_Type!=null and machineData.Machine_Type!=''">and Machine_Type=#{machineData.Machine_Type}</if>
+        <if test="machineData.Machine_Name!=null and machineData.Machine_Name!=''">and Machine_Name=#{machineData.Machine_Name}</if>
+        <if test="machineData.Brand!=null and machineData.Brand!=''">and Brand=#{machineData.Brand}</if>
+        <if test="machineData.Model_Number!=null and machineData.Model_Number!=''">and Model_Number=#{machineData.Model_Number}</if>
+        <if test="machineData.Size!=null and machineData.Size!=''">and Size=#{machineData.Size}</if>
+        order by Id
+    </select>
+    <select id="queryMachineDataForDownLoad" resultType="hwkj.hwkj.entity.Engineering.MachineData">
+        select * from hwkj_machine_data where Id=#{Id}
+    </select>
+    <select id="queryMachineDataForExist" parameterType="hwkj.hwkj.entity.Engineering.MachineData" resultType="int">
+        select count(*) from hwkj_machine_data where 1=1
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+        <if test="Model_Number!=null and Model_Number!=''">and Model_Number=#{Model_Number}</if>
+        <if test="Size!=null and Size!=''">and Size=#{Size}</if>
+    </select>
+</mapper>

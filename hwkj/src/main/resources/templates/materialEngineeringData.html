@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">料号:</span>
+        <input id="material_Number" class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">制造商料号:</span>
+        <input id="manufacturer_Material_Number"class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">规格:</span>
+        <input id="size"class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">型号:</span>
+        <input id="model_Number"class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">建立时间&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input id="date_From"class="easyui-datebox" style="width: 110px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">To:</span>
+        <input id="date_To"class="easyui-datebox" style="width: 110px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">类别:</span>
+        <input id="category" class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">物料类型&nbsp;&nbsp;&nbsp;:</span>
+        <input id="material_Type" class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">品牌:</span>
+        <input id="brand" class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <!--<span style="font-size: 10px">状态:</span>
+        <select id="status" class="easyui-combobox" style="width: 90px;height: 25px">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>&nbsp;&nbsp;&nbsp;-->
+        <span style="font-size: 10px">生命周期状态:</span>
+        <select id="life_Cycle_State" class="easyui-combobox" style="width: 110px;height: 25px">
+            <option></option>
+            <option>研发中</option>
+            <option>导入中</option>
+            <option>试产中</option>
+            <option>量产中</option>
+            <option>EOL</option>
+        </select>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newMaterialEngineeringData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="fileUpload" href="javascript:void(0)" class="easyui-linkbutton" onclick="FileUpload()" style="width:90px"><span style="align-content: center">图片上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px;height: 700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="material_Number_Add" name="material_Number" class="easyui-textbox" style="width: 230px" required="true" label="HW料号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="brand_Add" name="brand" class="easyui-combobox" style="width: 230px;" required="true" data-options="valueField:'brand',textField:'brand'" label="品牌:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="version" class="easyui-textbox" style="width: 230px" required="required" label="HW版本:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="manufacturer_Abbreviation_Add" name="manufacturer_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true"  label="制造商简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="product_Name_Add" name="product_Name" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'product_Name',textField:'product_Name'" label="品名:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="category_Add" name="category" class="easyui-textbox" style="width: 230px;" required="true" label="类别:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <select id="material_Type_Add" name="material_Type" class="easyui-combobox" style="width: 230px" required="true" label="物料类型:">
+                    <option>产品</option>
+                    <option>服务</option>
+                    <option>软体</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="manufacturer_Material_Number" class="easyui-textbox" style="width: 230px;" required="true" label="制造商料号:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="size_Add" name="size" class="easyui-textbox" style="width: 230px" required="true" label="规格/尺寸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="country_Origin_Add" name="country_Origin" class="easyui-textbox" style="width: 230px;" required="true"  label="原产地:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="texture_Material" class="easyui-textbox" style="width: 230px"  label="材质:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="quantity_Unit_Add" name="quantity_Unit" class="easyui-textbox" style="width: 230px;" required="true" label="数量单位:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="model_Number_Add" name="model_Number" class="easyui-textbox" style="width: 230px" required="true" label="型号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="net_Weight_Add" name="net_Weight" class="easyui-textbox" style="width: 230px;"  label="净重:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="volume_Add" name="volume" class="easyui-textbox" data-options="prompt:'请输入整数'" style="width: 230px"  label="材积(cm3):" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="gross_Weight_Add" name="gross_Weight" class="easyui-textbox" style="width: 230px;"  label="毛重:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="standard_Packing_Method" class="easyui-textbox" style="width: 230px"  label="标准包装方式:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="weight_Unit" class="easyui-textbox" style="width: 230px;" required="true" label="重量单位:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="packaging" class="easyui-textbox" style="width: 230px" required="true" label="包装材料:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="life_Cycle_State" class="easyui-combobox" style="width: 230px;" required="true" label="生命周期状态:">
+                    <option></option>
+                    <option>研发中</option>
+                    <option>导入中</option>
+                    <option>试产中</option>
+                    <option>量产中</option>
+                    <option>EOL</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="force_Time" class="easyui-datebox" style="width: 230px" required="true" label="生效时间:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="failure_Time" class="easyui-datebox" style="width: 230px;" required="true" label="失效时间:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="minimum_Packing_Capacity_Add" name="minimum_Packing_Capacity" class="easyui-textbox" style="width: 230px"  label="最小包装量:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="package_Quantity_Add" name="package_Quantity" class="easyui-textbox" style="width: 230px;" required="true" label="包装数量:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="drawing_Files" class="easyui-filebox" multiple="true" style="width: 230px" label="图纸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="specification_Files" class="easyui-filebox" multiple="true" style="width: 230px"  label="规格书:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="photo_Files" class="easyui-filebox" multiple="true" data-options="prompt:'文件上传'" style="width: 230px" required="true" label="照片:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <span>描述:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input name="described" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>备注:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input name="remark" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px;height: 700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="material_Number_Update" name="material_Number" class="easyui-textbox" style="width: 230px" required="true"  label="HW料号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="brand_Update" name="brand" class="easyui-combobox" style="width: 230px;" required="true" data-options="valueField:'brand',textField:'brand'"  label="品牌:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="version_Update" name="version" class="easyui-textbox" style="width: 230px"  label="HW版本:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="manufacturer_Abbreviation_Update" name="manufacturer_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true"  label="制造商简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="product_Name_Update" name="product_Name" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'product_Name',textField:'product_Name'" label="品名:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="category_Update" name="category" class="easyui-textbox" style="width: 230px;" required="true"  label="类别:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <select id="material_Type_Update" name="material_Type" class="easyui-combobox" style="width: 230px" required="true"  label="物料类型:">
+                    <option>产品</option>
+                    <option>服务</option>
+                    <option>软体</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="manufacturer_Material_Number_Update" name="manufacturer_Material_Number" class="easyui-textbox" style="width: 230px;"  label="制造商料号:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="size_Update" name="size" class="easyui-textbox" style="width: 230px" required="true"  label="规格/尺寸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="country_Origin_Update" name="country_Origin" class="easyui-textbox" style="width: 230px;" required="true" label="原产地:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="texture_Material_Update" name="texture_Material" class="easyui-textbox" style="width: 230px"  label="材质:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="quantity_Unit_Update" name="quantity_Unit" class="easyui-textbox" style="width: 230px;" required="true" label="数量单位:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="model_Number_Update" name="model_Number" class="easyui-textbox" style="width: 230px" required="true"  label="型号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="net_Weight_Update" name="net_Weight" class="easyui-textbox" style="width: 230px;" label="净重:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="volume_Update" name="volume" class="easyui-textbox" style="width: 230px"  label="材积(cm3):" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="gross_Weight_Update" name="gross_Weight" class="easyui-textbox" style="width: 230px;"  label="毛重:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="standard_Packing_Method_Update" name="standard_Packing_Method" class="easyui-textbox" style="width: 230px"  label="标准包装方式:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="weight_Unit_Update" name="weight_Unit" class="easyui-textbox" style="width: 230px;" required="true" label="重量单位:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="packaging_Update" name="packaging" class="easyui-textbox" style="width: 230px"  label="包装材料:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="life_Cycle_State_Update" name="life_Cycle_State" class="easyui-combobox" style="width: 230px;" required="true" label="生命周期状态:">
+                    <option></option>
+                    <option>研发中</option>
+                    <option>导入中</option>
+                    <option>试产中</option>
+                    <option>量产中</option>
+                    <option>EOL</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="force_Time_Update" name="force_Time" class="easyui-datebox" style="width: 230px" required="true" label="生效时间:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="failure_Time_Update" name="failure_Time" class="easyui-datebox" style="width: 230px;" required="true" label="失效时间:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="minimum_Packing_Capacity_Update" name="minimum_Packing_Capacity" class="easyui-textbox" style="width: 230px" label="最小包装量:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="package_Quantity_Update" name="package_Quantity" class="easyui-textbox" style="width: 230px;" required="true" label="包装数量:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>描述:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="described_Update" name="described" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>备注:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="remark_Update" name="remark" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="id_Update" name="id" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg4" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons4'">
+        <form id="fm4" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="material_Number" class="easyui-textbox" style="width: 230px" required="true" label="HW料号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="version" class="easyui-textbox" style="width: 230px"  label="HW版本:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="drawing_Files" class="easyui-filebox" multiple="true" style="width: 230px" label="图纸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="specification_Files" class="easyui-filebox" multiple="true" style="width: 230px"  label="规格书:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="photo_Files" class="easyui-filebox" multiple="true"  style="width: 230px"  label="照片:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons4">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser4()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg4').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<div style="display: none">
+    <div id="photo" class="datagrid-toolbar" style="padding:5px;">
+        <img id="img" src="" alt="">
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryMaterialEngineeringDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    /**
+     * 净重部分
+     */
+    $(function () {
+        $("#net_Weight_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#net_Weight_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 材积部分
+     */
+    $(function () {
+        $("#volume_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#volume_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 毛重部分
+     */
+    $(function () {
+        $("#gross_Weight_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#gross_Weight_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 最小包装量部分
+     */
+    $(function () {
+        $("#minimum_Packing_Capacity_Add").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#minimum_Packing_Capacity_Update").numberbox({
+            min: 0,
+        });
+    });
+    /**
+     * 包装数量部分
+     */
+    $(function () {
+        $("#package_Quantity_Add").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#package_Quantity_Update").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#brand_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Brand=$("#brand_Add").combobox('getText');
+                $.ajax({
+                    url:"queryMaterialEngineeringDataForBrand.do",
+                    type:"post",
+                    data:{Brand:Brand},
+                    dataType:"json",
+                    success:function (data) {
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#manufacturer_Abbreviation_Add").textbox("setValue",(data.vendorCodeList)[0].vendor_Chinese_Abbreviation);
+                        $("#country_Origin_Add").textbox("setValue",(data.vendorCodeList)[0].city);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#product_Name_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Product_Name=$("#product_Name_Add").combobox('getText');
+                $.ajax({
+                    url:"queryMaterialEngineeringDataForProductName.do",
+                    type:"post",
+                    data:{Product_Name:Product_Name},
+                    dataType:"json",
+                    success:function (data) {
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#category_Add").textbox("setValue",(data.commodityList)[0].category);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#brand_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Brand=$("#brand_Update").combobox('getText');
+                $.ajax({
+                    url:"queryMaterialEngineeringDataForBrand.do",
+                    type:"post",
+                    data:{Brand:Brand},
+                    dataType:"json",
+                    success:function (data) {
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#manufacturer_Abbreviation_Update").textbox("setValue",(data.vendorCodeList)[0].vendor_Chinese_Abbreviation);
+                        $("#country_Origin_Update").textbox("setValue",(data.vendorCodeList)[0].city);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#product_Name_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Product_Name=$("#product_Name_Update").combobox('getText');
+                $.ajax({
+                    url:"queryMaterialEngineeringDataForProductName.do",
+                    type:"post",
+                    data:{Product_Name:Product_Name},
+                    dataType:"json",
+                    success:function (data) {
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#category_Update").textbox("setValue",(data.commodityList)[0].category);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'material_Number',title:'料号',align:'center',width:'100px',titleAlign: true},
+                        {field:'version',title:'版本',align:'center',width:'100px',titleAlign: true},
+                        {field:'product_Name',title:'品名',align:'center',width:'100px',titleAlign: true},
+                        {field:'material_Type',title:'物料类型',align:'center',width:'100px',titleAlign: true},
+                        {field:'category',title:'类别',align:'center',width:'100px',titleAlign: true},
+                        {field:'size',title:'规格/尺寸',align:'center',width:'100px',titleAlign: true},
+                        {field:'texture_Material',title:'材质',align:'center',width:'100px',titleAlign: true},
+                        {field:'model_Number',title:'型号',align:'center',width:'100px',titleAlign: true},
+                        {field:'described',title:'描述',align:'center',width:'200px',titleAlign: true},
+                        {field:'brand',title:'品牌',align:'center',titleAlign: true},
+                        {field:'manufacturer_Abbreviation',title:'制造商简称',align:'center',titleAlign: true},
+                        {field:'manufacturer_Material_Number',title:'制造商料号',align:'center',titleAlign: true},
+                        {field:'country_Origin',title:'原产地',align:'center',titleAlign: true},
+                        {field:'drawing',title:'图纸',align:'center',titleAlign: true,formatter:showDrawing},
+                        {field:'specification',title:'规格书',align:'center',titleAlign: true,formatter:showSpecification},
+                        {field:'photo',title:'图片',align:'center',titleAlign: true,formatter:showPhoto},
+                        {field:'quantity_Unit',title:'数量单位',align:'center',titleAlign: true},
+                        {field:'net_Weight',title:'净重',align:'center',titleAlign: true},
+                        {field:'gross_Weight',title:'毛重',align:'center',titleAlign: true},
+                        {field:'weight_Unit',title:'重量单位',align:'center',titleAlign: true},
+                        {field:'volume',title:'材积cm3',align:'center',titleAlign: true},
+                        {field:'packaging',title:'包装材料',align:'center',titleAlign: true},
+                        {field:'minimum_Packing_Capacity',title:'最小包装量',align:'center',titleAlign: true},
+                        {field:'standard_Packing_Method',title:'标准包装方式',align:'center',titleAlign: true},
+                        {field:'life_Cycle_State',title:'生命周期状态',align:'center',titleAlign: true},
+                        {field:'package_Quantity',title:'包装数量',align:'center',titleAlign: true},
+                        {field:'force_Time',title:'生效时间',align:'center',width:'100px',titleAlign: true},
+                        {field:'failure_Time',title:'失效时间',align:'center',width:'100px',titleAlign: true},
+                        {field:'status',title:'有效状态',align:'center',titleAlign: true},
+                        {field:'remark',title:'备注',align:'center',width:'200px',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryMaterialEngineeringData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Material_Number:$("#material_Number").val(),Manufacturer_Material_Number:$("#manufacturer_Material_Number").val(),
+                            Size:$("#size").val(),Model_Number:$("#model_Number").val(),Date_From:$("#date_From").val(),Date_To:$("#date_To").val(),
+                            Material_Type:$("#material_Type").val(),Category:$("#category").val(),Brand:$("#brand").val(),Life_Cycle_State:$("#life_Cycle_State").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                nowrap:false,//换行
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Material_Number,Manufacturer_Material_Number,Size,Model_Number,Date_From,Date_To,Material_Type,Category,Brand,Life_Cycle_State){//分页触发
+                 findOption(page, rows,Material_Number,Manufacturer_Material_Number,Size,Model_Number,Date_From,Date_To,Material_Type,Category,Brand,Life_Cycle_State);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Material_Number,Manufacturer_Material_Number,Size,Model_Number,Date_From,Date_To,Material_Type,Category,Brand,Life_Cycle_State)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Material_Number:Material_Number,Manufacturer_Material_Number:Manufacturer_Material_Number,
+                                                Size:Size,Model_Number:Model_Number,Date_From:Date_From,Date_To:Date_To,Material_Type:Material_Type,Category:Category,
+                                                Brand:Brand,Life_Cycle_State:Life_Cycle_State});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryMaterialEngineeringData.do",
+            data : {
+                page:page,
+                rows:rows,
+                Material_Number:Material_Number,
+                Manufacturer_Material_Number:Manufacturer_Material_Number,
+                Size:Size,
+                Model_Number:Model_Number,
+                Date_From:Date_From,
+                Date_To:Date_To,
+                Material_Type:Material_Type,
+                Category:Category,
+                Brand:Brand,
+                Life_Cycle_State:Life_Cycle_State,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    var Old_Material_Number;
+    var Old_Version;
+    var Old_Manufacturer_Abbreviation;
+    var Old_Manufacturer_Material_Number;
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            Old_Material_Number="";
+            Old_Version="";
+            Old_Manufacturer_Abbreviation="";
+            Old_Manufacturer_Material_Number="";
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            url = 'materialEngineeringDataUpdate.do';
+            Old_Material_Number=checked[0].material_Number;
+            Old_Version=checked[0].version;
+            Old_Manufacturer_Abbreviation=checked[0].manufacturer_Abbreviation;
+            Old_Manufacturer_Material_Number=checked[0].manufacturer_Material_Number;
+            $.ajax({
+                url:"queryMaterialEngineeringDataForBrandAndProductName.do",
+                type:"post",
+                data:{Brand:"",Product_Name:""},
+                dataType:"json",
+                success:function (data) {
+                    $("#product_Name_Update").combobox("loadData",data.commodityList);
+                    //$("#category_Update").textbox("setValue","");
+                    $("#brand_Update").combobox("loadData",data.vendorCodeList);
+                    //$("#manufacturer_Abbreviation_Update").textbox("setValue","");
+                    //$("#country_Origin_Update").textbox("setValue","");
+                }
+            })
+        }
+    };
+    function newMaterialEngineeringData(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'materialEngineeringDataAdd.do';
+        $.ajax({
+            url:"queryMaterialEngineeringDataForBrandAndProductName.do",
+            type:"post",
+            data:{Brand:"",Product_Name:""},
+            dataType:"json",
+            success:function (data) {
+                $("#product_Name_Add").combobox("loadData",data.commodityList);
+                $("#category_Add").textbox("setValue","");
+                $("#brand_Add").combobox("loadData",data.vendorCodeList);
+                $("#manufacturer_Abbreviation_Add").textbox("setValue","");
+                $("#country_Origin_Add").textbox("setValue","");
+                /*$("#material_Number_Add").combobox("loadData",data.materialEngineeringDataList);
+                $("#product_Name_Add").textbox("setValue","");
+                $("#model_Number_Add").textbox("setValue","");
+                $("#size_Add").textbox("setValue","");
+                $("#material_Type_Add").textbox("setValue","");
+                $("#category_Add").textbox("setValue","");
+                $("#quantity_Unit_Add").textbox("setValue","");
+                $("#minimum_Packing_Capacity_Add").textbox("setValue","");*/
+            }
+        })
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增HW料号+HW版本+制造商+制造商料号是否已存在或者联系管理员!","error")
+                }
+                else if(result.message=="material_Number"){
+                    $.messager.alert("提示信息","请确认新增HW料号与品名,物料(服务)类型,类别,规格/大小,描述是否一致或者联系管理员!","error")
+                }
+                else if(result.message=="model_Number"){
+                    $.messager.alert("提示信息","请确认新增的HW料号+HW版本与型号是否一致或者联系管理员!","error")
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error")
+                }
+                else {
+                    $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error")
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error")
+            }
+        });
+    };
+    function saveUser2(){
+        $.ajax({
+            url:url,
+            type:'post',
+            dataType:'json',
+            data:{
+                Id:$("#id_Update").val(),
+                Material_Number:$("#material_Number_Update").val(),
+                Brand:$("#brand_Update").val(),
+                Version:$("#version_Update").val(),
+                Manufacturer_Abbreviation:$("#manufacturer_Abbreviation_Update").val(),
+                Product_Name:$("#product_Name_Update").val(),
+                Category:$("#category_Update").val(),
+                Material_Type:$("#material_Type_Update").val(),
+                Manufacturer_Material_Number:$("#manufacturer_Material_Number_Update").val(),
+                Size:$("#size_Update").val(),
+                Country_Origin:$("#country_Origin_Update").val(),
+                Texture_Material:$("#texture_Material_Update").val(),
+                Quantity_Unit:$("#quantity_Unit_Update").val(),
+                Model_Number:$("#model_Number_Update").val(),
+                Net_Weight:$("#net_Weight_Update").val(),
+                Volume:$("#volume_Update").val(),
+                Gross_Weight:$("#gross_Weight_Update").val(),
+                Standard_Packing_Method:$("#standard_Packing_Method_Update").val(),
+                Weight_Unit:$("#weight_Unit_Update").val(),
+                Packaging:$("#packaging_Update").val(),
+                Life_Cycle_State:$("#life_Cycle_State_Update").val(),
+                Force_Time:$("#force_Time_Update").val(),
+                Failure_Time:$("#failure_Time_Update").val(),
+                Minimum_Packing_Capacity:$("#minimum_Packing_Capacity_Update").val(),
+                Package_Quantity:$("#package_Quantity_Update").val(),
+                Described:$("#described_Update").val(),
+                Remark:$("#remark_Update").val(),
+                Old_Material_Number:Old_Material_Number,
+                Old_Version:Old_Version,
+                Old_Manufacturer_Abbreviation:Old_Manufacturer_Abbreviation,
+                Old_Manufacturer_Material_Number:Old_Manufacturer_Material_Number
+            },
+            success: function(result){
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="NoUpdate"){
+                    $.messager.alert("提示信息","请选择更新内容或者联系管理员!","warning");
+                }
+                else if(result.message=="material_error"){
+                    $.messager.alert("提示信息","请确认更新的HW料号+HW版本与品名,物料（服务）类型,规格/尺寸,描述,类别,型号必需一致或者联系管理员!","error")
+                }
+                else if(result.message=="material_Number"){
+                    $.messager.alert("提示信息","请确认更新的HW料号与品名,物料(服务)类型,类别,规格/大小,描述是否一致或者联系管理员!","error")
+                }
+                else if(result.message=="model_Number"){
+                    $.messager.alert("提示信息","请确认更新的HW料号+HW版本与型号是否一致或者联系管理员!","error")
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新HW料号+HW版本+制造商+制造商料号是否已存在或者联系管理员!","error")
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error")
+                }
+                else {
+                    $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error")
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error")
+            }
+        })
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index,item){
+                id.push(item.id);
+            });
+            url = 'materialEngineeringDataRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","成功删除数据!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Material_Number=$("#material_Number").val();
+        var Manufacturer_Material_Number=$("#manufacturer_Material_Number").val();
+        var Size=$("#size").val();
+        var Model_Number=$("#model_Number").val();
+        var Date_From=$("#date_From").val();
+        var Date_To=$("#date_To").val();
+        var Category=$("#category").val();
+        var Material_Type=$("#material_Type").val();
+        var Brand=$("#brand").val();
+        var Life_Cycle_State=$("#life_Cycle_State").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="materialEngineeringDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href="materialEngineeringDataDownLoadExcelAll.do?Material_Number="+Material_Number+"&Manufacturer_Material_Number="+Manufacturer_Material_Number+
+            "&Size="+Size+"&Model_Number="+Model_Number+"&Date_From="+Date_From+"&Date_To="+Date_To+"&Category="+Category+"&Material_Type="+Material_Type+
+                "&Brand="+Brand+"&Life_Cycle_State="+Life_Cycle_State;
+        }
+    };
+    function DownloadModel(){
+        location.href="materialEngineeringDataDownLoadModel.do";
+    };
+    /**
+     * 图纸,规格书,图片部分上传
+     */
+    function FileUpload(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg4').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm4').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("操作提示","请选择一条数据进行更新!","info");
+                $('#dlg4').dialog('close');
+            }
+            url = 'materialEngineeringDataFileUpload.do';
+        }
+    };
+    function saveUser4(){
+        $('#fm4').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg4').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","上传成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message="error"){
+                    $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm5').form('clear');
+        url = 'materialEngineeringDataUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,12)=="product_name"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列品名是否填写错误或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,13)=="material_Type"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列物料类型是否填写错误或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,5)=="brand"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列品牌是否填写错误或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,16)=="life_cycle_state"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(17)+"列生命周期状态是否填写错误或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,15)=="material_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(16)+"列HW料号与品名,物料（服务）类型,规格/尺寸,描述,类别是否填写一致或者联系管理员!","error")
+                }
+                else if(result.message.substring(0,12)=="model_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列HW料号+HW版本与品名,物料（服务）类型,规格/尺寸,描述,类别,型号是否填写一致或者联系管理员!","error")
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error")
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+    })(jQuery);
+    function showDrawing(cellValue, options, rowObject) {
+        if(cellValue!=null && cellValue!=""){
+            var drawing=[];
+            drawing=cellValue.split(",");
+            var rValue="";
+            //return "<a href='/hwkj/upload/drawing/sql.txt' target='_blank'>点击查看</a>,<a href='/hwkj/upload/drawing/sql.txt' target='_blank'>点击查看</a>";
+            for(var i=0;i<drawing.length;i++){
+                if(drawing[i]!=""){
+                    rValue+="<a href='"+drawing[i]+"' target='_blank'>"+drawing[i].substring(21)+"</a>"+"</br>";
+                }
+            }
+            return rValue;
+            //return rValue.substring(0,rValue.length-1);
+        }
+    };
+    function showSpecification(cellValue, options, rowObject) {
+        if(cellValue!=null && cellValue!=""){
+            var specification=[];
+            specification=cellValue.split(",");
+            var rValue="";
+            for(var i=0;i<specification.length;i++){
+                if(specification[i]!=""){
+                    rValue+="<a href='"+specification[i]+"' target='_blank'>"+specification[i].substring(27)+"</a>"+"</br>";
+                }
+            }
+            return rValue;
+            //return rValue.substring(0,rValue.length-1);
+            //return "<a href='/hwkj/upload/specification/成本会计学.pdf' target='_blank'>点击查看</a>";
+        }
+    };
+    function showPhoto(cellValue, options, rowObject) {
+        if(cellValue!=null && cellValue!=""){
+            var photo=[];
+            photo=cellValue.split(",");
+            var rValue="";
+            for(var i=0;i<photo.length;i++){
+                if(photo[i]!=""){
+                    rValue+="<a href='"+photo[i]+"' target='_blank'>"+photo[i].substring(19)+"</a>"+"</br>";
+                }
+            }
+            return rValue;
+            //return rValue.substring(0,rValue.length-1);
+        }
+    };
+</script>
+</body>
+</html>

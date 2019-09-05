@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjMaterialEngineeringDataMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjMaterialEngineeringData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Material_Number" jdbcType="VARCHAR" property="materialNumber" />
+    <result column="Version" jdbcType="VARCHAR" property="version" />
+    <result column="Product_Name" jdbcType="VARCHAR" property="productName" />
+    <result column="Material_Type" jdbcType="VARCHAR" property="materialType" />
+    <result column="Category" jdbcType="VARCHAR" property="category" />
+    <result column="Size" jdbcType="VARCHAR" property="size" />
+    <result column="Texture_Material" jdbcType="VARCHAR" property="textureMaterial" />
+    <result column="Model_Number" jdbcType="VARCHAR" property="modelNumber" />
+    <result column="Described" jdbcType="VARCHAR" property="described" />
+    <result column="Brand" jdbcType="VARCHAR" property="brand" />
+    <result column="Manufacturer_Abbreviation" jdbcType="VARCHAR" property="manufacturerAbbreviation" />
+    <result column="Manufacturer_Material_Number" jdbcType="VARCHAR" property="manufacturerMaterialNumber" />
+    <result column="Country_Origin" jdbcType="VARCHAR" property="countryOrigin" />
+    <result column="Drawing" jdbcType="VARCHAR" property="drawing" />
+    <result column="Specification" jdbcType="VARCHAR" property="specification" />
+    <result column="Photo" jdbcType="VARCHAR" property="photo" />
+    <result column="Quantity_Unit" jdbcType="VARCHAR" property="quantityUnit" />
+    <result column="Net_Weight" jdbcType="DOUBLE" property="netWeight" />
+    <result column="Gross_Weight" jdbcType="DOUBLE" property="grossWeight" />
+    <result column="Weight_Unit" jdbcType="VARCHAR" property="weightUnit" />
+    <result column="Volume" jdbcType="DOUBLE" property="volume" />
+    <result column="Packaging" jdbcType="VARCHAR" property="packaging" />
+    <result column="Minimum_Packing_Capacity" jdbcType="INTEGER" property="minimumPackingCapacity" />
+    <result column="Standard_Packing_Method" jdbcType="VARCHAR" property="standardPackingMethod" />
+    <result column="Life_Cycle_State" jdbcType="VARCHAR" property="lifeCycleState" />
+    <result column="Package_Quantity" jdbcType="INTEGER" property="packageQuantity" />
+    <result column="Force_Time" jdbcType="VARCHAR" property="forceTime" />
+    <result column="Failure_Time" jdbcType="VARCHAR" property="failureTime" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

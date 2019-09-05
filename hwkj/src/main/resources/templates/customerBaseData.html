@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">CustomerName:</span>
+        <input id="chinese_Full_Name" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CustomerCode:</span>
+        <input id="customer_Code" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">City&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input id="city" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">Revenue&nbsp;&nbsp;&nbsp;:</span>
+        <input id="revenueFrom" class="easyui-textbox" style="width: 120px;height: 25px" />
+        <span style="font-size: 10px">To:</span>
+        <input id="revenueTo" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">FoxconnGroup?:</span>
+        <select type="text" id="foxconn_Group" class="easyui-combobox" style="width: 80px;height: 25px" >
+            <option></option>
+            <option>是</option>
+            <option>否</option>
+        </select>&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">Country/Area&nbsp;&nbsp;:</span>
+        <input id="country" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">BPM &nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input type="text" id="bpm" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CreateDate:</span>
+        <input id="dateFrom" name="dateFrom" class="easyui-datebox" style="width: 120px;height: 25px" />
+        <span style="font-size: 10px">To:</span>
+        <input id="dateTo" name="dateTo" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">CreditLevel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input type="text" id="credit_Level" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">Industry&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input type="text" id="industry" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">Creator:</span>
+        <input id="creator" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newCustomerBaseData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px;height: 620px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="four_Initials" class="easyui-textbox" style="width: 230px" required="true" label="四位首字母:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="deliver_Term_Add" name="deliver_Term" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'clause',textField:'clause'" label="交易条件:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="chinese_Full_Name" class="easyui-textbox" style="width: 230px" required="true"  label="中文全称:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="payment_Term_Add" name="payment_Term" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'clause',textField:'clause'" label="付款条件:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="receive_Term_Add" name="receive_Term" class="easyui-combobox" style="width: 230px;" required="true" data-options="valueField:'clause',textField:'clause'" label="验收条件:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="english_Full_Name" class="easyui-textbox" style="width: 230px" required="true" label="英文全称:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="enterprise_Nature" class="easyui-combobox" style="width: 230px" required="true" label="企业性质:">
+                    <option>外资欧美</option>
+                    <option>非外资欧美</option>
+                    <option>台资企业</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="english_Abbreviation" class="easyui-textbox" style="width: 230px"required="true" label="英文简称:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="employee_Qty_Add" name="employee_Qty" class="easyui-textbox" style="width: 230px" required="required" label="员工人数:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="foxconn_Group" class="easyui-combobox" style="width: 230px" required="required" label="集团内客户:">
+                    <option>是</option>
+                    <option>否</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="customer_Level" class="easyui-textbox" style="width: 230px" required="required" label="客户等级:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="country" class="easyui-combobox" style="width: 230px" required="required" label="国家/地区:" >
+                    <option>中国</option>
+                    <option>美国</option>
+                    <option>日本</option>
+                    <option>澳大利亚</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="annual_Revenue_Add" name="annual_Revenue" class="easyui-textbox" style="width: 230px" required="true" label="年营收(万元):" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="city" class="easyui-combobox" style="width: 230px" required="required" label="城市:" >
+                    <option>北京</option>
+                    <option>上海</option>
+                    <option>广州</option>
+                    <option>深圳</option>
+                    <option>香港</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="industry_Rank" class="easyui-textbox" style="width: 230px;" required="true" label="行业等级:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="company_Owner" class="easyui-textbox" style="width: 230px" required="required" label="公司负责人:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="job_Number_Add" name="bPM" class="easyui-combobox" style="width: 230px" required="required" data-options="valueField:'china_Name',textField:'china_Name'" label="业务员:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="office_Address" class="easyui-textbox" style="width: 230px" required="required" label="办公地址:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="registered_Address" class="easyui-textbox" style="width: 230px" required="required" label="注册地址:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select id="status_Add" name="status" class="easyui-combobox" style="width: 230px" required="required" label="状态:" >
+                    <option>待开发</option>
+                    <option>开发中</option>
+                    <option>交易中</option>
+                    <option>暂停交易</option>
+                    <option>停止交易</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="industry" class="easyui-textbox" style="width: 230px" required="required" label="行业:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="development_Date_Add" name="development_Date" class="easyui-datebox" style="width: 230px" required="required" label="开发日期:"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="four_Initials" class="easyui-textbox" style="width: 230px" required="true"disabled="disabled" label="四位首字母:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="deliver_Term_Update" name="deliver_Term" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'clause',textField:'clause'"  label="交易条件:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="chinese_Full_Name" class="easyui-textbox" style="width: 230px" required="true" disabled="disabled" label="中文全称:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="payment_Term_Update" name="payment_Term" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'clause',textField:'clause'"  label="付款条件:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="receive_Term_Update" name="receive_Term" class="easyui-combobox" style="width: 230px;" required="true" data-options="valueField:'clause',textField:'clause'"  label="验收条件:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="english_Full_Name" class="easyui-textbox" style="width: 230px" required="true" label="英文全称:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="enterprise_Nature" class="easyui-combobox" style="width: 230px" required="true" label="企业性质:">
+                    <option>外资欧美</option>
+                    <option>非外资欧美</option>
+                    <option>台资企业</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="english_Abbreviation" class="easyui-textbox" style="width: 230px"required="true" label="英文简称:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="employee_Qty_Update" name="employee_Qty" class="easyui-textbox" style="width: 230px" required="required" label="员工人数:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="foxconn_Group" class="easyui-combobox" style="width: 230px" required="required" label="集团内客户:">
+                    <option>是</option>
+                    <option>否</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="customer_Level" class="easyui-textbox" style="width: 230px" required="required" label="客户等级:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="country" class="easyui-combobox" style="width: 230px" required="required" disabled="disabled" label="国家/地区:" >
+                    <option>中国</option>
+                    <option>美国</option>
+                    <option>日本</option>
+                    <option>澳大利亚</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="annual_Revenue_Update" name="annual_Revenue" class="easyui-textbox" style="width: 230px" required="true" label="年营收(万元):" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="city" class="easyui-combobox" style="width: 230px" required="required" disabled="disabled" label="城市:" >
+                    <option>北京</option>
+                    <option>上海</option>
+                    <option>广州</option>
+                    <option>深圳</option>
+                    <option>香港</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="industry_Rank" class="easyui-textbox" style="width: 230px;" required="true" label="行业等级:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="company_Owner" class="easyui-textbox" style="width: 230px" required="required" label="公司负责人:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="job_Number_Update" name="bPM" class="easyui-combobox" style="width: 230px" required="required" data-options="valueField:'china_Name',textField:'china_Name'" label="业务员:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="office_Address" class="easyui-textbox" style="width: 230px" required="required" label="办公地址:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="registered_Address" class="easyui-textbox" style="width: 230px" required="required" label="注册地址:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select id="status_Update" name="status" class="easyui-combobox" style="width: 230px" required="required" label="状态:" >
+                    <option>待开发</option>
+                    <option>开发中</option>
+                    <option>交易中</option>
+                    <option>暂停交易</option>
+                    <option>停止交易</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="industry" class="easyui-textbox" style="width: 230px" required="required" label="行业:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="development_Date_Update" name="development_Date" class="easyui-datebox" style="width: 230px" required="required" label="开发日期:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden" class="easyui-textbox"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    /*$(function () {
+    if(true){
+        $("#delete").css("display","none");
+        $("#downloadModel").css("display","none");
+        $("#excelUpload").css("display","none");
+        $("#fileUpload").css("display","none");
+        //$("#btn").hide();
+    }
+});*/
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryCustomerBaseDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    /**
+     * 员工人数
+     */
+    $(function () {
+        $("#employee_Qty_Add").numberbox({
+            min: 1,
+        });
+    });
+    $(function () {
+        $("#employee_Qty_Update").numberbox({
+            min: 1,
+        });
+    });
+    /**
+     * 年营收
+     */
+    $(function () {
+        $("#annual_Revenue_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#annual_Revenue_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#status_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Status=$("#status_Add").combobox('getText');
+                if(Status=="待开发"){
+                    $("#development_Date_Add").textbox({disabled:true});//设置输入框为disabled
+                }
+                else {
+                    $("#development_Date_Add").textbox({disabled:false});
+                }
+            }
+        });
+    });
+    $(function () {
+        $("#status_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Status=$("#status_Update").combobox('getText');
+                if(Status=="待开发"){
+                    $("#development_Date_Update").textbox({disabled:true});//设置输入框为disabled
+                }
+                else {
+                    $("#development_Date_Update").textbox({disabled:false});
+                }
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'customer_Code',title:'客户代码',align:'center',titleAlign: true},
+                        {field:'four_Initials',title:'四位首字母',align:'center',titleAlign: true},
+                        {field:'chinese_Full_Name',title:'中文全称',align:'center',titleAlign: true},
+                        {field:'chinese_Abbreviation',title:'中文简称',align:'center',titleAlign: true},
+                        {field:'english_Full_Name',title:'英文全称',align:'center',titleAlign: true},
+                        {field:'english_Abbreviation',title:'英文简称',align:'center',titleAlign: true},
+                        {field:'foxconn_Group',title:'集团内客户',align:'center',titleAlign: true},
+                        {field:'country',title:'国家/地区',align:'center',titleAlign: true},
+                        {field:'city',title:'城市',align:'center',titleAlign: true},
+                        {field:'industry',title:'行业',align:'center',titleAlign: true},
+                        {field:'company_Owner',title:'公司负责人',align:'center',titleAlign: true},
+                        {field:'registered_Capital',title:'注册资金(万)',align:'center',titleAlign: true},
+                        {field:'currency',title:'币别',align:'center',titleAlign: true},
+                        {field:'annual_Revenue',title:'年营收(万)',align:'center',titleAlign: true},
+                        {field:'industry_Rank',title:'行业等级',align:'center',titleAlign: true},
+                        {field:'enterprise_Nature',title:'企业性质',align:'center',titleAlign: true},
+                        {field:'employee_Qty',title:'员工人数',align:'center',titleAlign: true},
+                        {field:'customer_Level',title:'客户等级',align:'center',titleAlign: true},
+                        {field:'deliver_Term',title:'交易条件',align:'center',titleAlign: true},
+                        {field:'payment_Term',title:'付款条件',align:'center',titleAlign: true},
+                        {field:'receive_Term',title:'验收条件',align:'center',titleAlign: true},
+                        {field:'credit_Level',title:'信用等级',align:'center',titleAlign: true},
+                        {field:'credit_Amount',title:'信用额度(万)',align:'center',titleAlign: true},
+                        {field:'office_Address',title:'办公地址',align:'center',titleAlign: true},
+                        {field:'registered_Address',title:'注册地址',align:'center',titleAlign: true},
+                        {field:'status',title:'状态',align:'center',titleAlign: true},
+                        {field:'development_Date',title:'开发日期',align:'center',titleAlign: true},
+                        {field:'bPM',title:'业务员',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryCustomerBaseData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Chinese_Full_Name:$("#chinese_Full_Name").val(),Customer_Code:$("#customer_Code").val(),City:$("#city").val(),RevenueFrom:$("#revenueFrom").val(),RevenueTo:$("#revenueTo").val(),
+                    Foxconn_Group:$("#foxconn_Group").val(),Country:$("#country").val(),BPM:$("#bpm").val(),DateFrom:$("#dateFrom").val(),DateTo:$("#dateTo").val(),
+                    Credit_Level:$("#credit_Level").val(),Industry:$("#industry").val(),Creator:$("#creator").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Chinese_Full_Name,Customer_Code,City,RevenueFrom,RevenueTo,Foxconn_Group,Country,BPM,DateFrom,DateTo,Credit_Level,Industry,Creator){//分页触发
+                 findOption(page, rows,Chinese_Full_Name,Customer_Code,City,RevenueFrom,RevenueTo,Foxconn_Group,Country,BPM,DateFrom,DateTo,Credit_Level,Industry,Creator);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Chinese_Full_Name,Customer_Code,City,RevenueFrom,RevenueTo,Foxconn_Group,Country,BPM,DateFrom,DateTo,Credit_Level,Industry,Creator)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Chinese_Full_Name:Chinese_Full_Name,Customer_Code:Customer_Code,City:City,RevenueFrom:RevenueFrom,RevenueTo:RevenueTo,Foxconn_Group:Foxconn_Group,Country:Country,BPM:BPM,DateFrom:DateFrom,DateTo:DateTo,Credit_Level:Credit_Level,Industry:Industry,Creator:Creator});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryCustomerBaseData.do",
+            data : {
+                page:page,
+                rows:rows,
+                Chinese_Full_Name:Chinese_Full_Name,
+                Customer_Code:Customer_Code,
+                City:City,
+                RevenueFrom:RevenueFrom,
+                RevenueTo:RevenueTo,
+                Foxconn_Group:Foxconn_Group,
+                Country:Country,
+                BPM:BPM,
+                DateFrom:DateFrom,
+                DateTo:DateTo,
+                Credit_Level:Credit_Level,
+                Industry:Industry,
+                Creator:Creator
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            else {
+                $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+                $('#fm2').form('load',row);
+            }
+            url = 'customerBaseDataUpdate.do';
+            $.ajax({
+                url:"queryQuoteTermThreeTermAndJobNumber.do",
+                type:"post",
+                data:{Role:"BPM"},
+                dataType:"json",
+                success:function (data) {
+                    $("#deliver_Term_Update").combobox("loadData",data.deliver_TermList);
+                    $("#payment_Term_Update").combobox("loadData",data.payment_TermList);
+                    $("#receive_Term_Update").combobox("loadData",data.receive_TermList);
+                    $("#job_Number_Update").combobox("loadData",data.bPMList);
+                }
+            });
+        }
+    };
+    function newCustomerBaseData(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'customerBaseDataAdd.do';
+        //var Job_Number=$("#job_Number").combobox('getText');
+        $.ajax({
+            url:"queryQuoteTermThreeTermAndJobNumber.do",
+            type:"post",
+            data:{Role:"BPM"},
+            dataType:"json",
+            success:function (data) {
+                $("#deliver_Term_Add").combobox("loadData",data.deliver_TermList);
+                $("#payment_Term_Add").combobox("loadData",data.payment_TermList);
+                $("#receive_Term_Add").combobox("loadData",data.receive_TermList);
+                $("#job_Number_Add").combobox("loadData",data.bPMList);
+                //$("#show").textbox('setValue',"");
+            }
+        });
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否存在或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增数据失败或联系管理员!","error");
+                }
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新数据是否存在或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新数据失败或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败或联系管理员!","error");
+                }
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'customerBaseDataRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","成功删除数据!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Chinese_Full_Name=$("#chinese_Full_Name").val();
+        var Customer_Code=$("#customer_Code").val();
+        var City=$("#city").val();
+        var RevenueFrom=$("#revenueFrom").val();
+        var RevenueTo=$("#revenueTo").val();
+        var Foxconn_Group=$("#foxconn_Group").val();
+        var BPM=$("#bpm").val();
+        var DateFrom=$("#dateFrom").val();
+        var DateTo=$("#dateTo").val();
+        var Credit_Level=$("#credit_Level").val();
+        var Industry=$("#industry").val();
+        var Creator=$("#creator").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="customerBaseDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href="customerBaseDataDownLoadExcelAll.do?Chinese_Full_Name="+Chinese_Full_Name+"&Customer_Code="+Customer_Code+
+                "&City="+City+"&RevenueFrom="+RevenueFrom+"&RevenueTo="+RevenueTo+"&Foxconn_Group="+Foxconn_Group+"&BPM="+BPM+
+                "&DateFrom="+DateFrom+"&DateTo="+DateTo+"&Credit_Level="+Credit_Level+"&Industry="+Industry+"&Creator="+Creator;
+        }
+    };
+    function DownloadModel(){
+        location.href="customerBaseDataDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'customerBaseDataUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message.substring(0,12)=="deliver_Term"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列交易条件是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="payment_Term"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列付款条件是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="receive_Term"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列验收条件是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="foxconn_Group"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列集团内客户是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,17)=="enterprise_Nature"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(18)+"列企业性质是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,6)=="status"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(7)+"列状态是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,3)=="bpm"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(4)+"列业务员是否填写正确或者联系管理员!","error");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+    })(jQuery);
+</script>
+</body>
+</html>

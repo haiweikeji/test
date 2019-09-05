@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjCustomerAccountInfoMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjCustomerAccountInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Customer_Code" jdbcType="VARCHAR" property="customerCode" />
+    <result column="Chinese_Abbreviation" jdbcType="VARCHAR" property="chineseAbbreviation" />
+    <result column="Credit_Code" jdbcType="VARCHAR" property="creditCode" />
+    <result column="Taxpayer_Number" jdbcType="VARCHAR" property="taxpayerNumber" />
+    <result column="Registration_Number" jdbcType="VARCHAR" property="registrationNumber" />
+    <result column="Registration_Time" jdbcType="VARCHAR" property="registrationTime" />
+    <result column="Registered_Capital" jdbcType="DOUBLE" property="registeredCapital" />
+    <result column="Currency" jdbcType="VARCHAR" property="currency" />
+    <result column="Credit_Level" jdbcType="VARCHAR" property="creditLevel" />
+    <result column="Credit_Amount" jdbcType="DOUBLE" property="creditAmount" />
+    <result column="Invoice_Address" jdbcType="VARCHAR" property="invoiceAddress" />
+    <result column="Bank" jdbcType="VARCHAR" property="bank" />
+    <result column="Bank_Account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="Bank_Address" jdbcType="VARCHAR" property="bankAddress" />
+    <result column="Acceptable_Currency" jdbcType="VARCHAR" property="acceptableCurrency" />
+    <result column="Force_Time" jdbcType="VARCHAR" property="forceTime" />
+    <result column="Failure_Time" jdbcType="VARCHAR" property="failureTime" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

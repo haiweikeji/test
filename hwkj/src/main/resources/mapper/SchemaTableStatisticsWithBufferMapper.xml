@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.SchemaTableStatisticsWithBufferMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.SchemaTableStatisticsWithBuffer">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="table_schema" jdbcType="VARCHAR" property="tableSchema" />
+    <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+    <result column="rows_fetched" jdbcType="BIGINT" property="rowsFetched" />
+    <result column="rows_inserted" jdbcType="BIGINT" property="rowsInserted" />
+    <result column="rows_updated" jdbcType="BIGINT" property="rowsUpdated" />
+    <result column="rows_deleted" jdbcType="BIGINT" property="rowsDeleted" />
+    <result column="io_read_requests" jdbcType="DECIMAL" property="ioReadRequests" />
+    <result column="io_write_requests" jdbcType="DECIMAL" property="ioWriteRequests" />
+    <result column="io_misc_requests" jdbcType="DECIMAL" property="ioMiscRequests" />
+    <result column="innodb_buffer_pages" jdbcType="BIGINT" property="innodbBufferPages" />
+    <result column="innodb_buffer_pages_hashed" jdbcType="BIGINT" property="innodbBufferPagesHashed" />
+    <result column="innodb_buffer_pages_old" jdbcType="BIGINT" property="innodbBufferPagesOld" />
+    <result column="innodb_buffer_rows_cached" jdbcType="DECIMAL" property="innodbBufferRowsCached" />
+    <result column="fetch_latency" jdbcType="LONGVARCHAR" property="fetchLatency" />
+    <result column="insert_latency" jdbcType="LONGVARCHAR" property="insertLatency" />
+    <result column="update_latency" jdbcType="LONGVARCHAR" property="updateLatency" />
+    <result column="delete_latency" jdbcType="LONGVARCHAR" property="deleteLatency" />
+    <result column="io_read" jdbcType="LONGVARCHAR" property="ioRead" />
+    <result column="io_read_latency" jdbcType="LONGVARCHAR" property="ioReadLatency" />
+    <result column="io_write" jdbcType="LONGVARCHAR" property="ioWrite" />
+    <result column="io_write_latency" jdbcType="LONGVARCHAR" property="ioWriteLatency" />
+    <result column="io_misc_latency" jdbcType="LONGVARCHAR" property="ioMiscLatency" />
+    <result column="innodb_buffer_allocated" jdbcType="LONGVARCHAR" property="innodbBufferAllocated" />
+    <result column="innodb_buffer_data" jdbcType="LONGVARCHAR" property="innodbBufferData" />
+    <result column="innodb_buffer_free" jdbcType="LONGVARCHAR" property="innodbBufferFree" />
+  </resultMap>
+</mapper>

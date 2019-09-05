@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.Engineering.CommodityDao">
+    <insert id="insertCommodity" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.Engineering.Commodity">
+        insert into hwkj_commodity
+        (Product_Name,Category,Creator,Create_Date)
+        values
+        (#{Product_Name},#{Category},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCommodity" parameterType="java.lang.Integer">
+        delete from hwkj_commodity where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCommodity" parameterType="hwkj.hwkj.entity.Engineering.Commodity">
+        update hwkj_commodity
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Product_Name!=null">Product_Name=#{Product_Name},</if>
+            <if test="Category!=null">Category=#{Category},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCommodityList" resultType="hwkj.hwkj.entity.Engineering.Commodity">
+        select * from hwkj_commodity where 1=1
+        <if test="commodityPageModel.page!=null and commodityPageModel.rows!=null"></if>
+        <if test="commodity.Product_Name!=null and commodity.Product_Name!=''">and Product_Name=#{commodity.Product_Name}</if>
+        <if test="commodity.Category!=null and commodity.Category!=''">and Category=#{commodity.Category}</if>
+        order by Id limit #{commodityPageModel.startRow},#{commodityPageModel.rows}
+    </select>
+    <select id="queryCommodityCount" resultType="int">
+        select count(*) from hwkj_commodity where 1=1
+        <if test="commodityPageModel.page!=null and commodityPageModel.rows!=null"></if>
+        <if test="commodity.Product_Name!=null and commodity.Product_Name!=''">and Product_Name=#{commodity.Product_Name}</if>
+        <if test="commodity.Category!=null and commodity.Category!=''">and Category=#{commodity.Category}</if>
+    </select>
+    <select id="queryCommodityById" resultType="hwkj.hwkj.entity.Engineering.Commodity">
+        select * from hwkj_commodity where Id=#{Id}
+    </select>
+    <select id="queryCommodityForDownLoadAll" resultType="hwkj.hwkj.entity.Engineering.Commodity">
+        select * from hwkj_commodity where 1=1
+        <if test="commodity.Product_Name!=null and commodity.Product_Name!=''">and Product_Name=#{commodity.Product_Name}</if>
+        <if test="commodity.Category!=null and commodity.Category!=''">and Category=#{commodity.Category}</if>
+    </select>
+    <select id="queryCommodityForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.Engineering.Commodity">
+        select * from hwkj_commodity where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+    </select>
+    <select id="queryCommodityProductNameExits" resultType="int">
+        select count(*) from hwkj_commodity where Product_Name=#{Product_Name}
+    </select>
+    <select id="queryCommodityByProductName" resultType="hwkj.hwkj.entity.Engineering.Commodity">
+        select Product_Name,Category from hwkj_commodity where 1=1
+        <if test="Product_Name!=null and Product_Name!=''">and Product_Name=#{Product_Name}</if>
+    </select>
+    <select id="queryCommodityForAllExist" parameterType="hwkj.hwkj.entity.Engineering.Commodity" resultType="int">
+        select count(*) from hwkj_commodity where 1=1
+        <if test="Product_Name!=null">and Product_Name=#{Product_Name}</if>
+        <if test="Category!=null">and Category=#{Category}</if>
+    </select>
+</mapper>

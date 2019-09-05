@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerVisitPlanDao">
+    <insert id="insertCustomerVisitPlan" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        insert into hwkj_customer_visit_plan
+        (Visit_Id,Customer_Code,Plan_Date_From,Plan_Date_To,Actual_Start_Time,Actual_End_Time,
+        Contact_Chinese_Name,Contact_English_Name,Title,Dept,
+        Visit_Item,Visit_Purpose,Visit_Result,Status,BPM,Creator,Create_Date)
+        values
+        (#{Visit_Id},#{Customer_Code},#{Plan_Date_From},#{Plan_Date_To},#{Actual_Start_Time},#{Actual_End_Time},
+        #{Contact_Chinese_Name},#{Contact_English_Name},#{Title},#{Dept},
+        #{Visit_Item},#{Visit_Purpose},#{Visit_Result},#{Status},#{BPM},#{Creator},#{Create_Date});
+    </insert>
+    <delete id="deleteCustomerVisitPlan" parameterType="java.lang.Integer">
+        delete from hwkj_customer_visit_plan where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerVisitPlan" parameterType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        update hwkj_customer_visit_plan
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Visit_Id!=null">Visit_Id=#{Visit_Id},</if>
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Plan_Date_From!=null">Plan_Date_From=#{Plan_Date_From},</if>
+            <if test="Plan_Date_To!=null">Plan_Date_To=#{Plan_Date_To},</if>
+            <if test="Actual_Start_Time!=null">Actual_Start_Time=#{Actual_Start_Time},</if>
+            <if test="Actual_End_Time!=null">Actual_End_Time=#{Actual_End_Time},</if>
+            <if test="Contact_Chinese_Name!=null">Contact_Chinese_Name=#{Contact_Chinese_Name},</if>
+            <if test="Contact_English_Name!=null">Contact_English_Name=#{Contact_English_Name},</if>
+            <if test="Title!=null">Title=#{Title},</if>
+            <if test="Dept!=null">Dept=#{Dept},</if>
+            <if test="Visit_Item!=null">Visit_Item=#{Visit_Item},</if>
+            <if test="Visit_Purpose!=null">Visit_Purpose=#{Visit_Purpose},</if>
+            <if test="Visit_Result!=null">Visit_Result=#{Visit_Result},</if>
+            <if test="Status!=null">Status=#{Status},</if>
+            <if test="BPM!=null">BPM=#{BPM},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerVisitPlanList" resultType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        select v.Id,v.Visit_Id,v.Customer_Code,b.Chinese_Abbreviation,v.Plan_Date_From,
+        v.Plan_Date_To,v.Actual_Start_Time,v.Actual_End_Time,v.Contact_Chinese_Name,
+        v.Contact_English_Name,v.Title,v.Dept,v.Visit_Item,v.Visit_Purpose,v.Visit_Result,
+        v.Status,v.BPM,v.Creator,v.Create_Date,v.Updated_By,v.Update_Date,v.Approved_By,v.Approved_Date
+        from hwkj_customer_base_data b left join hwkj_customer_visit_plan v on
+        b.Customer_Code=v.Customer_Code  where 1=1 and v.Id is not null
+        <if test="customerVisitPlanPageModel.page!=null and customerVisitPlanPageModel.rows!=null"></if>
+        <if test="customerVisitPlan.Chinese_Abbreviation!=null and customerVisitPlan.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerVisitPlan.Chinese_Abbreviation}</if>
+        <if test="customerVisitPlan.Customer_Code!=null and customerVisitPlan.Customer_Code!=''">and v.Customer_Code=#{customerVisitPlan.Customer_Code}</if>
+        <if test="customerVisitPlan.BPM!=null and customerVisitPlan.BPM!=''">and v.BPM=#{customerVisitPlan.BPM}</if>
+        <if test="customerVisitPlan.Plan_Date_From!=null and customerVisitPlan.Plan_Date_From!=''">and date_format(v.Plan_Date_From,'%Y-%m-%d')&gt;='${customerVisitPlan.Plan_Date_From}'</if>
+        <if test="customerVisitPlan.Plan_Date_To!=null and customerVisitPlan.Plan_Date_To!=''">and date_format(v.Plan_Date_To,'%Y-%m-%d')&lt;='${customerVisitPlan.Plan_Date_To}'</if>
+        <if test="customerVisitPlan.Status!=null and customerVisitPlan.Status!=''">and v.Status=#{customerVisitPlan.Status}</if>
+        order by (v.Id) limit #{customerVisitPlanPageModel.startRow},#{customerVisitPlanPageModel.rows}
+    </select>
+    <select id="queryCustomerVisitPlanCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data b left join hwkj_customer_visit_plan v on
+        b.Customer_Code=v.Customer_Code  where 1=1 and v.Id is not null
+        <if test="customerVisitPlanPageModel.page!=null and customerVisitPlanPageModel.rows!=null"></if>
+        <if test="customerVisitPlan.Chinese_Abbreviation!=null and customerVisitPlan.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerVisitPlan.Chinese_Abbreviation}</if>
+        <if test="customerVisitPlan.Customer_Code!=null and customerVisitPlan.Customer_Code!=''">and v.Customer_Code=#{customerVisitPlan.Customer_Code}</if>
+        <if test="customerVisitPlan.BPM!=null and customerVisitPlan.BPM!=''">and v.BPM=#{customerVisitPlan.BPM}</if>
+        <if test="customerVisitPlan.Plan_Date_From!=null and customerVisitPlan.Plan_Date_From!=''">and date_format(v.Plan_Date_From,'%Y-%m-%d')&gt;='${customerVisitPlan.Plan_Date_From}'</if>
+        <if test="customerVisitPlan.Plan_Date_To!=null and customerVisitPlan.Plan_Date_To!=''">and date_format(v.Plan_Date_To,'%Y-%m-%d')&lt;='${customerVisitPlan.Plan_Date_To}'</if>
+        <if test="customerVisitPlan.Status!=null and customerVisitPlan.Status!=''">and v.Status=#{customerVisitPlan.Status}</if>
+    </select>
+    <select id="queryCustomerVisitPlanById" resultType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        select * from hwkj_customer_visit_plan where Id=#{Id}
+    </select>
+    <select id="queryCustomerVisitPlanForDownLoadAll" resultType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        select v.Id,v.Visit_Id,v.Customer_Code,b.Chinese_Abbreviation,v.Plan_Date_From,
+        v.Plan_Date_To,v.Actual_Start_Time,v.Actual_End_Time,v.Contact_Chinese_Name,
+        v.Contact_English_Name,v.Title,v.Dept,v.Visit_Item,v.Visit_Purpose,v.Visit_Result,
+        v.Status,v.BPM,v.Creator,v.Create_Date,v.Updated_By,v.Update_Date,v.Approved_By,v.Approved_Date
+        from hwkj_customer_base_data b left join hwkj_customer_visit_plan v on
+        b.Customer_Code=v.Customer_Code  where 1=1 and v.Id is not null
+        <if test="customerVisitPlan.Chinese_Abbreviation!=null and customerVisitPlan.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerVisitPlan.Chinese_Abbreviation}</if>
+        <if test="customerVisitPlan.Customer_Code!=null and customerVisitPlan.Customer_Code!=''">and v.Customer_Code=#{customerVisitPlan.Customer_Code}</if>
+        <if test="customerVisitPlan.BPM!=null and customerVisitPlan.BPM!=''">and v.BPM=#{customerVisitPlan.BPM}</if>
+        <if test="customerVisitPlan.Plan_Date_From!=null and customerVisitPlan.Plan_Date_From!=''">and date_format(v.Plan_Date_From,'%Y-%m-%d')&gt;='${customerVisitPlan.Plan_Date_From}'</if>
+        <if test="customerVisitPlan.Plan_Date_To!=null and customerVisitPlan.Plan_Date_To!=''">and date_format(v.Plan_Date_To,'%Y-%m-%d')&lt;='${customerVisitPlan.Plan_Date_To}'</if>
+        <if test="customerVisitPlan.Status!=null and customerVisitPlan.Status!=''">and v.Status=#{customerVisitPlan.Status}</if>
+        order by v.Id desc
+    </select>
+    <select id="queryCustomerVisitPlanForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        select v.Id,v.Visit_Id,v.Customer_Code,b.Chinese_Abbreviation,v.Plan_Date_From,
+        v.Plan_Date_To,v.Actual_Start_Time,v.Actual_End_Time,v.Contact_Chinese_Name,
+        v.Contact_English_Name,v.Title,v.Dept,v.Visit_Item,v.Visit_Purpose,v.Visit_Result,
+        v.Status,v.BPM,v.Creator,v.Create_Date,v.Updated_By,v.Update_Date,v.Approved_By,v.Approved_Date
+        from hwkj_customer_base_data b left join hwkj_customer_visit_plan v on
+        b.Customer_Code=v.Customer_Code  where 1=1 and v.Id is not null and v.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by v.Id desc
+    </select>
+    <select id="queryCustomerVisitPlanLastData" resultType="hwkj.hwkj.entity.CRM.CustomerVisitPlan">
+        select Visit_Id from hwkj_customer_visit_plan where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+        order by Visit_Id desc limit 1
+    </select>
+    <select id="queryCustomerVisitPlanForExist" parameterType="hwkj.hwkj.entity.CRM.CustomerVisitPlan" resultType="int">
+        select count(*) from hwkj_customer_visit_plan where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Plan_Date_From!=null">and Plan_Date_From=#{Plan_Date_From}</if>
+        <if test="Plan_Date_To!=null">and Plan_Date_To=#{Plan_Date_To}</if>
+        <if test="Actual_Start_Time!=null">and Actual_Start_Time=#{Actual_Start_Time}</if>
+        <if test="Actual_End_Time!=null">and Actual_End_Time=#{Actual_End_Time}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+        <if test="Contact_English_Name!=null">and Contact_English_Name=#{Contact_English_Name}</if>
+        <if test="Title!=null">and Title=#{Title}</if>
+        <if test="Dept!=null">and Dept=#{Dept}</if>
+        <if test="Visit_Item!=null">and Visit_Item=#{Visit_Item}</if>
+        <if test="Visit_Purpose!=null">and Visit_Purpose=#{Visit_Purpose}</if>
+        <if test="Visit_Result!=null">and Visit_Result=#{Visit_Result}</if>
+        <if test="Status!=null">and Status=#{Status}</if>
+        <if test="BPM!=null">and BPM=#{BPM}</if>
+    </select>
+</mapper>

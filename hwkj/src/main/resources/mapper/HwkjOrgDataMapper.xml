@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjOrgDataMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjOrgData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Group_Name" jdbcType="VARCHAR" property="groupName" />
+    <result column="Group_Code" jdbcType="VARCHAR" property="groupCode" />
+    <result column="Legal_Name" jdbcType="VARCHAR" property="legalName" />
+    <result column="Company_Code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="BG" jdbcType="VARCHAR" property="bg" />
+    <result column="BU" jdbcType="VARCHAR" property="bu" />
+    <result column="Region" jdbcType="VARCHAR" property="region" />
+    <result column="Dept" jdbcType="VARCHAR" property="dept" />
+    <result column="Ke" jdbcType="VARCHAR" property="ke" />
+    <result column="Zu" jdbcType="VARCHAR" property="zu" />
+    <result column="Cost_Code" jdbcType="VARCHAR" property="costCode" />
+    <result column="Org_Code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="Upper_Name" jdbcType="VARCHAR" property="upperName" />
+    <result column="Upper_ID" jdbcType="VARCHAR" property="upperId" />
+    <result column="Status" jdbcType="VARCHAR" property="status" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="VARCHAR" property="updateDate" />
+  </resultMap>
+</mapper>

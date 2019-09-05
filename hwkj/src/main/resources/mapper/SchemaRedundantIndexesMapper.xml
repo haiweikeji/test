@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.SchemaRedundantIndexesMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.SchemaRedundantIndexes">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="table_schema" jdbcType="INTEGER" property="tableSchema" />
+    <result column="table_name" jdbcType="INTEGER" property="tableName" />
+    <result column="redundant_index_name" jdbcType="INTEGER" property="redundantIndexName" />
+    <result column="redundant_index_columns" jdbcType="INTEGER" property="redundantIndexColumns" />
+    <result column="redundant_index_non_unique" jdbcType="INTEGER" property="redundantIndexNonUnique" />
+    <result column="dominant_index_name" jdbcType="INTEGER" property="dominantIndexName" />
+    <result column="dominant_index_columns" jdbcType="INTEGER" property="dominantIndexColumns" />
+    <result column="dominant_index_non_unique" jdbcType="INTEGER" property="dominantIndexNonUnique" />
+    <result column="subpart_exists" jdbcType="INTEGER" property="subpartExists" />
+    <result column="sql_drop_index" jdbcType="INTEGER" property="sqlDropIndex" />
+  </resultMap>
+</mapper>

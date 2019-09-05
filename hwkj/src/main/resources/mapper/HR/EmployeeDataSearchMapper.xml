@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.EmployeeDataSearchDao">
+    <select id="queryEmployeeDataSearchList" resultType="hwkj.hwkj.entity.HR.EmployeeDataSearch">
+        select p.Id,p.Job_Number,p.China_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        p.Phone_Number,p.WeChat_Number,p.Company_Mail,p.Private_Mail,o.Legal_Name,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,p.Entry_Date,p.Birth_Date,p.Id_Card,p.Id_Card_Address,p.Present_Address,p.Education,p.Major,
+        p.Graduated_From,p.Graduated_Time,p.Language,p.Native_Place,p.Nation,p.Religious_Belief,p.Marital_Status,
+        p.History_Disease,p.Emergency_Contact_Person,p.Emergency_Contact_Person_Relationship,p.Relationship_Phone,
+        p.Status,p.Creator,p.Create_Date,p.Updated_By,p.Update_Date from hwkj_employee_personal_data p left join
+        hwkj_employee_department_data d on p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code
+        where 1=1
+        <if test="employeeDataSearchPageModel.page != null and  employeeDataSearchPageModel.rows != null"></if>
+        <if test="employeeDataSearch.BG!=null and employeeDataSearch.BG!=''">and o.BG=#{employeeDataSearch.BG}</if>
+        <if test="employeeDataSearch.BU!=null and employeeDataSearch.BU!=''">and o.BU=#{employeeDataSearch.BU}</if>
+        <if test="employeeDataSearch.Dept!=null and employeeDataSearch.Dept!=''">and o.Dept=#{employeeDataSearch.Dept}</if>
+        <if test="employeeDataSearch.Ke!=null and employeeDataSearch.Ke!=''">and o.Ke=#{employeeDataSearch.Ke}</if>
+        <if test="employeeDataSearch.Zu!=null and employeeDataSearch.Zu!=''">and o.Zu=#{employeeDataSearch.Zu}</if>
+        <if test="employeeDataSearch.Status!=null and employeeDataSearch.Status!=''">and p.Status=#{employeeDataSearch.Status}</if>
+        <if test="employeeDataSearch.Job_Number!=null and employeeDataSearch.Job_Number!=''">and p.Job_Number=#{employeeDataSearch.Job_Number}</if>
+        <if test="employeeDataSearch.China_Name!=null and employeeDataSearch.China_Name!=''">and p.China_Name=#{employeeDataSearch.China_Name}</if>
+        <if test="employeeDataSearch.Sex!=null and employeeDataSearch.Sex!=''">and p.Sex=#{employeeDataSearch.Sex}</if>
+        <if test="employeeDataSearch.DateFrom!=null and employeeDataSearch.DateFrom!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &gt;='${employeeDataSearch.DateFrom}'</if>
+        <if test="employeeDataSearch.DateTo!=null and employeeDataSearch.DateTo!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &lt;='${employeeDataSearch.DateTo}'</if>
+        <if test="employeeDataSearch.Native_Place!=null and employeeDataSearch.Native_Place!=''">and p.Native_Place=#{employeeDataSearch.Native_Place}</if>
+        order by p.Id desc limit #{employeeDataSearchPageModel.startRow},#{employeeDataSearchPageModel.rows}
+    </select>
+
+    <select id="queryEmployeeDataSearchCount" resultType="int">
+        select count(*) from hwkj_employee_personal_data p left join
+        hwkj_employee_department_data d on p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code
+        where 1=1
+        <if test="employeeDataSearchPageModel.page != null and  employeeDataSearchPageModel.rows != null"></if>
+        <if test="employeeDataSearch.BG!=null and employeeDataSearch.BG!=''">and o.BG=#{employeeDataSearch.BG}</if>
+        <if test="employeeDataSearch.BU!=null and employeeDataSearch.BU!=''">and o.BU=#{employeeDataSearch.BU}</if>
+        <if test="employeeDataSearch.Dept!=null and employeeDataSearch.Dept!=''">and o.Dept=#{employeeDataSearch.Dept}</if>
+        <if test="employeeDataSearch.Ke!=null and employeeDataSearch.Ke!=''">and o.Ke=#{employeeDataSearch.Ke}</if>
+        <if test="employeeDataSearch.Zu!=null and employeeDataSearch.Zu!=''">and o.Zu=#{employeeDataSearch.Zu}</if>
+        <if test="employeeDataSearch.Status!=null and employeeDataSearch.Status!=''">and p.Status=#{employeeDataSearch.Status}</if>
+        <if test="employeeDataSearch.Job_Number!=null and employeeDataSearch.Job_Number!=''">and p.Job_Number=#{employeeDataSearch.Job_Number}</if>
+        <if test="employeeDataSearch.China_Name!=null and employeeDataSearch.China_Name!=''">and p.China_Name=#{employeeDataSearch.China_Name}</if>
+        <if test="employeeDataSearch.Sex!=null and employeeDataSearch.Sex!=''">and p.Sex=#{employeeDataSearch.Sex}</if>
+        <if test="employeeDataSearch.DateFrom!=null and employeeDataSearch.DateFrom!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &gt;='${employeeDataSearch.DateFrom}'</if>
+        <if test="employeeDataSearch.DateTo!=null and employeeDataSearch.DateTo!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &lt;='${employeeDataSearch.DateTo}'</if>
+        <if test="employeeDataSearch.Native_Place!=null and employeeDataSearch.Native_Place!=''">and p.Native_Place=#{employeeDataSearch.Native_Place}</if>
+    </select>
+
+    <select id="queryEmployeeDataSearchForDownLoadAll" resultType="hwkj.hwkj.entity.HR.EmployeeDataSearch">
+        select p.Id,p.Job_Number,p.China_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        p.Phone_Number,p.WeChat_Number,p.Company_Mail,p.Private_Mail,o.Legal_Name,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,p.Entry_Date,p.Birth_Date,p.Id_Card,p.Id_Card_Address,p.Present_Address,p.Education,p.Major,
+        p.Graduated_From,p.Graduated_Time,p.Language,p.Native_Place,p.Nation,p.Religious_Belief,p.Marital_Status,
+        p.History_Disease,p.Emergency_Contact_Person,p.Emergency_Contact_Person_Relationship,p.Relationship_Phone,
+        p.Status,p.Creator,p.Create_Date,p.Updated_By,p.Update_Date from hwkj_employee_personal_data p left join
+        hwkj_employee_department_data d on p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code
+        where 1=1
+        <if test="employeeDataSearch.BG!=null and employeeDataSearch.BG!=''">and o.BG=#{employeeDataSearch.BG}</if>
+        <if test="employeeDataSearch.BU!=null and employeeDataSearch.BU!=''">and o.BU=#{employeeDataSearch.BU}</if>
+        <if test="employeeDataSearch.Dept!=null and employeeDataSearch.Dept!=''">and o.Dept=#{employeeDataSearch.Dept}</if>
+        <if test="employeeDataSearch.Ke!=null and employeeDataSearch.Ke!=''">and o.Ke=#{employeeDataSearch.Ke}</if>
+        <if test="employeeDataSearch.Zu!=null and employeeDataSearch.Zu!=''">and o.Zu=#{employeeDataSearch.Zu}</if>
+        <if test="employeeDataSearch.Status!=null and employeeDataSearch.Status!=''">and p.Status=#{employeeDataSearch.Status}</if>
+        <if test="employeeDataSearch.Job_Number!=null and employeeDataSearch.Job_Number!=''">and p.Job_Number=#{employeeDataSearch.Job_Number}</if>
+        <if test="employeeDataSearch.China_Name!=null and employeeDataSearch.China_Name!=''">and p.China_Name=#{employeeDataSearch.China_Name}</if>
+        <if test="employeeDataSearch.Sex!=null and employeeDataSearch.Sex!=''">and p.Sex=#{employeeDataSearch.Sex}</if>
+        <if test="employeeDataSearch.DateFrom!=null and employeeDataSearch.DateFrom!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &gt;='${employeeDataSearch.DateFrom}'</if>
+        <if test="employeeDataSearch.DateTo!=null and employeeDataSearch.DateTo!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &lt;='${employeeDataSearch.DateTo}'</if>
+        <if test="employeeDataSearch.Native_Place!=null and employeeDataSearch.Native_Place!=''">and p.Native_Place=#{employeeDataSearch.Native_Place}</if>
+        order by p.Id desc
+    </select>
+    <select id="queryEmployeeDataSearchForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HR.EmployeeDataSearch">
+        select p.Id,p.Job_Number,p.China_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        p.Phone_Number,p.WeChat_Number,p.Company_Mail,p.Private_Mail,o.Legal_Name,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,p.Entry_Date,p.Birth_Date,p.Id_Card,p.Id_Card_Address,p.Present_Address,p.Education,p.Major,
+        p.Graduated_From,p.Graduated_Time,p.Language,p.Native_Place,p.Nation,p.Religious_Belief,p.Marital_Status,
+        p.History_Disease,p.Emergency_Contact_Person,p.Emergency_Contact_Person_Relationship,p.Relationship_Phone,
+        p.Status,p.Creator,p.Create_Date,p.Updated_By,p.Update_Date from hwkj_employee_personal_data p left join
+        hwkj_employee_department_data d on p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code
+        where 1=1 and p.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+        order by p.Id desc
+    </select>
+</mapper>

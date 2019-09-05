@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjFileManagementMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjFileManagement">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="File_Number" jdbcType="VARCHAR" property="fileNumber" />
+    <result column="File_Name" jdbcType="VARCHAR" property="fileName" />
+    <result column="File_Type" jdbcType="VARCHAR" property="fileType" />
+    <result column="File_Url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

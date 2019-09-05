@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerEquipmentDataDao">
+    <insert id="insertCustomerEquipmentData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        insert into hwkj_customer_equipment_data
+        (Customer_Code,Factory_Address,Equipment_Name,Brand,Model_Number,Production_Date,SN,Quantity,
+        Products,Operation_Rate,Maintenance_Record,Repair_Recode,BPM,Engineer,Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Factory_Address},#{Equipment_Name},#{Brand},#{Model_Number},#{Production_Date},#{SN},#{Quantity},
+        #{Products},#{Operation_Rate},#{Maintenance_Record},#{Repair_Recode},#{BPM},#{Engineer},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerEquipmentData" parameterType="java.lang.Integer">
+        delete from hwkj_customer_equipment_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerEquipmentData" parameterType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        update hwkj_customer_equipment_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Factory_Address!=null">Factory_Address=#{Factory_Address},</if>
+            <if test="Equipment_Name!=null">Equipment_Name=#{Equipment_Name},</if>
+            <if test="Brand!=null">Brand=#{Brand},</if>
+            <if test="Model_Number!=null">Model_Number=#{Model_Number},</if>
+            <if test="Production_Date!=null">Production_Date=#{Production_Date},</if>
+            <if test="SN!=null">SN=#{SN},</if>
+            <if test="Quantity!=null">Quantity=#{Quantity},</if>
+            <if test="Products!=null">Products=#{Products},</if>
+            <if test="Operation_Rate!=null">Operation_Rate=#{Operation_Rate},</if>
+            <if test="Maintenance_Record!=null">Maintenance_Record=#{Maintenance_Record},</if>
+            <if test="Repair_Recode!=null">Repair_Recode=#{Repair_Recode},</if>
+            <if test="BPM!=null">BPM=#{BPM},</if>
+            <if test="Engineer!=null">Engineer=#{Engineer},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerEquipmentDataList" resultType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        select e.Id,e.Customer_Code,d.Chinese_Abbreviation,d.English_Abbreviation,d.Country,d.City,
+        e.Factory_Address,e.Equipment_Name,e.Brand,e.Model_Number,e.Production_Date,e.SN,e.Quantity,e.Products,e.Operation_Rate,
+        e.Maintenance_Record,e.Repair_Recode,e.BPM,e.Engineer,e.Creator,e.Create_Date,e.Updated_By,e.Update_Date
+        from hwkj_customer_base_data d left join (select * from hwkj_customer_equipment_data a,
+        (select sn b_sn,max(Create_Date) max_date from hwkj_customer_equipment_data group by sn ) b
+        where a.sn=b.b_sn and a.Create_Date=b.max_date ) as e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null
+        <if test="customerEquipmentDataPageModel.page!=null and customerEquipmentDataPageModel.rows!=null"></if>
+        <if test="customerEquipmentData.Chinese_Abbreviation!=null and customerEquipmentData.Chinese_Abbreviation!=''">and d.Chinese_Abbreviation=#{customerEquipmentData.Chinese_Abbreviation}</if>
+        <if test="customerEquipmentData.Customer_Code!=null and customerEquipmentData.Customer_Code!=''">and e.Customer_Code=#{customerEquipmentData.Customer_Code}</if>
+        <if test="customerEquipmentData.Equipment_Name!=null and customerEquipmentData.Equipment_Name!=''">and e.Equipment_Name=#{customerEquipmentData.Equipment_Name}</if>
+        order by (e.Id) desc limit #{customerEquipmentDataPageModel.startRow},#{customerEquipmentDataPageModel.rows}
+    </select>
+    <select id="queryCustomerEquipmentDataCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data d left join (select * from hwkj_customer_equipment_data a,
+        (select sn b_sn,max(Create_Date) max_date from hwkj_customer_equipment_data group by sn ) b
+        where a.sn=b.b_sn and a.Create_Date=b.max_date ) as e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null
+        <if test="customerEquipmentDataPageModel.page!=null and customerEquipmentDataPageModel.rows!=null"></if>
+        <if test="customerEquipmentData.Chinese_Abbreviation!=null and customerEquipmentData.Chinese_Abbreviation!=''">and d.Chinese_Abbreviation=#{customerEquipmentData.Chinese_Abbreviation}</if>
+        <if test="customerEquipmentData.Customer_Code!=null and customerEquipmentData.Customer_Code!=''">and e.Customer_Code=#{customerEquipmentData.Customer_Code}</if>
+        <if test="customerEquipmentData.Equipment_Name!=null and customerEquipmentData.Equipment_Name!=''">and e.Equipment_Name=#{customerEquipmentData.Equipment_Name}</if>
+    </select>
+    <select id="queryCustomerEquipmentDataById" resultType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        select * from hwkj_customer_equipment_data where Id=#{Id}
+    </select>
+    <select id="queryCustomerEquipmentDataForDownLoadAll" parameterType="hwkj.hwkj.entity.CRM.CustomerEquipmentData" resultType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        select e.Id,e.Customer_Code,d.Chinese_Abbreviation,d.English_Abbreviation,d.Country,d.City,
+        e.Factory_Address,e.Equipment_Name,e.Brand,e.Model_Number,e.Production_Date,e.SN,e.Quantity,e.Products,e.Operation_Rate,
+        e.Maintenance_Record,e.Repair_Recode,e.BPM,e.Engineer,e.Creator,e.Create_Date,e.Updated_By,e.Update_Date
+        from hwkj_customer_base_data d left join (select * from hwkj_customer_equipment_data a,
+        (select sn b_sn,max(Create_Date) max_date from hwkj_customer_equipment_data group by sn ) b
+        where a.sn=b.b_sn and a.Create_Date=b.max_date ) as e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null
+        <if test="customerEquipmentData.Chinese_Abbreviation!=null and customerEquipmentData.Chinese_Abbreviation!=''">and d.Chinese_Abbreviation=#{customerEquipmentData.Chinese_Abbreviation}</if>
+        <if test="customerEquipmentData.Customer_Code!=null and customerEquipmentData.Customer_Code!=''">and e.Customer_Code=#{customerEquipmentData.Customer_Code}</if>
+        <if test="customerEquipmentData.Equipment_Name!=null and customerEquipmentData.Equipment_Name!=''">and e.Equipment_Name=#{customerEquipmentData.Equipment_Name}</if>
+        order by (e.Id) desc
+    </select>
+    <select id="queryCustomerEquipmentDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        select e.Id,e.Customer_Code,d.Chinese_Abbreviation,d.English_Abbreviation,d.Country,d.City,
+        e.Factory_Address,e.Equipment_Name,e.Brand,e.Model_Number,e.Production_Date,e.SN,e.Quantity,e.Products,e.Operation_Rate,
+        e.Maintenance_Record,e.Repair_Recode,e.BPM,e.Engineer,e.Creator,e.Create_Date,e.Updated_By,e.Update_Date
+        from hwkj_customer_base_data d left join (select * from hwkj_customer_equipment_data a,
+        (select sn b_sn,max(Create_Date) max_date from hwkj_customer_equipment_data group by sn ) b
+        where a.sn=b.b_sn and a.Create_Date=b.max_date ) as e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null and e.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by e.Id desc
+    </select>
+    <select id="queryCustomerEquipmentDataByFactoryAddress" resultType="int">
+        select count(*) from hwkj_customer_equipment_data where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+        <if test="Factory_Address!=null and Factory_Address!=''">and Factory_Address=#{Factory_Address}</if>
+    </select>
+    <select id="queryMaintenanceAndMaintenanceRecordsDataList" resultType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        select e.Id,e.Customer_Code,d.Chinese_Abbreviation,d.English_Abbreviation,d.Country,d.City,
+        e.Factory_Address,e.Equipment_Name,e.Brand,e.Model_Number,e.Production_Date,e.SN,e.Quantity,e.Products,e.Operation_Rate,
+        e.Maintenance_Record,e.Repair_Recode,e.BPM,e.Engineer,e.Creator,e.Create_Date,e.Updated_By,e.Update_Date
+        from hwkj_customer_base_data d left join hwkj_customer_equipment_data e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null
+        <if test="customerEquipmentDataPageModel.page!=null and customerEquipmentDataPageModel.rows!=null"></if>
+        <if test="customerEquipmentData.Chinese_Abbreviation!=null and customerEquipmentData.Chinese_Abbreviation!=''">and d.Chinese_Abbreviation=#{customerEquipmentData.Chinese_Abbreviation}</if>
+        <if test="customerEquipmentData.Customer_Code!=null and customerEquipmentData.Customer_Code!=''">and e.Customer_Code=#{customerEquipmentData.Customer_Code}</if>
+        <if test="customerEquipmentData.Equipment_Name!=null and customerEquipmentData.Equipment_Name!=''">and e.Equipment_Name=#{customerEquipmentData.Equipment_Name}</if>
+        <if test="customerEquipmentData.SN!=null and customerEquipmentData.SN!=''">and e.SN=#{customerEquipmentData.SN}</if>
+        order by (e.Id) desc limit #{customerEquipmentDataPageModel.startRow},#{customerEquipmentDataPageModel.rows}
+    </select>
+    <select id="queryMaintenanceAndMaintenanceRecordsDataCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data d left join hwkj_customer_equipment_data e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null
+        <if test="customerEquipmentDataPageModel.page!=null and customerEquipmentDataPageModel.rows!=null"></if>
+        <if test="customerEquipmentData.Chinese_Abbreviation!=null and customerEquipmentData.Chinese_Abbreviation!=''">and d.Chinese_Abbreviation=#{customerEquipmentData.Chinese_Abbreviation}</if>
+        <if test="customerEquipmentData.Customer_Code!=null and customerEquipmentData.Customer_Code!=''">and e.Customer_Code=#{customerEquipmentData.Customer_Code}</if>
+        <if test="customerEquipmentData.Equipment_Name!=null and customerEquipmentData.Equipment_Name!=''">and e.Equipment_Name=#{customerEquipmentData.Equipment_Name}</if>
+        <if test="customerEquipmentData.SN!=null and customerEquipmentData.SN!=''">and e.SN=#{customerEquipmentData.SN}</if>
+    </select>
+    <select id="queryMaintenanceAndMaintenanceRecordsDataDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerEquipmentData">
+        select e.Id,e.Customer_Code,d.Chinese_Abbreviation,d.English_Abbreviation,d.Country,d.City,
+        e.Factory_Address,e.Equipment_Name,e.Brand,e.Model_Number,e.Production_Date,e.SN,e.Quantity,e.Products,e.Operation_Rate,
+        e.Maintenance_Record,e.Repair_Recode,e.BPM,e.Engineer,e.Creator,e.Create_Date,e.Updated_By,e.Update_Date
+        from hwkj_customer_base_data d left join hwkj_customer_equipment_data e
+        on d.Customer_Code=e.Customer_Code where 1=1 and e.Id is not null and e.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        <!--<if test="customerEquipmentData.Chinese_Abbreviation!=null and customerEquipmentData.Chinese_Abbreviation!=''">and d.Chinese_Abbreviation=#{customerEquipmentData.Chinese_Abbreviation}</if>
+        <if test="customerEquipmentData.Customer_Code!=null and customerEquipmentData.Customer_Code!=''">and e.Customer_Code=#{customerEquipmentData.Customer_Code}</if>
+        <if test="customerEquipmentData.Equipment_Name!=null and customerEquipmentData.Equipment_Name!=''">and e.Equipment_Name=#{customerEquipmentData.Equipment_Name}</if>
+        <if test="customerEquipmentData.SN!=null and customerEquipmentData.SN!=''">and e.SN=#{customerEquipmentData.SN}</if>-->
+        order by (e.Id) desc
+    </select>
+    <select id="queryCustomerEquipmentDataForAllExist" parameterType="hwkj.hwkj.entity.CRM.CustomerEquipmentData" resultType="int">
+        select count(*) from hwkj_customer_equipment_data where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Factory_Address!=null">and Factory_Address=#{Factory_Address}</if>
+        <if test="Equipment_Name!=null">and Equipment_Name=#{Equipment_Name}</if>
+        <if test="Brand!=null">and Brand=#{Brand}</if>
+        <if test="Model_Number!=null">and Model_Number=#{Model_Number}</if>
+        <if test="Production_Date!=null">and Production_Date=#{Production_Date}</if>
+        <if test="SN!=null">and SN=#{SN}</if>
+        <if test="Quantity!=null">and Quantity=#{Quantity}</if>
+        <if test="Products!=null">and Products=#{Products}</if>
+        <if test="Operation_Rate!=null">and Operation_Rate=#{Operation_Rate}</if>
+        <if test="Maintenance_Record!=null">and Maintenance_Record=#{Maintenance_Record}</if>
+        <if test="Repair_Recode!=null">and Repair_Recode=#{Repair_Recode}</if>
+        <if test="BPM!=null">and BPM=#{BPM}</if>
+        <if test="Engineer!=null">and Engineer=#{Engineer}</if>
+    </select>
+</mapper>

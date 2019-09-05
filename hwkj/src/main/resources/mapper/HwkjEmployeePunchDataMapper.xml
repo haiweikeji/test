@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjEmployeePunchDataMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjEmployeePunchData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="Job_Number" jdbcType="VARCHAR" property="jobNumber" />
+    <result column="Attendance_Date" jdbcType="VARCHAR" property="attendanceDate" />
+    <result column="Morning_Work_Time" jdbcType="VARCHAR" property="morningWorkTime" />
+    <result column="Morning_Punch_Time" jdbcType="VARCHAR" property="morningPunchTime" />
+    <result column="Morning_Punch_Result" jdbcType="VARCHAR" property="morningPunchResult" />
+    <result column="Morning_Punch_Address" jdbcType="VARCHAR" property="morningPunchAddress" />
+    <result column="Morning_Punch_Equipment" jdbcType="VARCHAR" property="morningPunchEquipment" />
+    <result column="Afternoon_Work_Time" jdbcType="VARCHAR" property="afternoonWorkTime" />
+    <result column="Afternoon_Punch_Time" jdbcType="VARCHAR" property="afternoonPunchTime" />
+    <result column="Afternoon_Punch_Result" jdbcType="VARCHAR" property="afternoonPunchResult" />
+    <result column="Afternoon_Punch_Address" jdbcType="VARCHAR" property="afternoonPunchAddress" />
+    <result column="Afternoon_Punch_Equipment" jdbcType="VARCHAR" property="afternoonPunchEquipment" />
+    <result column="Later_Amount" jdbcType="INTEGER" property="laterAmount" />
+    <result column="Later_Time" jdbcType="VARCHAR" property="laterTime" />
+    <result column="Early_Amount" jdbcType="INTEGER" property="earlyAmount" />
+    <result column="Early_Time" jdbcType="VARCHAR" property="earlyTime" />
+    <result column="Name" jdbcType="VARCHAR" property="name" />
+    <result column="Dept" jdbcType="VARCHAR" property="dept" />
+  </resultMap>
+</mapper>

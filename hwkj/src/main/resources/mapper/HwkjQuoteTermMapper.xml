@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjQuoteTermMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjQuoteTerm">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Condition_Type" jdbcType="VARCHAR" property="conditionType" />
+    <result column="Condition_Code" jdbcType="VARCHAR" property="conditionCode" />
+    <result column="Clause" jdbcType="VARCHAR" property="clause" />
+    <result column="Described" jdbcType="VARCHAR" property="described" />
+    <result column="Days" jdbcType="INTEGER" property="days" />
+    <result column="Percent" jdbcType="VARCHAR" property="percent" />
+    <result column="Status" jdbcType="VARCHAR" property="status" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div >
+        <div>
+            <span style="font-size: 10px">事业群:</span>
+            <input id="s1" name="s1"class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+            <span style="font-size: 10px">事业处:</span>
+            <input id="s2" name="s2" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+            <span style="font-size: 10px">部门名称:</span>
+            <input id="s3" name="s3" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+            <span style="font-size: 10px">课别:</span>
+            <input id="s4" name="s4" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+            <span style="font-size: 10px">组别:</span>
+            <input id="s5" name="s5" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+            <span style="font-size: 10px">法人:</span>
+            <input id="s6" name="s6" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+            <span style="font-size: 10px">区域:</span>
+            <input id="s7" name="s7" class="easyui-textbox" style="width: 80px;height: 25px" />&nbsp;&nbsp;
+        </div>
+        <div style="height: 10px"></div>
+        <div>
+            <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+            <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newOrgData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+            <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+            <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+            <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+            <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+            <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+        </div>
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+                <script type="text/javascript">
+                    $(function () {
+                        var url=window.location.href;
+                        url = url.substring(url.lastIndexOf("/") + 1);
+                        $.ajax({
+                            url:"queryOrgDataFunction.do",
+                            type:"post",
+                            dataType:"json",
+                            data:{Url_Page:url},
+                            success:function (data) {
+                                data=data.list;
+                                if(data=="timeOut"){
+                                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                                }else {
+                                    if(data.newly_Added!="Y"){
+                                        $("#insert").css("display","none");
+                                    }
+                                    if(data.modify!="Y"){
+                                        $("#update").css("display","none");
+                                    }
+                                    if(data.remove!="Y"){
+                                        $("#remove").css("display","none");
+                                    }
+                                    if(data.download!="Y"){
+                                        $("#download").css("display","none");
+                                    }
+                                    if(data.model!="Y"){
+                                        $("#model").css("display","none");
+                                    }
+                                    if(data.upload!="Y"){
+                                        $("#upload").css("display","none");
+                                    }
+                                }
+                            },
+                            error:function () {
+                                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+                            }
+                        })
+                    });
+                    $(function(){
+                        $("#g").datagrid({
+                            columns:[
+                                [//定义标题行所有的列
+                                    {field:'id',title:'编号',checkbox:true},
+                                    {field:'group_Name',title:'集团名称',align:'center',titleAlign: true},
+                                    {field:'group_Code',title:'集团代码',align:'center',titleAlign: true},
+                                    {field:'legal_Name',title:'法人名称',align:'center',titleAlign: true},
+                                    {field:'company_Code',title:'公司代码',align:'center',titleAlign: true},
+                                    {field:'bG',title:'事业群名称',align:'center',titleAlign: true},
+                                    {field:'bU',title:'事业处',align:'center',titleAlign: true},
+                                    {field:'region',title:'区域',align:'center',titleAlign: true},
+                                    {field:'dept',title:'部门名称',align:'center',titleAlign: true},
+                                    {field:'ke',title:'课别',align:'center',titleAlign: true},
+                                    {field:'zu',title:'组别',align:'center',titleAlign: true},
+                                    {field:'cost_Code',title:'费用代码',align:'center',titleAlign: true},
+                                    {field:'org_Code',title:'组织代码',align:'center',titleAlign: true},
+                                    //{field:'upper_Name',title:'上级单位名称',align:'center',titleAlign: true},
+                                    {field:'status',title:'状态',align:'center',titleAlign: true},
+                                    {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                                    {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                                    {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                                    {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                                ]
+                            ],
+                            url:"queryOrgData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                            //emptyMsg: '未找到记录！',
+                            //autoRowHeight:false,
+                            //cache: false,
+                            //fit:true,
+                            //border:false,
+                            //rownumbers: true,
+                            //idField: 'id',
+                            //iconCls: 'icon-x2',
+                            //singleSelect:true,
+                            //fitColumns: true,
+                            //nowrap: true,
+                            //striped: true,
+                            //collapsible: true,
+                            //dataType : "json",//数据格式
+                            //type : "GET",//请求方式
+                            //async : false,//是否异步请求
+                            //queryParams:{pageNumber:1,pageSize:20},//查询参数
+                            loadMsg:"正在加载数据...",
+                            //rownumbers:true,//查询结果在表格中显示行号
+                            fitColumns:true,//列的宽度填满表格，防止下方出现滚动条
+                            //pageNumber:1,   //初始页码，得在这设置才效果，pagination设置没效果
+                            /*toolbar:[//工具栏
+                                {text:'添加',iconCls:'icon-add'},
+                                {text:'删除',iconCls:'icon-remove',
+                                    handler:function(){
+                                        //获得选中的行
+                                        var rows = $("#g").datagrid("getSelections");
+                                        for(var i=0;i<rows.length;i++){
+                                            var id = rows[i].Id;
+                                            alert(id);
+                                        }
+                                    }},
+                                {text:'修改',iconCls:'icon-edit'}
+                            ],*/
+                            singleSelect:false,//是否可以单选
+                            pagination:true,//分页条
+                            pageSize:20,
+                            pageList:[15,20,30,40,50],//分页条中的下拉框选项
+                            onLoadSuccess:function(data){
+                                if(data){
+                                    $.each(data.rows, function(index,item){
+                                        if(item.checked){
+                                            $('#g').datagrid('checkRow',index);
+                                        }
+                                    });
+                                }
+                            },
+                            onSelectPage: function (page, rows) {//分页触发
+                                find(page, rows);
+                            }
+                        });
+                    });
+                    function find(page, rows)
+                    {
+                        $("#g").datagrid("getPager").pagination({page : page,rows : rows });//重置
+                        $("#g").datagrid("loading"); //加屏蔽
+                        $.ajax({
+                            type : "POST",
+                            dataType : "json",
+                            url : "queryOrgData.do",
+                            data : {
+                                page : page,
+                                rows : rows
+                            },
+                            success : function(data) {
+                                $("#g").datagrid("loadData",data);
+                                $("#g").datagrid("loaded"); //移除屏蔽
+                            },
+                            error : function(err) {
+                                $.messager.alert("操作提示", "获取信息失败...请联系管理员!", "error");
+                                $("#g").datagrid("loaded"); //移除屏蔽
+                            }
+                        });
+                    }
+                </script>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="legal_Name" class="easyui-textbox" required="true" disabled="disabled" label="法人名称:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="company_Code"  class="easyui-textbox" required="true" disabled="disabled" label="公司代码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="bG" id="bG" class="easyui-textbox" required="true" label="事业群名称:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="bU" id="bU" class="easyui-textbox"  label="事业处:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="region" class="easyui-textbox" required="true" label="区域:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="dept" id="dept" class="easyui-textbox"  label="部门名称:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="ke" id="ke" class="easyui-textbox"  label="课别:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="zu" id="zu" class="easyui-textbox"  label="组别:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="cost_Code" name="cost_Code" class="easyui-textbox" required="true" label="费用代码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="org_Code" name="org_Code" class="easyui-textbox" required="true" label="组织代码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="status" class="easyui-combobox" required="true" label="状态:" style="width:100%">
+                    <option></option>
+                    <option>Y</option>
+                    <option>N</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input type="hidden" name="id" />
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="EditCalculateOrgCode()" style="width:120px"><span style="align-content: center">计算组织代码</span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="legal_Name" id="legal_Name2" class="easyui-combobox" style="width: 100%" data-options="required:true,valueField:'legal_Name',textField:'legal_Name'"  label="法人名称:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="company_Code2" name="company_Code" class="easyui-textbox"  required="true" label="公司代码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="bG" id="bG2" class="easyui-textbox" required="true" label="事业群名称:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="bU" id="bU2" class="easyui-textbox"  label="事业处:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="region" class="easyui-textbox" required="true" label="区域:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="dept" id="dept2" class="easyui-textbox"  label="部门名称:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="ke" id="ke2" class="easyui-textbox"  label="课别:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="zu" id="zu2" class="easyui-textbox"  label="组别:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="cost_Code2" name="cost_Code" class="easyui-textbox" required="true" label="费用代码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="org_Code2" name="org_Code" class="easyui-textbox" required="true" label="组织代码:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="status" class="easyui-combobox" required="true" label="状态:" style="width:100%">
+                    <option></option>
+                    <option>Y</option>
+                    <option>N</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="CalculateOrgCode()" style="width:120px"><span style="align-content: center">计算组织代码</span></a>
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg4" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons4'">
+        <form id="fm4" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons4">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser4()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg4').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#legal_Name2").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var legal_Name2=$("#legal_Name2").combobox('getText');
+                $.ajax({
+                    url:"optionQuery.do",
+                    type:"post",
+                    data:{legal_Name2:legal_Name2},
+                    //contentType:"application/json",
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.legaldata;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#company_Code2").textbox('setValue',data[0].company_Code);
+                    }
+                });
+            }
+        });
+    });
+   /* $(function () {
+        $("").click(function () {
+            $('#g').datagrid('load',{
+                "s1":$("#s1").combobox("getValue"),
+                "s2":$("#s2").combobox("getValue"),
+                "s3":$("#s3").combobox("getValue"),
+                "s4":$("#s4").combobox("getValue"),
+                "s5":$("#s5").combobox("getValue"),
+                "s6":$("#s6").combobox("getValue"),
+                "s7":$("#s7").combobox("getValue"),
+            });
+        })
+    });*/
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true},
+                        {field:'group_Name',title:'集团名称',align:'center',titleAlign: true},
+                        {field:'group_Code',title:'集团代码',align:'center',titleAlign: true},
+                        {field:'legal_Name',title:'法人名称',align:'center',titleAlign: true},
+                        {field:'company_Code',title:'公司代码',align:'center',titleAlign: true},
+                        {field:'bG',title:'事业群名称',align:'center',titleAlign: true},
+                        {field:'bU',title:'事业处',align:'center',titleAlign: true},
+                        {field:'region',title:'区域',align:'center',titleAlign: true},
+                        {field:'dept',title:'部门名称',align:'center',titleAlign: true},
+                        {field:'ke',title:'课别',align:'center',titleAlign: true},
+                        {field:'zu',title:'组别',align:'center',titleAlign: true},
+                        {field:'cost_Code',title:'费用代码',align:'center',titleAlign: true},
+                        {field:'org_Code',title:'组织代码',align:'center',titleAlign: true},
+                        //{field:'upper_Name',title:'上级单位名称',align:'center',titleAlign: true},
+                        {field:'status',title:'状态',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryOrgData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{BG:$("#s1").val().trim(),BU:$("#s2").val(),Dept:$("#s3").val(),
+                    Ke:$("#s4").val(),Zu:$("#s5").val(),Legal_Name:$("#s6").val(),Region:$("#s7").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                //rownumbers:true,//查询结果在表格中显示行号
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                //pageNumber:1,   //初始页码，得在这设置才效果，pagination设置没效果
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,BG,BU,Dept,Ke,Zu,Legal_Name,Region) {//分页触发
+                 findOption(page, rows,BG,BU,Dept,Ke,Zu,Legal_Name,Region);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page,rows,BG,BU,Dept,Ke,Zu,Legal_Name,Region)
+    {
+        $("#g").datagrid("getPager").pagination({page : page,rows : rows ,BG:BG,BU:BU,Dept:Dept,
+            Ke:Ke,Zu:Zu,Legal_Name:Legal_Name,Region:Region});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryOrgData.do",
+            data : {
+                page : page,
+                rows : rows,
+                BG:BG,
+                BU:BU,
+                Dept:Dept,
+                Ke:Ke,
+                Zu:Zu,
+                Legal_Name:Legal_Name,
+                Region:Region
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id = [];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg').dialog('close');
+            }
+            url = 'orgDataUpdate.do';
+        }
+    };
+    function newOrgData(){
+        $('#dlg2').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm2').form('clear');
+        url = 'orgDataAdd.do';
+        var legal_Name2=$("#legal_Name2").combobox('getText');
+        $.ajax({
+            url:"optionQuery.do",
+            type:"post",
+            data:{"legal_Name2":legal_Name2},
+            //contentType:"application/json",
+            dataType:"json",
+            success:function (data) {
+                // for(var i=0;i<data.legaldata.length;i++){
+                //alert((data.legaldata)[i].company_Code);
+                // str+= '<option value="' + data.legaldata[i].company_Code + '">'+ data.legaldata[i].company_Code +'</option>';
+                //}
+                $("#legal_Name2").combobox("loadData",data.legaldata);
+                $("#company_Code2").textbox('setValue',"");
+            }
+        });
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    if(result.message=="success"){
+                        $('#dlg').dialog('close');        // close the dialog
+                        $.messager.alert("提示信息","更新数据成功!","info");
+                        $('#g').datagrid('reload');    // reload the user data
+                    }
+                    else if(result.message=="timeOut"){
+                        $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning")
+                    }
+                    else if(result.message=="error"){
+                        $.messager.alert("提示信息","更新数据失败,请稍后尝试或者联系管理员!","error")
+                    }
+                    else {
+                        $.messager.alert("提示信息","更新数据失败,请稍后尝试或者联系管理员!","error")
+                    }
+                }
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    if(result.message=="success"){
+                        $('#dlg2').dialog('close');        // close the dialog
+                        $.messager.alert("提示信息","新增数据成功!","info");
+                        $('#g').datagrid('reload');    // reload the user data
+                    }
+                    else if(result.message=="timeOut"){
+                        $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning")
+                    }
+                    else if(result.message=="error"){
+                        $.messager.alert("提示信息","新增数据失败,请稍后尝试或者联系管理员!","error")
+                    }
+                    else {
+                        $.messager.alert("提示信息","新增数据失败,请稍后尝试或者联系管理员!","error")
+                    }
+                }
+            }
+        });
+    };
+    function CalculateOrgCode(){
+        $.ajax({
+            url:"calculateOrgCode.do",
+            type:"post",
+            data:{
+                BG:$("#bG2").val(),
+                BU:$("#bU2").val(),
+                Dept:$("#dept2").val(),
+                Ke:$("#ke2").val(),
+                Zu:$("#zu2").val()
+            },
+            dataType:"json",
+            success:function (data) {
+                $("#cost_Code2").textbox('setValue',data.orgCode.substring(0,7)+"00");//从字符串第一位开始到第七位结束，不包含第七位
+                $("#org_Code2").textbox('setValue',data.orgCode);
+            }
+        })
+    };
+    function EditCalculateOrgCode(){
+        $.ajax({
+            url:"calculateOrgCode.do",
+            type:"post",
+            data:{
+                BG:$("#bG").val(),
+                BU:$("#bU").val(),
+                Dept:$("#dept").val(),
+                Ke:$("#ke").val(),
+                Zu:$("#zu").val()
+            },
+            dataType:"json",
+            success:function (data) {
+                $("#cost_Code").textbox('setValue',data.orgCode.substring(0,7)+"00");
+                $("#org_Code").textbox('setValue',data.orgCode);
+            }
+        })
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'orgDataRemove.do';
+        }
+    }
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (data) {
+                if(data.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(data.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或者联系管理员!","error")
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或者联系管理员!","error")
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或者联系管理员!","error")
+            }
+        })
+    };
+    function ExcelUpload(){
+        $('#dlg4').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm4').form('clear');
+        url = 'orgDataUpload.do';
+    };
+    function saveUser4(){
+        $('#fm4').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(data){
+                if(data=="1"){
+                    $.messager.alert("提示信息","数据上传成功!","info")
+                    $('#dlg4').dialog('close');
+                    $('#g').datagrid('reload');
+                }
+                else if(data=="2"){
+                    $.messager.alert("提示信息","请确认公司法人是否有错或者联系管理员!","error")
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error")
+                }
+            }
+        });
+    };
+    function DownloadModel(){
+        location.href="orgDataDownLoadModel.do";
+    };
+    function Download(){
+        var BG=$("#s1").val();
+        var BU=$("#s2").val();
+        var Dept=$("#s3").val();
+        var Ke=$("#s4").val();
+        var Zu=$("#s5").val();
+        var Legal_Name=$("#s6").val();
+        var Region=$("#s7").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="orgDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href="orgDataDownLoadExcelAll.do?BG="+BG+"&BU="+BU+"&Dept="+Dept+"&Ke="+Ke+"&Zu="+Zu+"&Legal_Name="+Legal_Name+"&Region="+Region;
+        }
+    }
+</script>
+</body>
+</html>

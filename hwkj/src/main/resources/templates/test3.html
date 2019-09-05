@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    var age;
+    for(;;){
+        age=prompt("请输入年龄:");
+        if(!isNaN(age)){
+            break;
+        }
+        alert("请输入数字:");
+    }
+    alert(age);
+    var ageNum=parseInt(age);
+    alert(ageNum);
+    if(ageNum>=0 && ageNum<1){
+        alert("婴儿");
+    }
+    else if (1<=ageNum && ageNum<=12){
+        alert("儿童");
+    }
+    else if (13<=ageNum && ageNum<=17){
+        alert("少年");
+    }
+    else {
+        alert("成人");
+    }
+</script>
+</body>
+</html>

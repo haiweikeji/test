@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <input type="text" id="legal_Name" class="easyui-textbox" style="width: 240px;height: 25px" label="法人名称:">&nbsp;&nbsp;&nbsp;
+        <input type="text" id="company_Code" class="easyui-textbox" style="width: 240px;height: 25px" label="公司代码:">&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newLegalData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="legal_Name" class="easyui-textbox" style="width: 230px" required="true"  label="法人名称:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="two_Initials" class="easyui-textbox" style="width: 230px" required="true" label="前两位首字母:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="country" class="easyui-combobox" style="width: 230px" required="true"  label="国家:">
+                    <option></option>
+                    <option>中国</option>
+                    <option>美国</option>
+                    <option>英国</option>
+                    <option>日本</option>
+                    <option>澳大利亚</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="city" class="easyui-combobox" style="width: 230px" required="true" label="城市:">
+                    <option></option>
+                    <option>北京</option>
+                    <option>纽约</option>
+                    <option>伦敦</option>
+                    <option>东京</option>
+                    <option>悉尼</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="industry" class="easyui-textbox" style="width: 230px" required="true"  label="行业:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="legal" class="easyui-textbox" style="width: 230px" required="true" label="法人代表:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="taxpayer_Number" class="easyui-textbox" style="width: 230px" required="true"  label="纳税人识别号:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="registration_Number" class="easyui-textbox" style="width: 230px" required="true" label="工商注册号:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="registered_Time" class="easyui-datebox" style="width: 230px" required="true"  label="注册时间:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="registered_Capital_Add" name="registered_Capital" class="easyui-textbox" style="width: 230px" required="true" label="注册资金(万元):" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="registered_Address" class="easyui-textbox" style="width: 230px" required="true"  label="注册地址:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="bank" class="easyui-textbox" style="width: 230px" required="true" label="开户银行:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="bank_Account_Add" name="bank_Account" class="easyui-textbox" style="width: 230px" required="true"  label="银行账号:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="bank_Address" class="easyui-textbox" style="width: 230px" required="true" label="银行地址:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="currency" class="easyui-textbox" style="width: 230px" required="true"  label="可接受币别:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="office_Address" class="easyui-textbox" style="width: 230px" required="true" label="办公地址:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="legal_Name" class="easyui-textbox" style="width: 230px" required="true" disabled="disabled" label="法人名称:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="two_Initials" class="easyui-textbox" style="width: 230px" required="true" disabled="disabled" label="前两位首字母:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="country" class="easyui-combobox" style="width: 230px" required="true" disabled="disabled" label="国家:">
+                    <option></option>
+                    <option>中国</option>
+                    <option>美国</option>
+                    <option>英国</option>
+                    <option>日本</option>
+                    <option>澳大利亚</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="city" class="easyui-combobox" style="width: 230px" required="true" disabled="disabled" label="城市:">
+                    <option></option>
+                    <option>北京</option>
+                    <option>纽约</option>
+                    <option>伦敦</option>
+                    <option>东京</option>
+                    <option>悉尼</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="industry" class="easyui-textbox" style="width: 230px" required="true"  label="行业:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="legal" class="easyui-textbox" style="width: 230px" required="true" label="法人代表:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="taxpayer_Number" class="easyui-textbox" style="width: 230px" required="true"  label="纳税人识别号:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="registration_Number" class="easyui-textbox" style="width: 230px" required="true" label="工商注册号:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="registered_Time" class="easyui-datebox" style="width: 230px" required="true"  label="注册时间:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="registered_Capital_Update" name="registered_Capital" class="easyui-textbox" style="width: 230px" required="true" label="注册资金(万元):" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="registered_Address" class="easyui-textbox" style="width: 230px" required="true"  label="注册地址:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="bank" class="easyui-textbox" style="width: 230px" required="true" label="开户银行:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="bank_Account_Update" name="bank_Account" class="easyui-textbox" style="width: 230px" required="true"  label="银行账号:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="bank_Address" class="easyui-textbox" style="width: 230px" required="true" label="银行地址:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="currency" class="easyui-textbox" style="width: 230px" required="true"  label="可接受币别:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="office_Address" class="easyui-textbox" style="width: 230px" required="true" label="办公地址:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryLegalDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    /**
+     * 注册资金
+     */
+    $(function () {
+        $("#registered_Capital_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#registered_Capital_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 银行账号
+     */
+    $(function () {
+        $("#bank_Account_Add").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#bank_Account_Update").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'legal_Name',title:'法人名称',align:'center',titleAlign: true},
+                        {field:'two_Initials',title:'前两位首字母',align:'center',titleAlign: true},
+                        {field:'company_Code',title:'公司代码',align:'center',titleAlign: true},
+                        {field:'country',title:'国家',align:'center',titleAlign: true},
+                        {field:'city',title:'城市',align:'center',titleAlign: true},
+                        {field:'industry',title:'行业',align:'center',titleAlign: true},
+                        {field:'legal',title:'法人代表',align:'center',titleAlign: true},
+                        {field:'taxpayer_Number',title:'纳税人识别号',align:'center',titleAlign: true},
+                        {field:'registration_Number',title:'工商注册号',align:'center',titleAlign: true},
+                        {field:'registered_Time',title:'注册时间',align:'center',titleAlign: true},
+                        {field:'registered_Capital',title:'注册资金(万元)',align:'center',titleAlign: true},
+                        {field:'registered_Address',title:'注册地址',align:'center',titleAlign: true},
+                        {field:'bank',title:'开户银行',align:'center',titleAlign: true},
+                        {field:'bank_Account',title:'银行账号',align:'center',titleAlign: true},
+                        {field:'bank_Address',title:'银行地址',align:'center',titleAlign: true},
+                        {field:'currency',title:'可接受币别',align:'center',titleAlign: true},
+                        {field:'office_Address',title:'办公地址',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryLegalData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Legal_Name:$("#legal_Name").val(),Company_Code:$("#company_Code").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//true可以单选
+                selectOnCheck: true,
+                checkOnSelect: true,
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page,rows,Legal_Name,Company_Code) {//分页触发
+                 findOption(page,rows,Legal_Name,Company_Code);
+                }
+            })
+        })
+    });
+    function findOption(page,rows,Legal_Name,Company_Code)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Legal_Name:Legal_Name,Company_Code:Company_Code});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryLegalData.do",
+            data : {
+                page : page,
+                rows : rows,
+                Legal_Name:Legal_Name,
+                Company_Code:Company_Code,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+            }
+            else{
+                $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+                $('#fm2').form('load',row);
+            }
+            url = 'legalDataUpdate.do';
+        }
+    };
+    function newLegalData(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'legalDataAdd.do';
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否已存在或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增数据失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新数据失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index,item){
+                id.push(item.id);
+            });
+            url = 'legalDataRemove.do';
+        }
+    }
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","成功删除数据!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function Download() {
+        var Legal_Name=$("#legal_Name").val();
+        var Company_Code=$("#company_Code").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="legalDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href="legalDataDownLoadExcelAll.do?Legal_Name="+Legal_Name+"&Company_Code="+Company_Code;
+        }
+    };
+    function DownloadModel(){
+        location.href="legalDataDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'legalDataUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,15)=="registered_Time"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(16)+"列注册时间格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,18)=="registered_Capital"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(19)+"列注册资金格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,15)=="taxpayer_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(16)+"列纳税人识别号是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,19)=="registration_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(20)+"列工商注册号是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="bank_Account"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列银行账号是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+    })(jQuery);
+</script>
+</body>
+</html>

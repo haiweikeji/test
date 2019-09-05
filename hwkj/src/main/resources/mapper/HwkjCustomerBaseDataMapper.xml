@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjCustomerBaseDataMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjCustomerBaseData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Customer_Code" jdbcType="VARCHAR" property="customerCode" />
+    <result column="Four_Initials" jdbcType="VARCHAR" property="fourInitials" />
+    <result column="Country" jdbcType="VARCHAR" property="country" />
+    <result column="City" jdbcType="VARCHAR" property="city" />
+    <result column="Chinese_Full_Name" jdbcType="VARCHAR" property="chineseFullName" />
+    <result column="Chinese_Abbreviation" jdbcType="VARCHAR" property="chineseAbbreviation" />
+    <result column="English_Full_Name" jdbcType="VARCHAR" property="englishFullName" />
+    <result column="English_Abbreviation" jdbcType="VARCHAR" property="englishAbbreviation" />
+    <result column="Foxconn_Group" jdbcType="VARCHAR" property="foxconnGroup" />
+    <result column="Industry" jdbcType="VARCHAR" property="industry" />
+    <result column="Company_Owner" jdbcType="VARCHAR" property="companyOwner" />
+    <result column="Annual_Revenue" jdbcType="DOUBLE" property="annualRevenue" />
+    <result column="Industry_Rank" jdbcType="VARCHAR" property="industryRank" />
+    <result column="Enterprise_Nature" jdbcType="VARCHAR" property="enterpriseNature" />
+    <result column="Employee_Qty" jdbcType="INTEGER" property="employeeQty" />
+    <result column="Customer_Level" jdbcType="VARCHAR" property="customerLevel" />
+    <result column="Deliver_Term" jdbcType="VARCHAR" property="deliverTerm" />
+    <result column="Payment_Term" jdbcType="VARCHAR" property="paymentTerm" />
+    <result column="Receive_Term" jdbcType="VARCHAR" property="receiveTerm" />
+    <result column="Office_Address" jdbcType="VARCHAR" property="officeAddress" />
+    <result column="Registered_Address" jdbcType="VARCHAR" property="registeredAddress" />
+    <result column="Status" jdbcType="VARCHAR" property="status" />
+    <result column="Development_Date" jdbcType="VARCHAR" property="developmentDate" />
+    <result column="BPM" jdbcType="VARCHAR" property="bpm" />
+    <result column="Registered_Capital" jdbcType="DOUBLE" property="registeredCapital" />
+    <result column="Currency" jdbcType="VARCHAR" property="currency" />
+    <result column="Credit_Level" jdbcType="VARCHAR" property="creditLevel" />
+    <result column="credit_Amount" jdbcType="DOUBLE" property="creditAmount" />
+    <result column="Revenue_From" jdbcType="DOUBLE" property="revenueFrom" />
+    <result column="Revenue_To" jdbcType="DOUBLE" property="revenueTo" />
+    <result column="Date_From" jdbcType="VARCHAR" property="dateFrom" />
+    <result column="Date_To" jdbcType="VARCHAR" property="dateTo" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjVendorContactMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjVendorContact">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Vendor_Code" jdbcType="VARCHAR" property="vendorCode" />
+    <result column="Contact_Chinese_Name" jdbcType="VARCHAR" property="contactChineseName" />
+    <result column="Contact_English_Name" jdbcType="VARCHAR" property="contactEnglishName" />
+    <result column="Sex" jdbcType="VARCHAR" property="sex" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="Dept" jdbcType="VARCHAR" property="dept" />
+    <result column="Authority" jdbcType="VARCHAR" property="authority" />
+    <result column="Language" jdbcType="VARCHAR" property="language" />
+    <result column="Company_Telephone" jdbcType="VARCHAR" property="companyTelephone" />
+    <result column="Phone_Number" jdbcType="VARCHAR" property="phoneNumber" />
+    <result column="Company_Mail" jdbcType="VARCHAR" property="companyMail" />
+    <result column="Private_Mail" jdbcType="VARCHAR" property="privateMail" />
+    <result column="WeChat_Number" jdbcType="VARCHAR" property="wechatNumber" />
+    <result column="Status" jdbcType="VARCHAR" property="status" />
+    <result column="Purchase" jdbcType="VARCHAR" property="purchase" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="VARCHAR" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="VARCHAR" property="updateDate" />
+  </resultMap>
+</mapper>

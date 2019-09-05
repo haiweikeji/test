@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjCustomerManagementMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjCustomerManagement">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Customer_Code" jdbcType="VARCHAR" property="customerCode" />
+    <result column="Year" jdbcType="VARCHAR" property="year" />
+    <result column="Quarter" jdbcType="VARCHAR" property="quarter" />
+    <result column="Revenue" jdbcType="DOUBLE" property="revenue" />
+    <result column="Overdue_Amount" jdbcType="DOUBLE" property="overdueAmount" />
+    <result column="Score" jdbcType="VARCHAR" property="score" />
+    <result column="Important_Item" jdbcType="VARCHAR" property="importantItem" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

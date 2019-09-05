@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.User.MenuDao">
+    <insert id="insertMenu" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="hwkj.hwkj.entity.HUser.Menu">
+        insert into hwkj_menu
+        (pId,name,page)
+        values
+        (#{pId},#{name},#{page});
+    </insert>
+    <delete id="deleteMenu" parameterType="java.lang.Integer">
+        delete from hwkj_menu where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="updateMenu" parameterType="hwkj.hwkj.entity.HUser.Menu">
+        update hwkj_menu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pId!=null and pId!=''">pId=#{pId},</if>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="page!=null and page!=''">page=#{page},</if>
+        </trim>
+        where id=#{id}
+    </update>
+    <select id="queryAllMenu" resultType="hwkj.hwkj.entity.HUser.Menu">
+        select * from hwkj_menu
+    </select>
+    <select id="queryMenuByMenuId" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HUser.Menu">
+        select * from  hwkj_menu where id=#{id}
+    </select>
+    <select id="queryMenuByPage" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.HUser.Menu">
+        select * from  hwkj_menu where page=#{page}
+    </select>
+    <select id="queryMenuByNameAndPage" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.HUser.Menu">
+        select * from  hwkj_menu where name=#{name} or page=#{page}
+    </select>
+    <select id="queryMenuByName" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.HUser.Menu">
+        select * from  hwkj_menu where name=#{name}
+    </select>
+    <select id="queryMenuList" resultType="hwkj.hwkj.entity.HUser.Menu">
+        select * from hwkj_menu where 1=1
+        <if test="menuPageModel.page != null and  menuPageModel.rows != null"></if>
+        <if test="menu.name!=null and menu.name!=''">and name=#{menu.name}</if>
+        order by id desc limit #{menuPageModel.startRow},#{menuPageModel.rows}
+    </select>
+    <select id="queryMenuCount" resultType="int">
+        select count(*) from hwkj_menu where 1=1
+        <if test="menuPageModel.page != null and  menuPageModel.rows != null"></if>
+        <if test="menu.name!=null and menu.name!=''">and name=#{menu.name}</if>
+    </select>
+    <select id="queryMenuMaxMenuId" resultType="int">
+        select max(Menu_Id) as Menu_Id from hwkj_menu
+    </select>
+    <select id="queryMenuForExist" parameterType="hwkj.hwkj.entity.HUser.Menu" resultType="int">
+        select count(*) from hwkj_menu where 1=1
+        <if test="pId!=null">and pId=#{pId}</if>
+        <if test="name!=null">and name=#{name}</if>
+    </select>
+</mapper>

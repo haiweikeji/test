@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">CustomerName:</span>
+        <input id="chinese_Abbreviation" class="easyui-textbox" style="width: 100px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CustomerCode:</span>
+        <input id="customer_Code"class="easyui-textbox" style="width: 100px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">ContactName:</span>
+        <input id="contact_Name" class="easyui-textbox" style="width: 100px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">BPM:</span>
+        <input id="bpm" class="easyui-textbox" style="width: 100px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">Status:</span>
+        <select id="status" class="easyui-combobox" style="width: 100px;height: 25px" >
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newCustomerContact()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px;height: 650px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Add" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Add" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="contact_Chinese_Name" class="easyui-textbox" style="width: 230px" required="true" label="联系人中文名字:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="contact_English_Name" class="easyui-textbox" style="width: 230px;"  label="联系人英文名字:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="sex" class="easyui-combobox" style="width: 230px" required="true" label="性别:" >
+                    <option></option>
+                    <option>男</option>
+                    <option>女</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="title" class="easyui-textbox"  style="width: 230px;" required="true" label="职级:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="dept" class="easyui-textbox" style="width: 230px" required="true" label="部门:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="authority" class="easyui-textbox" style="width: 230px" required="true" label="权限:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="language" class="easyui-combobox" style="width: 230px" required="required" label="语言:">
+                    <option></option>
+                    <option>汉语</option>
+                    <option>英语</option>
+                    <option>日语</option>
+                    <option>粤语</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="company_Telephone_Add" name="company_Telephone" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Company_Telephone_Add'" label="公司电话:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="phone_Number_Add" name="phone_Number" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Phone_Number_Add'" label="手机号:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="company_Mail" class="easyui-textbox" style="width: 230px" required="required" validType='email' label="公司邮箱:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="private_Mail" class="easyui-textbox" style="width: 230px"  validType='email' label="私人邮箱:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="weChat_Number" class="easyui-textbox" style="width: 230px" required="required" label="微信号:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="id_Card_Add" name="id_Card" class="easyui-textbox" style="width: 230px" data-options="validType:'Id_Card_Add'" label="身份证号:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="passport_Number" class="easyui-textbox" style="width: 230px" data-options="validType:'Passport_Number_Add'" label="护照号:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="native_Place" class="easyui-textbox" style="width: 230px" label="祖籍:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="nation" class="easyui-textbox" style="width: 230px" label="民族:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="religious_Belief" class="easyui-textbox" style="width: 230px"   label="宗教:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="diet_Taboo" class="easyui-textbox" style="width: 230px"   label="饮食禁忌:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="interests" class="easyui-textbox" style="width: 230px"  label="兴趣爱好:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="habit" class="easyui-textbox" style="width: 230px"   label="习惯:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="member_Family" class="easyui-textbox" style="width: 230px"   label="家庭状况:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="job_Number_Add" name="bPM" class="easyui-combobox" style="width: 230px" required="required" data-options="valueField:'china_Name',textField:'china_Name'" label="业务员:"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:650px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Update" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Update" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="contact_Chinese_Name_Update" name="contact_Chinese_Name" class="easyui-textbox" style="width: 230px" required="true" label="联系人中文名字:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="contact_English_Name_Update" name="contact_English_Name" class="easyui-textbox" style="width: 230px;"  label="联系人英文名字:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <select id="sex_Update" name="sex" class="easyui-combobox" style="width: 230px" required="true" label="性别:" >
+                    <option></option>
+                    <option>男</option>
+                    <option>女</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="title_Update" name="title" class="easyui-textbox"  style="width: 230px;"  label="职级:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="dept_Update" name="dept" class="easyui-textbox" style="width: 230px"  label="部门:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="authority_Update" name="authority" class="easyui-textbox" style="width: 230px"  label="权限:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <select id="language_Update" name="language" class="easyui-combobox" style="width: 230px" required="required" label="语言:">
+                    <option></option>
+                    <option>汉语</option>
+                    <option>英语</option>
+                    <option>日语</option>
+                    <option>粤语</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="company_Telephone_Update" name="company_Telephone" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Company_Telephone_Update'" label="公司电话:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="phone_Number_Update" name="phone_Number" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Phone_Number_Update'" label="手机号:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="company_Mail_Update" name="company_Mail" class="easyui-textbox" style="width: 230px" required="required" validType='email' label="公司邮箱:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="private_Mail_Update" name="private_Mail" class="easyui-textbox" style="width: 230px" validType='email' label="私人邮箱:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="weChat_Number_Update" name="weChat_Number" class="easyui-textbox" style="width: 230px" required="required" label="微信号:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="id_Card_Update" name="id_Card" class="easyui-textbox" style="width: 230px" data-options="validType:'Id_Card_Update'" label="身份证号:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="passport_Number_Update" name="passport_Number" class="easyui-textbox" style="width: 230px" data-options="validType:'Passport_Number_Update'" label="护照号:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="native_Place_Update" name="native_Place" class="easyui-textbox" style="width: 230px" label="祖籍:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="nation_Update" name="nation" class="easyui-textbox" style="width: 230px" label="民族:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="religious_Belief_Update" name="religious_Belief" class="easyui-textbox" style="width: 230px"   label="宗教:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="diet_Taboo_Update" name="diet_Taboo" class="easyui-textbox" style="width: 230px"   label="饮食禁忌:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="interests_Update" name="interests" class="easyui-textbox" style="width: 230px"  label="兴趣爱好:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="habit_Update" name="habit" class="easyui-textbox" style="width: 230px"   label="习惯:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="member_Family_Update" name="member_Family" class="easyui-textbox" style="width: 230px"   label="家庭状况:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="status_Update" name="status" class="easyui-combobox" style="width: 230px"  required="required" label="状态:">
+                    <option></option>
+                    <option>Y</option>
+                    <option>N</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="job_Number_Update" name="bPM" class="easyui-combobox" style="width: 230px" required="required" data-options="valueField:'china_Name',textField:'china_Name'" label="业务员:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="id_Update" name="id" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden" class="easyui-textbox"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryCustomerContactFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $.extend($.fn.validatebox.defaults.rules, {
+        Company_Telephone_Add:{
+            validator : function(value) {
+                //var reg = /^\d+$/;
+                var reg = /^\d+([+-]\d+)+$/;
+                //var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的电话号'
+        },
+        Company_Telephone_Update:{
+            validator : function(value) {
+                //var reg = /^\d+$/;
+                var reg = /^\d+([+-]\d+)+$/;
+                //var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的电话号'
+        },
+        Phone_Number_Add:{
+            validator : function(value) {
+                var reg = /^\d+$/;
+                //var reg = /^[0-9a-zA-Z]+$/;
+                //var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的手机号'
+        },
+        Phone_Number_Update:{
+            validator : function(value) {
+                var reg = /^\d+$/;
+                //var reg = /^[0-9a-zA-Z]+$/;
+                //var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的手机号'
+        },
+        Id_Card_Add:{
+            validator : function(value) {
+                //var reg = /^\d+$/;
+                //var reg = /^[0-9a-zA-Z]+$/;
+                var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value) && value.length==18){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的身份证号'
+        },
+        Id_Card_Update:{
+            validator : function(value) {
+                //var reg = /^\d+$/;
+                //var reg = /^[0-9a-zA-Z]+$/;
+                var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value) && value.length==18){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的身份证号'
+        },
+        Passport_Number_Add:{
+            validator : function(value) {
+                //var reg = /^\d+$/;
+                var reg = /^[0-9a-zA-Z]+$/;
+                //var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的护照号'
+        },
+        Passport_Number_Update:{
+            validator : function(value) {
+                //var reg = /^\d+$/;
+                var reg = /^[0-9a-zA-Z]+$/;
+                //var reg=/^(\d{17})([0-9]|[X]|[x])$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的护照号'
+        }
+    });
+    $(function () {
+        $("#customer_Code_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Add").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerContactForOption.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Add").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#customer_Code_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Update").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerContactForOption.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Update").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'customer_Code',title:'客户代码',align:'center',titleAlign: true},
+                        {field:'chinese_Abbreviation',title:'中文简称',align:'center',titleAlign: true},
+                        {field:'country',title:'国家/地区',align:'center',titleAlign: true},
+                        {field:'city',title:'城市',align:'center',titleAlign: true},
+                        {field:'contact_Chinese_Name',title:'联系人中文名字',align:'center',titleAlign: true},
+                        {field:'contact_English_Name',title:'联系人英文名字',align:'center',titleAlign: true},
+                        {field:'sex',title:'性别',align:'center',titleAlign: true},
+                        {field:'title',title:'职级',align:'center',titleAlign: true},
+                        {field:'dept',title:'部门',align:'center',titleAlign: true},
+                        {field:'authority',title:'权限',align:'center',titleAlign: true},
+                        {field:'language',title:'语言',align:'center',titleAlign: true},
+                        {field:'company_Telephone',title:'公司电话',align:'center',titleAlign: true},
+                        {field:'phone_Number',title:'手机号',align:'center',titleAlign: true},
+                        {field:'company_Mail',title:'公司邮箱',align:'center',titleAlign: true},
+                        {field:'private_Mail',title:'私人邮箱',align:'center',titleAlign: true},
+                        {field:'weChat_Number',title:'微信号',align:'center',titleAlign: true},
+                        {field:'id_Card',title:'身份证号',align:'center',titleAlign: true},
+                        {field:'passport_Number',title:'护照号',align:'center',titleAlign: true},
+                        {field:'birth_Date',title:'出生日期',align:'center',titleAlign: true},
+                        {field:'bank',title:'开户银行',align:'center',titleAlign: true},
+                        {field:'bank_Account',title:'银行账号',align:'center',titleAlign: true},
+                        {field:'native_Place',title:'祖籍',align:'center',titleAlign: true},
+                        {field:'nation',title:'民族',align:'center',titleAlign: true},
+                        {field:'religious_Belief',title:'宗教',align:'center',titleAlign: true},
+                        {field:'diet_Taboo',title:'饮食禁忌',align:'center',titleAlign: true},
+                        {field:'interests',title:'兴趣爱好',align:'center',titleAlign: true},
+                        {field:'habit',title:'习惯',align:'center',titleAlign: true},
+                        {field:'member_Family',title:'家庭状况',align:'center',titleAlign: true},
+                        {field:'status',title:'状态',align:'center',titleAlign: true},
+                        {field:'bPM',title:'业务员',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryCustomerContact.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Chinese_Abbreviation:$("#chinese_Abbreviation").val(),Customer_Code:$("#customer_Code").val(),Contact_Chinese_Name:$("#contact_Name").val(),BPM:$("#bpm").val(),Status:$("#status").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Chinese_Full_Name,Customer_Code,Contact_Chinese_Name,BPM,Status){//分页触发
+                 findOption(page, rows,Chinese_Full_Name,Customer_Code,Contact_Chinese_Name,BPM,Status);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Chinese_Full_Name,Customer_Code,Contact_Chinese_Name,BPM,Status)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Chinese_Full_Name:Chinese_Full_Name,Customer_Code:Customer_Code,Contact_Chinese_Name:Contact_Chinese_Name,BPM:BPM,Status:Status});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryCustomerContact.do",
+            data : {
+                page:page,
+                rows:rows,
+                Chinese_Full_Name:Chinese_Full_Name,
+                Customer_Code:Customer_Code,
+                Contact_Chinese_Name:Contact_Chinese_Name,
+                BPM:BPM,
+                Status:Status,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("操作提示", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var Old_Customer_Code;
+    var Old_Contact_Chinese_Name;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            Old_Customer_Code="";
+            Old_Contact_Chinese_Name="";
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+                return;
+            }
+            url = 'customerContactUpdate.do';
+            Old_Customer_Code=checked[0].customer_Code;
+            Old_Contact_Chinese_Name=checked[0].contact_Chinese_Name;
+            $.ajax({
+                url:"queryCustomerContactAllCustomerCode.do",
+                type:"post",
+                data:{Customer_Code:"",Role:"BPM"},
+                dataType:"json",
+                success:function (data) {
+                    $("#customer_Code_Update").combobox("loadData",data.customerCodeList);
+                    $("#job_Number_Update").combobox("loadData",data.bpmList);
+                }
+            });
+        }
+    };
+    function newCustomerContact(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'customerContactAdd.do';
+        $.ajax({
+            url:"queryCustomerContactAllCustomerCode.do",
+            type:"post",
+            data:{Customer_Code:"",Role:"BPM"},
+            dataType:"json",
+            success:function (data) {
+                $("#customer_Code_Add").combobox("loadData",data.customerCodeList);
+                $("#chinese_Abbreviation_Add").textbox('setValue',"");
+                $("#job_Number_Add").combobox("loadData",data.bpmList);
+            }
+        });
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="company_Telephone"){
+                    $.messager.alert("提示信息","请确认新增数据中公司电话是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="phone_Number"){
+                    $.messager.alert("提示信息","请确认新增数据中手机号是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="id_Card"){
+                    $.messager.alert("提示信息","请确认新增数据中身份证号是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="passport_Number"){
+                    $.messager.alert("提示信息","请确认新增数据中护照是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        if (!$("#fm2").form('validate')) {
+            return;
+        }
+        $.ajax({
+            url:url,
+            type:'post',
+            dataType:'json',
+            data:{
+                Id:$("#id_Update").val(),
+                Customer_Code:$("#customer_Code_Update").val(),
+                Chinese_Abbreviation:$("#chinese_Abbreviation_Update").val(),
+                Contact_Chinese_Name:$("#contact_Chinese_Name_Update").val(),
+                Contact_English_Name:$("#contact_English_Name_Update").val(),
+                Sex:$("#sex_Update").val(),
+                Title:$("#title_Update").val(),
+                Dept:$("#dept_Update").val(),
+                Authority:$("#authority_Update").val(),
+                Language:$("#language_Update").val(),
+                Company_Telephone:$("#company_Telephone_Update").val(),
+                Phone_Number:$("#phone_Number_Update").val(),
+                Company_Mail:$("#company_Mail_Update").val(),
+                Private_Mail:$("#private_Mail_Update").val(),
+                WeChat_Number:$("#weChat_Number_Update").val(),
+                Id_Card:$("#id_Card_Update").val(),
+                Passport_Number:$("#passport_Number_Update").val(),
+                Native_Place:$("#native_Place_Update").val(),
+                Nation:$("#nation_Update").val(),
+                Religious_Belief:$("#religious_Belief_Update").val(),
+                Diet_Taboo:$("#diet_Taboo_Update").val(),
+                Interests:$("#interests_Update").val(),
+                Habit:$("#habit_Update").val(),
+                Member_Family:$("#member_Family_Update").val(),
+                Status:$("#status_Update").val(),
+                BPM:$("#job_Number_Update").val(),
+                Old_Customer_Code:Old_Customer_Code,
+                Old_Contact_Chinese_Name:Old_Contact_Chinese_Name
+            },
+            success: function(result){
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="NoUpdate"){
+                    $.messager.alert("提示信息","请选择更新内容或者联系管理员!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新数据是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="company_Telephone"){
+                    $.messager.alert("提示信息","请确认更新数据中公司电话是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="phone_Number"){
+                    $.messager.alert("提示信息","请确认更新数据中手机号是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="id_Card"){
+                    $.messager.alert("提示信息","请确认更新数据中身份证号是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="passport_Number"){
+                    $.messager.alert("提示信息","请确认更新数据中护照是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'customerContactRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Chinese_Abbreviation=$("#chinese_Abbreviation").val();
+        var Customer_Code=$("#customer_Code").val();
+        var Contact_Chinese_Name=$("#contact_Name").val();
+        var BPM=$("#bpm").val();
+        var Status=$("#status").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="customerContactDownLoadExcel.do?id="+id;
+        }else {
+            location.href="customerContactDownLoadExcelAll.do?Chinese_Abbreviation="+Chinese_Abbreviation+"&Customer_Code="+Customer_Code+
+                "&Contact_Chinese_Name="+Contact_Chinese_Name+"&BPM="+BPM+"&Status="+Status;
+        }
+    };
+    function DownloadModel(){
+        location.href="customerContactDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'customerContactUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="customer_Code"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列客户代码是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,3)=="sex"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(4)+"列性别是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,3)=="bpm"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(4)+"列业务员是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,17)=="company_Telephone"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(18)+"列公司电话是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="phone_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列手机号是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="company_Mail"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列公司邮箱是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="private_Mail"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列私人邮箱是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,20)=="id_Card_Length_Error"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(21)+"列身份证长度是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,7)=="id_Card"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(8)+"列身份证号是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,15)=="passport_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(16)+"列护照是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+</script>
+</body>
+</html>

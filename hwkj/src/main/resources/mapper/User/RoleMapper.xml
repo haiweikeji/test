@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.User.RoleDao">
+    <insert id="insertRole" useGeneratedKeys="true" keyColumn="Id" keyProperty="Id" parameterType="hwkj.hwkj.entity.HUser.Role">
+        insert into hwkj_role (Id,Role_Name,Role_Described) values (#{Id},#{Role_Name},#{Role_Described});
+    </insert>
+    <delete id="deleteRole" parameterType="java.lang.Integer">
+        delete from hwkj_role where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateRole" parameterType="hwkj.hwkj.entity.HUser.Role">
+        update hwkj_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Role_Name!=null">Role_Name=#{Role_Name},</if>
+            <if test="Role_Described!=null">Role_Described=#{Role_Described},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryAllRole" resultType="hwkj.hwkj.entity.HUser.Role">
+        select * from hwkj_role order by Id desc
+    </select>
+    <select id="queryRoleByRoleId" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HUser.Role">
+        select * from hwkj_role where 1=1
+        <if test="Id!=null and Id!=''">and Id=#{Id}</if>
+    </select>
+    <select id="queryRoleByRoleName" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.HUser.Role">
+        select * from hwkj_role where Role_Name=#{Role_Name}
+    </select>
+    <select id="queryRoleByRoleIdAndRoleName" resultType="hwkj.hwkj.entity.HUser.Role">
+        select * from hwkj_role where Id=#{Id} or Role_Name=#{Role_Name}
+    </select>
+    <select id="queryRoleList" resultType="hwkj.hwkj.entity.HUser.Role">
+        select * from hwkj_role where 1=1
+        <if test="rolePageModel.page != null and  rolePageModel.rows != null"></if>
+        <if test="role.Role_Name!=null and role.Role_Name!=''">and Role_Name=#{role.Role_Name}</if>
+        order by Id desc limit #{rolePageModel.startRow},#{rolePageModel.rows}
+    </select>
+    <select id="queryRoleCount" resultType="int">
+        select count(*) from hwkj_role where 1=1
+        <if test="rolePageModel.page != null and  rolePageModel.rows != null"></if>
+        <if test="role.Role_Name!=null and role.Role_Name!=''">and Role_Name=#{role.Role_Name}</if>
+    </select>
+    <select id="queryRoleForExist" resultType="int">
+        select count(*) from hwkj_role where 1=1
+        <if test="Role_Name!=null and Role_Name!=''">and Role_Name=#{Role_Name}</if>
+    </select>
+</mapper>

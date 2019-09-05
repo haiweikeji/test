@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.User.UserRoleDao">
+    <insert id="importUserRole" parameterType="java.util.List" useGeneratedKeys="true" keyColumn="User_Role_Id" keyProperty="User_Role_Id">
+        insert into hwkj_user_role (Job_Number,Role_Name)
+        values
+        <foreach collection="list" item="userRoleList" separator=",">
+            (#{userRoleList.Job_Number},#{userRoleList.Role_Name})
+        </foreach>
+    </insert>
+    <delete id="deleteUserRole" parameterType="java.lang.Integer">
+        delete from hwkj_user_role where User_Role_Id in
+        <foreach collection="array" item="User_Role_Id" open="(" separator="," close=")">
+            #{User_Role_Id}
+        </foreach>
+    </delete>
+    <update id="updateUserRole" parameterType="hwkj.hwkj.entity.HUser.UserRole">
+        update hwkj_user_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Role_Name!=null">Role_Name=#{Role_Name},</if>
+        </trim>
+        where User_Role_Id=#{User_Role_Id}
+    </update>
+    <select id="queryAllUserRole" resultType="hwkj.hwkj.entity.HUser.UserRole">
+        select * from hwkj_user_role
+    </select>
+    <select id="queryUserRoleByUserRoleId" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HUser.UserRole">
+        select * from hwkj_user_role where User_Role_Id=#{User_Role_Id}
+    </select>
+    <select id="queryUserRoleList" resultType="hwkj.hwkj.entity.HUser.UserRole">
+        select * from hwkj_user_role where 1=1
+        <if test="userRolePageModel.page != null and  userRolePageModel.rows != null"></if>
+        <if test="Job_Number!=null and Job_Number!=''">and Job_Number=#{Job_Number}</if>
+        <if test="Role_Name!=null and Role_Name!=''">and Role_Name=#{Role_Name}</if>
+        order by Job_Number limit #{userRolePageModel.startRow},#{userRolePageModel.rows}
+    </select>
+    <select id="queryUserRoleCount" resultType="java.lang.Integer">
+        select count(*) from hwkj_user_role where 1=1
+        <if test="userRolePageModel.page != null and  userRolePageModel.rows != null"></if>
+        <if test="Job_Number!=null and Job_Number!=''">and Job_Number=#{Job_Number}</if>
+        <if test="Role_Name!=null and Role_Name!=''">and Role_Name=#{Role_Name}</if>
+    </select>
+    <select id="queryUserRoleByJobNumberAndRoleName" parameterType="hwkj.hwkj.entity.HUser.UserRole" resultType="hwkj.hwkj.entity.HUser.UserRole">
+        select * from hwkj_user_role where Job_Number=#{Job_Number} and Role_Name=#{Role_Name}
+    </select>
+    <select id="queryUserRoleForRole" resultType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        select p.Job_Number,p.China_Name
+        from hwkj_user_role u left join hwkj_employee_personal_data p
+        on u.Job_Number=p.Job_Number where 1=1
+        <if test="Role!=null and Role!=''">and u.role_name=#{Role}</if>
+    </select>
+    <select id="queryUserRoleForUploadRole" resultType="int">
+        select count(*) from hwkj_user_role u left join hwkj_employee_personal_data p
+        on u.Job_Number=p.Job_Number where 1=1
+        <if test="Role!=null and Role!=''">and u.role_name=#{Role}</if>
+        <if test="China_Name!=null and China_Name!=''">and p.china_Name=#{China_Name}</if>
+    </select>
+    <select id="queryUserRoleForExist" parameterType="hwkj.hwkj.entity.HUser.UserRole" resultType="int">
+        select count(*) from hwkj_user_role where 1=1
+        <if test="Job_Number!=null">and Job_Number=#{Job_Number}</if>
+        <if test="Role_Name!=null">and Role_Name=#{Role_Name}</if>
+    </select>
+</mapper>

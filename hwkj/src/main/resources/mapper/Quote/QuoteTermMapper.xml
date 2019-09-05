@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.Quote.QuoteTermDao">
+    <insert id="insertQuoteTerm" useGeneratedKeys="true" keyColumn="Id" keyProperty="Id" parameterType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        insert into hwkj_quote_term
+        (Condition_Type,Condition_Code,Clause,Described,Days,Percent,Status,Remark,Creator,Create_Date)
+        values
+        (#{Condition_Type},#{Condition_Code},#{Clause},#{Described},#{Days},#{Percent},
+        #{Status},#{Remark},#{Creator},#{Create_Date});
+    </insert>
+    <delete id="deleteQuoteTerm" parameterType="java.lang.Integer">
+        delete from hwkj_quote_term where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateQuoteTerm" parameterType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        update hwkj_quote_term
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Condition_Type!=null">Condition_Type=#{Condition_Type},</if>
+            <if test="Condition_Code!=null">Condition_Code=#{Condition_Code},</if>
+            <if test="Clause!=null">Clause=#{Clause},</if>
+            <if test="Described!=null">Described=#{Described},</if>
+            Days=#{Days},
+            <if test="Percent!=null">Percent=#{Percent},</if>
+            <if test="Status!=null">Status=#{Status},</if>
+            <if test="Remark!=null">Remark=#{Remark},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryQuoteTermList" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select * from hwkj_quote_term where 1=1
+        <if test="quoteTermPageModel.page!=null and quoteTermPageModel.rows!=null"></if>
+        <if test="quoteTerm.Condition_Type!=null and quoteTerm.Condition_Type!=''">and Condition_Type=#{quoteTerm.Condition_Type}</if>
+        <if test="quoteTerm.Condition_Code!=null and quoteTerm.Condition_Code!=''">and Condition_Code=#{quoteTerm.Condition_Code}</if>
+        <if test="quoteTerm.Clause!=null and quoteTerm.Clause!=''">and Clause=#{quoteTerm.Clause}</if>
+        <if test="quoteTerm.Status!=null and quoteTerm.Status!=''">and Status=#{quoteTerm.Status}</if>
+        order by Id desc limit #{quoteTermPageModel.startRow},#{quoteTermPageModel.rows}
+    </select>
+    <select id="queryQuoteTermCount" resultType="int">
+        select count(*) from hwkj_quote_term where 1=1
+        <if test="quoteTermPageModel.page!=null and quoteTermPageModel.rows!=null"></if>
+        <if test="quoteTerm.Condition_Type!=null and quoteTerm.Condition_Type!=''">and Condition_Type=#{quoteTerm.Condition_Type}</if>
+        <if test="quoteTerm.Condition_Code!=null and quoteTerm.Condition_Code!=''">and Condition_Code=#{quoteTerm.Condition_Code}</if>
+        <if test="quoteTerm.Clause!=null and quoteTerm.Clause!=''">and Clause=#{quoteTerm.Clause}</if>
+        <if test="quoteTerm.Status!=null and quoteTerm.Status!=''">and Status=#{quoteTerm.Status}</if>
+    </select>
+    <select id="queryQuoteTermById" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select * from hwkj_quote_term where Id=#{Id}
+    </select>
+    <select id="queryQuoteTermByDeliver_Term" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select Clause from hwkj_quote_term where Condition_Type='Deliver_Term' and Status='Y'
+    </select>
+    <select id="queryQuoteTermByPayment_Term" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select Clause from hwkj_quote_term where Condition_Type='Payment_Term' and Status='Y'
+    </select>
+    <select id="queryQuoteTermByReceive_Term" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select Clause from hwkj_quote_term where Condition_Type='Receive_Term' and Status='Y'
+    </select>
+    <select id="queryQuoteTermForUploadDeliverTerm" resultType="int">
+        select count(*) from hwkj_quote_term where 1=1 and Status='Y'
+        <if test="Deliver_Term!=null and Deliver_Term!=''">and Clause=#{Deliver_Term}</if>
+    </select>
+    <select id="queryQuoteTermForUploadPaymentTerm" resultType="int">
+        select count(*) from hwkj_quote_term where 1=1 and Status='Y'
+        <if test="Payment_Term!=null and Payment_Term!=''">and Clause=#{Payment_Term}</if>
+    </select>
+    <select id="queryQuoteTermForUploadReceiveTerm" resultType="int">
+        select count(*) from hwkj_quote_term where 1=1 and Status='Y'
+        <if test="Receive_Term!=null and Receive_Term!=''">and Clause=#{Receive_Term}</if>
+    </select>
+    <select id="queryQuoteTermForDownLoadAll" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select * from hwkj_quote_term where 1=1
+        <if test="quoteTerm.Condition_Type!=null and quoteTerm.Condition_Type!=''">and Condition_Type=#{quoteTerm.Condition_Type}</if>
+        <if test="quoteTerm.Condition_Code!=null and quoteTerm.Condition_Code!=''">and Condition_Code=#{quoteTerm.Condition_Code}</if>
+        <if test="quoteTerm.Clause!=null and quoteTerm.Clause!=''">and Clause=#{quoteTerm.Clause}</if>
+        <if test="quoteTerm.Status!=null and quoteTerm.Status!=''">and Status=#{quoteTerm.Status}</if>
+        order by Id desc
+    </select>
+    <select id="queryQuoteTermForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.Quote.QuoteTerm">
+        select * from hwkj_quote_term where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by Id desc
+    </select>
+    <select id="queryQuoteTermForExist" resultType="int">
+        select count(*) from hwkj_quote_term where 1=1
+        <if test="Condition_Code!=null and Condition_Code!=null">and Condition_Code=#{Condition_Code}</if>
+        <if test="Status!=null and Status!=''">and Status=#{Status}</if>
+    </select>
+    <select id="queryQuoteTermForAllExist" parameterType="hwkj.hwkj.entity.Quote.QuoteTerm" resultType="int">
+        select count(*) from hwkj_quote_term where 1=1
+        <if test="Condition_Type!=null">and Condition_Type=#{Condition_Type}</if>
+        <if test="Condition_Code!=null">and Condition_Code=#{Condition_Code}</if>
+        <if test="Clause!=null">and Clause=#{Clause}</if>
+        <if test="Described!=null">and Described=#{Described}</if>
+        <choose>
+            <when test="Days==null">
+                and Days is null
+            </when>
+            <otherwise>
+                and Days=#{Days}
+            </otherwise>
+        </choose>
+        <if test="Percent!=null">and Percent=#{Percent}</if>
+        <if test="Status!=null">and Status=#{Status}</if>
+        <if test="Remark!=null">and Remark=#{Remark}</if>
+    </select>
+</mapper>

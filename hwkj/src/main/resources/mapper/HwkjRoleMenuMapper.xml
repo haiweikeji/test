@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjRoleMenuMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjRoleMenu">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Role_Menu_Id" jdbcType="INTEGER" property="roleMenuId" />
+    <result column="Role_Name" jdbcType="VARCHAR" property="roleName" />
+    <result column="Menu_Name" jdbcType="VARCHAR" property="menuName" />
+    <result column="Url_Page" jdbcType="VARCHAR" property="urlPage" />
+    <result column="Newly_Added" jdbcType="VARCHAR" property="newlyAdded" />
+    <result column="Modify" jdbcType="VARCHAR" property="modify" />
+    <result column="Remove" jdbcType="VARCHAR" property="remove" />
+    <result column="Download" jdbcType="VARCHAR" property="download" />
+    <result column="Model" jdbcType="VARCHAR" property="model" />
+    <result column="Upload" jdbcType="VARCHAR" property="upload" />
+    <result column="Move" jdbcType="VARCHAR" property="move" />
+  </resultMap>
+</mapper>

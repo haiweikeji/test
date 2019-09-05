@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.SCM.VendorCodeDao">
+    <insert id="insertVendorCode" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.SCM.VendorCode">
+        insert into hwkj_vendor_code
+        (Vendor_Chinese_Full,Vendor_Chinese_Abbreviation,Vendor_English_Full,Vendor_English_Abbreviation,
+        Vendor_Nature,Vendor_Code,Country_Area,City,Brand,Invoice_Address,Industry,
+        Supplier_Category,Company_Owner,Vendor_Level,Website_Address,Bank,Bank_Account,
+        Bank_Address,Acceptable_Currency,Annual_Revenue,Industry_Rank,Enterprise_Nature,Employee_Qty,
+        Credit_Code,Taxpayer_Number,Registration_Number,Registration_Time,Registered_Capital,Credit_Level,
+        Credit_Amount,Currency,Purchase,Status,Creator,Create_Date)
+        values
+        (#{Vendor_Chinese_Full},#{Vendor_Chinese_Abbreviation},#{Vendor_English_Full},#{Vendor_English_Abbreviation},
+        #{Vendor_Nature},#{Vendor_Code},#{Country_Area},#{City},#{Brand},#{Invoice_Address},#{Industry},
+        #{Supplier_Category},#{Company_Owner},#{Vendor_Level},#{Website_Address},#{Bank},#{Bank_Account},
+        #{Bank_Address},#{Acceptable_Currency},#{Annual_Revenue},#{Industry_Rank},#{Enterprise_Nature},#{Employee_Qty},
+        #{Credit_Code},#{Taxpayer_Number},#{Registration_Number},#{Registration_Time},#{Registered_Capital},#{Credit_Level},
+        #{Credit_Amount},#{Currency},#{Purchase},#{Status},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteVendorCode" parameterType="java.lang.Integer">
+        delete from hwkj_vendor_code where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateVendorCode" parameterType="hwkj.hwkj.entity.SCM.VendorCode">
+        update hwkj_vendor_code
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Vendor_Chinese_Full!=null and Vendor_Chinese_Full!=''">Vendor_Chinese_Full=#{Vendor_Chinese_Full},</if>
+            <if test="Vendor_Chinese_Abbreviation!=null and Vendor_Chinese_Abbreviation!=''">Vendor_Chinese_Abbreviation=#{Vendor_Chinese_Abbreviation},</if>
+            <if test="Vendor_English_Full!=null and Vendor_English_Full!=''">Vendor_English_Full=#{Vendor_English_Full},</if>
+            <if test="Vendor_English_Abbreviation!=null and Vendor_English_Abbreviation!=''">Vendor_English_Abbreviation=#{Vendor_English_Abbreviation},</if>
+            <if test="Vendor_Nature!=null and Vendor_Nature!=''">Vendor_Nature=#{Vendor_Nature},</if>
+            <if test="Vendor_Code!=null and Vendor_Code!=''">Vendor_Code=#{Vendor_Code},</if>
+            <if test="Country_Area!=null and Country_Area!=''">Country_Area=#{Country_Area},</if>
+            <if test="City!=null and City!=''">City=#{City},</if>
+            <if test="Brand!=null and Brand!=''">Brand=#{Brand},</if>
+            <if test="Invoice_Address!=null and Invoice_Address!=''">Invoice_Address=#{Invoice_Address},</if>
+            <if test="Industry!=null and Industry!=''">Industry=#{Industry},</if>
+            <if test="Supplier_Category!=null and Supplier_Category!=''">Supplier_Category=#{Supplier_Category},</if>
+            <if test="Company_Owner!=null and Company_Owner!=''">Company_Owner=#{Company_Owner},</if>
+            <if test="Vendor_Level!=null and Vendor_Level!=''">Vendor_Level=#{Vendor_Level},</if>
+            <if test="Website_Address!=null and Website_Address!=''">Website_Address=#{Website_Address},</if>
+            <if test="Bank!=null and Bank!=''">Bank=#{Bank},</if>
+            <if test="Bank_Account!=null and Bank_Account!=''">Bank_Account=#{Bank_Account},</if>
+            <if test="Bank_Address!=null and Bank_Address!=''">Bank_Address=#{Bank_Address},</if>
+            <if test="Acceptable_Currency!=null and Acceptable_Currency!=''">Acceptable_Currency=#{Acceptable_Currency},</if>
+            <if test="Annual_Revenue!=null and Annual_Revenue!=''">Annual_Revenue=#{Annual_Revenue},</if>
+            <if test="Industry_Rank!=null and Industry_Rank!=''">Industry_Rank=#{Industry_Rank},</if>
+            <if test="Enterprise_Nature!=null and Enterprise_Nature!=''">Enterprise_Nature=#{Enterprise_Nature},</if>
+            <if test="Employee_Qty!=null and Employee_Qty!=''">Employee_Qty=#{Employee_Qty},</if>
+            <if test="Credit_Code!=null and Credit_Code!=''">Credit_Code=#{Credit_Code},</if>
+            <if test="Taxpayer_Number!=null and Taxpayer_Number!=''">Taxpayer_Number=#{Taxpayer_Number},</if>
+            <if test="Registration_Number!=null and Registration_Number!=''">Registration_Number=#{Registration_Number},</if>
+            <if test="Registration_Time!=null and Registration_Time!=''">Registration_Time=#{Registration_Time},</if>
+            <if test="Registered_Capital!=null and Registered_Capital!=''">Registered_Capital=#{Registered_Capital},</if>
+            <if test="Credit_Level!=null and Credit_Level!=''">Credit_Level=#{Credit_Level},</if>
+            <if test="Credit_Amount!=null and Credit_Amount!=''">Credit_Amount=#{Credit_Amount},</if>
+            <if test="Currency!=null and Currency!=''">Currency=#{Currency},</if>
+            <if test="Purchase!=null and Purchase!=''">Purchase=#{Purchase},</if>
+            <if test="Status!=null and Status!=''">Status=#{Status},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryVendorContactList" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select * from hwkj_vendor_code where 1=1
+        <if test="vendorCodePageModel.page!=null and vendorCodePageModel.rows!=null"></if>
+        <if test="vendorCode.Vendor_Chinese_Full!=null and vendorCode.Vendor_Chinese_Full!=''">and Vendor_Chinese_Full=#{vendorCode.Vendor_Chinese_Full}</if>
+        <if test="vendorCode.Vendor_Chinese_Abbreviation!=null and vendorCode.Vendor_Chinese_Abbreviation!=''">and Vendor_Chinese_Abbreviation=#{vendorCode.Vendor_Chinese_Abbreviation}</if>
+        <if test="vendorCode.Vendor_Code!=null and vendorCode.Vendor_Code!=''">and Vendor_Code=#{vendorCode.Vendor_Code}</if>
+        <if test="vendorCode.Vendor_Nature!=null and vendorCode.Vendor_Nature!=''">and Vendor_Nature=#{vendorCode.Vendor_Nature}</if>
+        <if test="vendorCode.Purchase!=null and vendorCode.Purchase!=''">and Purchase=#{vendorCode.Purchase}</if>
+        order by Id limit #{vendorCodePageModel.startRow},#{vendorCodePageModel.rows}
+    </select>
+    <select id="queryVendorCodeCount" resultType="int">
+        select count(*) from hwkj_vendor_code where 1=1
+        <if test="vendorCodePageModel.page!=null and vendorCodePageModel.rows!=null"></if>
+        <if test="vendorCode.Vendor_Chinese_Full!=null and vendorCode.Vendor_Chinese_Full!=''">and Vendor_Chinese_Full=#{vendorCode.Vendor_Chinese_Full}</if>
+        <if test="vendorCode.Vendor_Chinese_Abbreviation!=null and vendorCode.Vendor_Chinese_Abbreviation!=''">and Vendor_Chinese_Abbreviation=#{vendorCode.Vendor_Chinese_Abbreviation}</if>
+        <if test="vendorCode.Vendor_Code!=null and vendorCode.Vendor_Code!=''">and Vendor_Code=#{vendorCode.Vendor_Code}</if>
+        <if test="vendorCode.Vendor_Nature!=null and vendorCode.Vendor_Nature!=''">and Vendor_Nature=#{vendorCode.Vendor_Nature}</if>
+        <if test="vendorCode.Purchase!=null and vendorCode.Purchase!=''">and Purchase=#{vendorCode.Purchase}</if>
+    </select>
+    <select id="queryVendorCodeById" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select * from hwkj_vendor_code where Id=#{Id}
+    </select>
+    <select id="queryVendorCodeForDownLoadAll" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select * from hwkj_vendor_code where 1=1
+        <if test="vendorCode.Vendor_Chinese_Full!=null and vendorCode.Vendor_Chinese_Full!=''">and Vendor_Chinese_Full=#{vendorCode.Vendor_Chinese_Full}</if>
+        <if test="vendorCode.Vendor_Chinese_Abbreviation!=null and vendorCode.Vendor_Chinese_Abbreviation!=''">and Vendor_Chinese_Abbreviation=#{vendorCode.Vendor_Chinese_Abbreviation}</if>
+        <if test="vendorCode.Vendor_Code!=null and vendorCode.Vendor_Code!=''">and Vendor_Code=#{vendorCode.Vendor_Code}</if>
+        <if test="vendorCode.Vendor_Nature!=null and vendorCode.Vendor_Nature!=''">and Vendor_Nature=#{vendorCode.Vendor_Nature}</if>
+        <if test="vendorCode.Purchase!=null and vendorCode.Purchase!=''">and Purchase=#{vendorCode.Purchase}</if>
+    </select>
+    <select id="queryVendorCodeForDownLoad" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select * from hwkj_vendor_code where Id=#{Id}
+    </select>
+    <select id="queryVendorCodeForExist" parameterType="hwkj.hwkj.entity.SCM.VendorCode" resultType="int">
+        select count(*) from hwkj_vendor_code where 1=1
+        <if test="Vendor_Chinese_Full!=null and Vendor_Chinese_Full!=''">and Vendor_Chinese_Full=#{Vendor_Chinese_Full}</if>
+        <if test="Vendor_Chinese_Abbreviation!=null and Vendor_Chinese_Abbreviation!=''">and Vendor_Chinese_Abbreviation=#{Vendor_Chinese_Abbreviation}</if>
+        <if test="Vendor_English_Full!=null and Vendor_English_Full!=''">and Vendor_English_Full=#{Vendor_English_Full}</if>
+        <if test="Vendor_English_Abbreviation!=null and Vendor_English_Abbreviation!=''">and Vendor_English_Abbreviation=#{Vendor_English_Abbreviation}</if>
+        <if test="Vendor_Nature!=null and Vendor_Nature!=''">and Vendor_Nature=#{Vendor_Nature}</if>
+        <if test="Country_Area!=null and Country_Area!=''">and Country_Area=#{Country_Area}</if>
+        <if test="City!=null and City!=''">and City=#{City}</if>
+    </select>
+    <select id="queryVendorCodeLastData" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Code from hwkj_vendor_code where 1=1
+        <if test="Vendor_Nature!=null and Vendor_Nature!=''">and Vendor_Nature=#{Vendor_Nature}</if>
+        order by Vendor_Code desc limit 1
+    </select>
+    <select id="queryVendorCodeForOption" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Code,Vendor_Chinese_Abbreviation,Country_Area,City from hwkj_vendor_code where 1=1
+        <if test="Vendor_Code!=null and Vendor_Code!=''">and Vendor_Code=#{Vendor_Code}</if>
+    </select>
+    <select id="queryVendorCodeForCheck" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Chinese_Full,Vendor_Chinese_Abbreviation,Vendor_English_Full,Vendor_English_Abbreviation
+        from hwkj_vendor_code where 1=1
+        <if test="Vendor_Chinese_Full!=null and Vendor_Chinese_Full!=''">and Vendor_Chinese_Full=#{Vendor_Chinese_Full}</if>
+    </select>
+    <select id="queryVendorCodeForVendorChineseFullOption" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Chinese_Full,Vendor_Chinese_Abbreviation,Vendor_English_Full,Vendor_English_Abbreviation
+        from hwkj_vendor_code where 1=1
+        <if test="Vendor_Chinese_Full!=null and Vendor_Chinese_Full!=''">and Vendor_Chinese_Full=#{Vendor_Chinese_Full}</if>
+        group by Vendor_Chinese_Full
+    </select>
+    <select id="queryVendorCodeForBrandExist" resultType="int">
+        select count(*) from hwkj_vendor_code where 1=1 and Vendor_Nature='原厂'
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+    </select>
+    <select id="queryVendorCodeForBrandOption" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Chinese_Abbreviation,City,Brand from hwkj_vendor_code where 1=1 and Vendor_Nature='原厂'
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+    </select>
+    <select id="queryVendorCodeForLikeBrandOption" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Chinese_Abbreviation,City,Brand from hwkj_vendor_code where 1=1 and Vendor_Nature='原厂'
+        <if test="Brand!=null and Brand!=''">and Brand like CONCAT('%',#{Brand},'%')</if>
+    </select>
+    <select id="queryVendorCodeForVendorCodeOption" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Code from hwkj_vendor_code where 1=1
+        <if test="Vendor_Nature!=null and Vendor_Nature!=''">and Vendor_Nature=#{Vendor_Nature}</if>
+    </select>
+    <select id="queryVendorCodeForUploadBrand" resultType="int">
+        select count(*) from hwkj_vendor_code where 1=1
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+    </select>
+    <select id="queryVendorCodeForUploadVendorCode" resultType="int">
+        select count(*) from hwkj_vendor_code where 1=1
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+        <if test="Vendor_Code!=null and Vendor_Code!=''">and Vendor_Code=#{Vendor_Code}</if>
+    </select>
+    <select id="queryVendorCodeForOptionVendorCode" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+        select Vendor_Code from hwkj_vendor_code where 1=1
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+    </select>
+</mapper>

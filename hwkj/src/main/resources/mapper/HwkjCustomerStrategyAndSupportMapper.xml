@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjCustomerStrategyAndSupportMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjCustomerStrategyAndSupport">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Customer_Code" jdbcType="VARCHAR" property="customerCode" />
+    <result column="Date_From" jdbcType="VARCHAR" property="dateFrom" />
+    <result column="Date_To" jdbcType="VARCHAR" property="dateTo" />
+    <result column="Top_Three_Customer" jdbcType="VARCHAR" property="topThreeCustomer" />
+    <result column="Top_Three_Product" jdbcType="VARCHAR" property="topThreeProduct" />
+    <result column="Annual_Output" jdbcType="VARCHAR" property="annualOutput" />
+    <result column="Annual_Revenue" jdbcType="DOUBLE" property="annualRevenue" />
+    <result column="Business_Strategy" jdbcType="VARCHAR" property="businessStrategy" />
+    <result column="Support_Need" jdbcType="VARCHAR" property="supportNeed" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/demo/demo.css">
+    <link rel="stylesheet" type="text/css" href="zTree/css/zTreeStyle/zTreeStyle.css">
+    <script type="text/javascript" src="easyUi/jquery.min.js"></script>
+    <script type="text/javascript" src="easyUi/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="zTree/js/jquery.ztree.all.js"></script>
+    <script type="text/javascript" src="easyUi/locale/easyui-lang-zh_CN.js"></script>
+    <style>
+        #div1{
+            background-image: url("/hwkj/image/head2.jpg");
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+<div id="div1" data-options="region:'north'" style="width: 1000px;height: 100px">
+    <div style="height:40px">
+        <h1 style="text-align: center;font-size: 24px;font-family: 微软雅黑">海潍科技智慧管理系统</h1>
+    </div>
+    <div style="height: 40px">
+        <span>用户:</span><span th:text="${user.name}"></span><!--thymeleaf用法-->
+        <a href="login.do">登出</a>
+    </div>
+</div>
+<div title="菜单" data-options="region:'west'" style="width: 240px;">
+    <div class="easyui-accordion" >
+        <div title="HomePage">
+            <ul id="zTree1" class="ztree"></ul>
+        </div>
+        <div title="HR">
+            <ul id="HR" class="ztree"></ul>
+            <script type="text/javascript">
+                var HRNodes = [ {
+                    id : '1',
+                    pId : '0',
+                    name : 'OrgData',
+                    page : 'orgData.do',
+                },//每个json对象对应一个节点数据
+                    {
+                        id : '2',
+                        pId : '0',
+                        name : 'TitleData',
+                        page : 'titleData.do',
+                    },//每个json对象对应一个节点数据
+                    {
+                        id : '3',
+                        pId : '0',
+                        name : 'EmployeePersonalData',
+                        page : 'employeePersonalData.do',
+                    },//每个json对象对应一个节点数据
+                    {
+                        id : '4',
+                        pId : '0',
+                        name : 'EmployeeDepartmentData',
+                        page : 'employeeDepartmentData.do',
+                    },//每个json对象对应一个节点数据
+                    {
+                        id : '5',
+                        pId : '0',
+                        name : 'EmployeeQualificationData',
+                        page :'test1',
+                    },//每个json对象对应一个节点数据
+                    {
+                        id: '6',
+                        pId: '0',
+                        name: 'EmployeePerformance'
+                    },
+                    {
+                        id: '7',
+                        pId: '0',
+                        name: 'EmployeeDataSearch',
+                        page : 'employeeDataSearch.do',
+                    }
+                ];
+                $(function() {
+                    //当页面加载完成后，动态创建ztree菜单
+                    var HRsetting = {
+                        data : {
+                            simpleData : {
+                                enable : true
+                                //启用简单json数据描述节点数据
+                            }
+                        },
+                        callback: {//绑定事件
+                            onClick: function(a,b,HRNodes){
+                                var page = HRNodes.page;
+                                if(page != undefined){//需要打开选项卡
+                                    //判断当前选项卡是否已经打开
+                                    var e = $("#centerId").tabs("exists",HRNodes.name);
+                                    if(e){
+                                        //已经打开
+                                        $("#centerId").tabs("select",HRNodes.name);
+                                    }else{
+                                        $("#centerId")
+                                            .tabs(
+                                                "add",
+                                                {
+                                                    title : HRNodes.name,
+                                                    content : '<iframe frameborder="0" width="100%" height="100%" src="'+HRNodes.page+'"></iframe>',
+                                                    closable : true,
+                                                    iconCls : 'icon-edit'
+                                                });
+                                    }
+                                }
+                            }
+                        }
+                    };//设置ztree相关的属性
+                    //构造json数据
+
+                    //创建ztree
+                    $.fn.zTree.init($("#HR"), HRsetting, HRNodes);
+                });
+            </script>
+        </div>
+        <div title="CRM">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Project">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Engineering">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Quote">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="PO">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Forecast">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="PIR">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="WO">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="QA">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Purchase">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="WH">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Production">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Logistics">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="Service">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="PM">
+            <ul class="ztree"></ul>
+        </div>
+        <div title="EmployeeConfiguration">
+            <ul id="EmployeeConfiguration" class="ztree"></ul>
+            <script type="text/javascript">
+                var EmployeeConfigurationNodes = [ {
+                    id : '1',
+                    pId : '0',
+                    name : 'EmployeeConfiguration',
+                    page : 'employeeConfiguration.do',
+                }//每个json对象对应一个节点数据
+                    ,{
+                        id : '2',
+                        pId : '0',
+                        name : '用户管理',
+                        page : 'user.do',
+                    },
+                    {
+                        id : '3',
+                        pId : '0',
+                        name : '角色管理',
+                        page : 'role.do',
+                    },
+                    {
+                        id : '4',
+                        pId : '0',
+                        name : '菜单管理',
+                        page : 'menu.do',
+                    },
+                    {
+                        id : '5',
+                        pId : '0',
+                        name : '用户角色管理',
+                        page : 'userRole.do',
+                    },
+                    {
+                        id : '6',
+                        pId : '0',
+
+                        name : '角色菜单管理',
+                        page : 'roleMenu.do',
+                    }
+                ];
+                $(function() {
+                    //当页面加载完成后，动态创建ztree菜单
+                    var EmployeeConfigurationsetting = {
+                        data : {
+                            simpleData : {
+                                enable : true
+                                //启用简单json数据描述节点数据
+                            }
+                        },
+                        callback: {//绑定事件
+                            onClick: function(a,b,EmployeeConfigurationNodes){
+                                var page = EmployeeConfigurationNodes.page;
+                                if(page != undefined){//需要打开选项卡
+                                    //判断当前选项卡是否已经打开
+                                    var e = $("#centerId").tabs("exists",EmployeeConfigurationNodes.name);
+                                    if(e){
+                                        //已经打开
+                                        $("#centerId").tabs("select",EmployeeConfigurationNodes.name);
+                                    }else{
+                                        $("#centerId")
+                                            .tabs(
+                                                "add",
+                                                {
+                                                    title : EmployeeConfigurationNodes.name,
+                                                    content : '<iframe frameborder="0" width="100%" height="100%" src="'+EmployeeConfigurationNodes.page+'"></iframe>',
+                                                    closable : true,
+                                                    iconCls : 'icon-edit'
+                                                });
+                                    }
+                                }
+                            }
+                        }
+                    };//设置ztree相关的属性
+                    //构造json数据
+
+                    //创建ztree
+                    $.fn.zTree.init($("#EmployeeConfiguration"), EmployeeConfigurationsetting, EmployeeConfigurationNodes);
+                });
+            </script>
+        </div>
+    </div>
+</div>
+<div data-options="region:'center'">
+    <div id="centerId" class="easyui-tabs" data-options="fit:true">
+        <!--<div title="面板一" data-options="closable:true,iconCls:'icon-help'" class="easyui-tabs" data-options="fit:true">test1</div>-->
+    </div>
+</div>
+<!--<div data-options="region:'east'" style="width: 20%;height: 100% ;background-color: #1e282c"></div>-->
+<!--<div data-options="region:'south'" style="width: 80%;height: 20% ;float:right;background-color: #1f637b"></div>-->
+</body>
+</html>

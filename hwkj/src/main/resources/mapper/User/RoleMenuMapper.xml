@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.User.RoleMenuDao">
+    <select id="queryFunction" resultType="hwkj.hwkj.entity.HUser.RoleMenu">
+        select rm.Url_Page,rm.Newly_Added,rm.Modify,rm.Remove,rm.Download,rm.Model,rm.Upload,rm.Move
+        from hwkj_user u left join hwkj_user_role ur on u.Job_Number=ur.Job_Number
+        right join hwkj_role_menu rm on ur.Role_Name=rm.Role_Name
+        left join hwkj_menu m on rm.Menu_Name=m.name
+        where 1=1
+        <if test="Job_Number!=null and Job_Number!=''">and u.Job_Number=#{Job_Number}</if>
+        <if test="Url_Page!=null and Url_Page!=''">and rm.Url_Page=#{Url_Page}</if>
+        group by(rm.Menu_Name)
+    </select>
+    <insert id="importRoleMenu" useGeneratedKeys="true" keyColumn="Role_Menu_Id" keyProperty="Role_Menu_Id" parameterType="java.util.List">
+        insert into hwkj_role_menu
+        (Role_Name,Menu_Name,Url_Page,Newly_Added,Modify,Remove,Download,Model,Upload,Move)
+        values
+        <foreach collection="list" item="roleMenuList" separator=",">
+            (#{roleMenuList.Role_Name},#{roleMenuList.Menu_Name},#{roleMenuList.Url_Page},
+            #{roleMenuList.Newly_Added},#{roleMenuList.Modify},#{roleMenuList.Remove},
+            #{roleMenuList.Download},#{roleMenuList.Model},#{roleMenuList.Upload},#{roleMenuList.Move})
+        </foreach>
+    </insert>
+    <delete id="deleteRoleMenu" parameterType="java.lang.Integer">
+        delete from hwkj_role_menu where Role_Menu_Id in
+        <foreach collection="array" item="Role_Menu_Id" open="(" separator="," close=")">
+            #{Role_Menu_Id}
+        </foreach>
+    </delete>
+    <update id="updateRoleMenu" parameterType="hwkj.hwkj.entity.HUser.RoleMenu">
+        update hwkj_role_menu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Newly_Added!=null">Newly_Added=#{Newly_Added},</if>
+            <if test="Modify!=null">Modify=#{Modify},</if>
+            <if test="Remove!=null">Remove=#{Remove},</if>
+            <if test="Download!=null">Download=#{Download},</if>
+            <if test="Model!=null">Model=#{Model},</if>
+            <if test="Upload!=null">Upload=#{Upload},</if>
+            <if test="Move!=null">Move=#{Move},</if>
+        </trim>
+        where Role_Menu_Id=#{Role_Menu_Id}
+    </update>
+    <select id="queryAllRoleMenu" resultType="hwkj.hwkj.entity.HUser.RoleMenu">
+        select * from hwkj_role_menu
+    </select>
+    <select id="queryRoleMenuByRoleMenuId" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HUser.RoleMenu">
+        select * from hwkj_role_menu where Role_Menu_Id=#{Role_Menu_Id}
+    </select>
+    <select id="queryRoleMenuList" resultType="hwkj.hwkj.entity.HUser.RoleMenu">
+        select * from hwkj_role_menu where 1=1
+        <if test="roleMenuPageModel.page != null and  roleMenuPageModel.rows != null"></if>
+        <if test="roleMenu.Role_Name!=null and roleMenu.Role_Name!=''">and Role_Name=#{roleMenu.Role_Name}</if>
+        <if test="roleMenu.Menu_Name!=null and roleMenu.Menu_Name!=''">and Menu_Name=#{roleMenu.Menu_Name}</if>
+        order by Role_Menu_Id desc limit #{roleMenuPageModel.startRow},#{roleMenuPageModel.rows}
+    </select>
+    <select id="queryRoleMenuCount" resultType="int">
+        select count(*) from hwkj_role_menu where 1=1
+        <if test="roleMenuPageModel.page != null and  roleMenuPageModel.rows != null"></if>
+        <if test="roleMenu.Role_Name!=null and roleMenu.Role_Name!=''">and Role_Name=#{roleMenu.Role_Name}</if>
+        <if test="roleMenu.Menu_Name!=null and roleMenu.Menu_Name!=''">and Menu_Name=#{roleMenu.Menu_Name}</if>
+    </select>
+    <select id="queryRoleMenuByPageAndRoleNameAndMenuName" parameterType="hwkj.hwkj.entity.HUser.RoleMenu" resultType="hwkj.hwkj.entity.HUser.RoleMenu">
+        select * from hwkj_role_menu where 1=1 and
+        Url_Page=#{Url_Page} and Role_Name=#{Role_Name} and Menu_Name=#{Menu_Name}
+    </select>
+    <select id="queryRoleMenuForExist" parameterType="hwkj.hwkj.entity.HUser.RoleMenu" resultType="int">
+        select count(*) from hwkj_role_menu where 1=1
+        <if test="Url_Page!=null">and Url_Page=#{Url_Page}</if>
+        <if test="Role_Name!=null">and Role_Name=#{Role_Name}</if>
+        <if test="Menu_Name!=null">and Menu_Name=#{Menu_Name}</if>
+    </select>
+</mapper>

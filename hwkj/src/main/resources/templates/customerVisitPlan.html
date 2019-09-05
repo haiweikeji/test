@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">CustomerName:</span>
+        <input id="chinese_Abbreviation" class="easyui-textbox" style="width: 150px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CustomerCode:</span>
+        <input id="customer_Code"class="easyui-textbox" style="width: 150px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">BPM:</span>
+        <input id="bpm" class="easyui-textbox" style="width: 150px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">DateFrom:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input id="plan_Date_From" class="easyui-datebox" style="width: 150px;height: 25px"  />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">DateTo:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <input id="plan_Date_To" class="easyui-datebox" style="width: 150px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">状态:&nbsp;</span>
+        <select id="status" class="easyui-combobox" style="width: 150px;height: 25px">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newCustomerVisitPlan()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px;height: 700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Add" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Add" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="contact_Chinese_Name_Add" name="contact_Chinese_Name" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'contact_Chinese_Name',textField:'contact_Chinese_Name'" label="联系人中文名字:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="contact_English_Name_Add" name="contact_English_Name" class="easyui-textbox" style="width: 230px;" required="true" label="联系人英文名字:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="title_Add" name="title" class="easyui-textbox" style="width: 230px" required="true" label="职级:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="dept_Add" name="dept" class="easyui-textbox" style="width: 230px;" required="true" label="部门:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="plan_Date_From" class="easyui-datetimebox" style="width: 230px" required="true" label="计划开始时间:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="plan_Date_To" class="easyui-datetimebox" style="width: 230px" required="required" label="计划结束时间:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="actual_Start_Time" class="easyui-datetimebox" style="width: 230px" required="true" label="实际开始时间:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="actual_End_Time" class="easyui-datetimebox" style="width: 230px" required="required" label="实际结束时间:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="bpm_Add" name="bPM" class="easyui-textbox" style="width: 230px;" required="true" label="业务员:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom:10px">
+                <span>拜访事项:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="visit_Item_Add" name="visit_Item" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>拜访目的:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="visit_Purpose_Add" name="visit_Purpose" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>拜访结果:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="visit_Result_Add" name="visit_Result" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px;height: 700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Update" name="customer_Code" class="easyui-textbox" style="width: 230px" required="true" readonly="readonly"  label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Update" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" readonly="readonly" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="contact_Chinese_Name_Update" name="contact_Chinese_Name" class="easyui-textbox" style="width: 230px" required="true" readonly="readonly"  label="联系人中文名字:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="contact_English_Name_Update" name="contact_English_Name" class="easyui-textbox" style="width: 230px;" required="true" readonly="readonly" label="联系人英文名字:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="title_Update" name="title" class="easyui-textbox" style="width: 230px" required="true" readonly="readonly" label="职级:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="dept_Update" name="dept" class="easyui-textbox" style="width: 230px;" required="true" readonly="readonly" label="部门:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="plan_Date_From" class="easyui-datetimebox" style="width: 230px" required="true" label="计划开始时间:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="plan_Date_To" class="easyui-datetimebox" style="width: 230px" required="required" label="计划结束时间:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="actual_Start_Time" class="easyui-datetimebox" style="width: 230px" required="true" label="实际开始时间:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="actual_End_Time" class="easyui-datetimebox" style="width: 230px" required="required" label="实际结束时间:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="bpm_Update" name="bPM" class="easyui-textbox" style="width: 230px;" required="true" readonly="readonly" label="业务员:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="status" class="easyui-combobox" style="width: 230px" required="required" label="状态:">
+                    <option></option>
+                    <option>Y</option>
+                    <option>N</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>拜访事项:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="visit_Item_Update" name="visit_Item" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>拜访目的:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="visit_Purpose_Update" name="visit_Purpose" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>拜访结果:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="visit_Result_Update" name="visit_Result" class="easyui-textbox" data-options="multiline:true" style="height: 60px;width: 500px"/>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryCustomerVisitPlanFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $(function () {
+        $("#customer_Code_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Add").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerVisitPlanCustomerCodeAndContact.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    cache : false,
+                    dataType:"json",
+                    success:function (data) {
+                        $("#contact_Chinese_Name_Add").combobox("setValue","");
+                        $("#contact_Chinese_Name_Add").combobox("loadData",data.contactList);
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Add").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#contact_Chinese_Name_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Add").combobox('getText');
+                var Contact_Chinese_Name=$("#contact_Chinese_Name_Add").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerVisitPlanCustomerCodeAndContactChineseName.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code,Contact_Chinese_Name:Contact_Chinese_Name},
+                    cache : false,
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.contactChineseNameList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#contact_English_Name_Add").textbox('setValue',data[0].contact_English_Name);
+                        $("#title_Add").textbox('setValue',data[0].title);
+                        $("#dept_Add").textbox('setValue',data[0].dept);
+                        $("#bpm_Add").textbox('setValue',data[0].bPM);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'visit_Id',title:'拜访编码',align:'center',titleAlign: true},
+                        {field:'customer_Code',title:'客户代码',align:'center',titleAlign: true},
+                        {field:'chinese_Abbreviation',title:'中文简称',align:'center',titleAlign: true},
+                        {field:'plan_Date_From',title:'计划开始时间',align:'center',titleAlign: true},
+                        {field:'plan_Date_To',title:'计划结束时间',align:'center',titleAlign: true},
+                        {field:'actual_Start_Time',title:'实际开始时间',align:'center',titleAlign: true},
+                        {field:'actual_End_Time',title:'实际结束时间',align:'center',titleAlign: true},
+                        {field:'contact_Chinese_Name',title:'联系人中文名字',align:'center',titleAlign: true},
+                        {field:'contact_English_Name',title:'联系人英文名字',align:'center',titleAlign: true},
+                        {field:'title',title:'职级',align:'center',titleAlign: true},
+                        {field:'dept',title:'部门',align:'center',titleAlign: true},
+                        {field:'visit_Item',title:'拜访事项',width:'200px',align:'center',titleAlign: true},
+                        {field:'visit_Purpose',title:'拜访目的',width:'200px',align:'center',titleAlign: true},
+                        {field:'visit_Result',title:'拜访结果',width:'200px',align:'center',titleAlign: true},
+                        {field:'status',title:'状态',align:'center',titleAlign: true},
+                        {field:'bPM',title:'业务员',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                        {field:'approved_By',title:'审核人',align:'center',titleAlign: true},
+                        {field:'approved_Date',title:'审核日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryCustomerVisitPlan.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Chinese_Abbreviation:$("#chinese_Abbreviation").val(),Customer_Code:$("#customer_Code").val(),BPM:$("#bpm").val(),Plan_Date_From:$("#plan_Date_From").val(),Plan_Date_To:$("#plan_Date_To").val(),Status:$("#status").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                nowrap:false,//换行
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Chinese_Abbreviation,Customer_Code,BPM,Plan_Date_From,Plan_Date_To,Status){//分页触发
+                 findOption(page, rows,Chinese_Abbreviation,Customer_Code,BPM,Plan_Date_From,Plan_Date_To,Status);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Chinese_Abbreviation,Customer_Code,BPM,Plan_Date_From,Plan_Date_To,Status)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Chinese_Abbreviation:Chinese_Abbreviation,Customer_Code:Customer_Code,BPM:BPM,Plan_Date_From:Plan_Date_From,Plan_Date_To:Plan_Date_To,Status:Status});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryCustomerVisitPlan.do",
+            data : {
+                page:page,
+                rows:rows,
+                Chinese_Abbreviation:Chinese_Abbreviation,
+                Customer_Code:Customer_Code,
+                BPM:BPM,
+                Plan_Date_From:Plan_Date_From,
+                Plan_Date_To:Plan_Date_To,
+                Status:Status
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            url = 'customerVisitPlanUpdate.do';
+        }
+    };
+    function newCustomerVisitPlan(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'customerVisitPlanAdd.do';
+        $.ajax({
+            url:"queryCustomerVisitPlanCustomerCodeAndContact.do",
+            type:"post",
+            data:{Customer_Code:""},
+            cache : false,
+            dataType:"json",
+            success:function (data) {
+                $("#contact_Chinese_Name_Add").combobox("loadData",{});
+                $("#customer_Code_Add").combobox("loadData",data.customerCodeList);
+                $("#chinese_Abbreviation_Add").textbox('setValue',"");
+                $("#contact_English_Name_Add").textbox('setValue',"");
+                $("#title_Add").textbox('setValue',"");
+                $("#dept_Add").textbox('setValue',"");
+                $("#bpm_Add").textbox('setValue',"");
+            }
+        });
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="contact_Chinese_Name"){
+                    $.messager.alert("提示信息","请确认新增数据的联系人中文名字是否填写正确或联系管理员!","error");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else {
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="NoUpdateOrExist"){
+                    $.messager.alert("提示信息","请选择内容更新或更新信息已存在!","warning");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index,item){
+                id.push(item.id);
+            });
+            url = 'customerVisitPlanRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Chinese_Abbreviation=$("#chinese_Abbreviation").val();
+        var Customer_Code=$("#customer_Code").val();
+        var BPM=$("#bpm").val();
+        var Plan_Date_From=$("#plan_Date_From").val();
+        var Plan_Date_To=$("#plan_Date_To").val();
+        var Status=$("#status").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="customerVisitPlanDownLoadExcel.do?id="+id;
+        }else {
+            location.href="customerVisitPlanDownLoadExcelAll.do?Chinese_Abbreviation="+Chinese_Abbreviation+"&Customer_Code="+Customer_Code+
+                "&BPM="+BPM+"&Plan_Date_From="+Plan_Date_From+"&Plan_Date_To="+Plan_Date_To+"&Status="+Status;
+        }
+    };
+    function DownloadModel(){
+        location.href="customerVisitPlanDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'customerVisitPlanUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="customer_Code"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列客户代码是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,14)=="plan_Date_From"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(15)+"列计划开始时间的格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="plan_Date_To"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列计划结束时间的格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,17)=="actual_Start_Time"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(18)+"列实际开始时间的格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,15)=="actual_End_Time"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(16)+"列实际结束时间是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,20)=="contact_Chinese_Name"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(21)+"列联系人中文名字是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,20)=="contact_English_Name"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(21)+"列联系人英文名字是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="title"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列职级是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,4)=="dept"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(5)+"列部门是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,3)=="bpm"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(4)+"列业务员是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+
+    })(jQuery);
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.LegalDataDao">
+    <select id="queryLegalDataByLegalName" parameterType="hwkj.hwkj.entity.HR.LegalData" resultType="hwkj.hwkj.entity.HR.LegalData">
+        select * from hwkj_legal_data where 1=1
+        <if test="Legal_Name !=null and Legal_Name !='' "> and Legal_Name=#{Legal_Name}</if>
+        group by (Legal_Name) order by Id
+    </select>
+    <select id="selectLegalDataByLegalName" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.HR.LegalData">
+        select * from hwkj_legal_data where Legal_Name=#{Legal_Name} group by (Legal_Name) order by Id
+    </select>
+    <insert id="insertLegalData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.HR.LegalData">
+        insert into hwkj_legal_data
+        (Legal_Name,Two_Initials,Company_Code,Country,City,Industry,
+        Legal,Taxpayer_Number,Registration_Number,Registered_Time,Registered_Capital,
+        Registered_Address,Bank,Bank_Account,Bank_Address,Currency,Office_Address,
+        Creator,Create_Date)
+        values
+        (#{Legal_Name},#{Two_Initials},#{Company_Code},#{Country},#{City},#{Industry},
+        #{Legal},#{Taxpayer_Number},#{Registration_Number},#{Registered_Time},#{Registered_Capital},
+        #{Registered_Address},#{Bank},#{Bank_Account},#{Bank_Address},#{Currency},#{Office_Address},
+        #{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteLegalData" parameterType="java.lang.Integer">
+        delete from hwkj_legal_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateLegalData" parameterType="hwkj.hwkj.entity.HR.LegalData">
+       update hwkj_legal_data
+       <trim prefix="set" suffixOverrides=",">
+           <if test="Legal_Name!=null">Legal_Name=#{Legal_Name},</if>
+           <if test="Two_Initials!=null">Two_Initials=#{Two_Initials},</if>
+           <if test="Company_Code!=null">Company_Code=#{Company_Code},</if>
+           <if test="Country!=null">Country=#{Country},</if>
+           <if test="City!=null">City=#{City},</if>
+           <if test="Industry!=null">Industry=#{Industry},</if>
+           <if test="Legal!=null">Legal=#{Legal},</if>
+           <if test="Taxpayer_Number!=null">Taxpayer_Number=#{Taxpayer_Number},</if>
+           <if test="Registration_Number!=null">Registration_Number=#{Registration_Number},</if>
+           <if test="Registered_Time!=null">Registered_Time=#{Registered_Time},</if>
+           <if test="Registered_Capital!=null">Registered_Capital=#{Registered_Capital},</if>
+           <if test="Registered_Address!=null">Registered_Address=#{Registered_Address},</if>
+           <if test="Bank!=null">Bank=#{Bank},</if>
+           <if test="Bank_Account!=null">Bank_Account=#{Bank_Account},</if>
+           <if test="Bank_Address!=null">Bank_Address=#{Bank_Address},</if>
+           <if test="Currency!=null">Currency=#{Currency},</if>
+           <if test="Office_Address!=null">Office_Address=#{Office_Address},</if>
+           <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+           <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+       </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryLegalDataList" resultType="hwkj.hwkj.entity.HR.LegalData">
+        select * from hwkj_legal_data where 1=1
+        <if test="legalDataPageModel.page!=null and legalDataPageModel.rows!=null"></if>
+        <if test="legalData.Legal_Name!=null and legalData.Legal_Name!=''">and Legal_Name=#{legalData.Legal_Name}</if>
+        <if test="legalData.Company_Code!=null and legalData.Company_Code!=''">and Company_Code=#{legalData.Company_Code}</if>
+        order by Id desc limit #{legalDataPageModel.startRow},#{legalDataPageModel.rows}
+    </select>
+    <select id="queryLegalDataCount" resultType="int">
+        select count(*) from hwkj_legal_data where 1=1
+        <if test="legalDataPageModel.page!=null and legalDataPageModel.rows!=null"></if>
+        <if test="legalData.Legal_Name!=null and legalData.Legal_Name!=''">and Legal_Name=#{legalData.Legal_Name}</if>
+        <if test="legalData.Company_Code!=null and legalData.Company_Code!=''">and Company_Code=#{legalData.Company_Code}</if>
+    </select>
+    <select id="queryLegalDataForDownLoadAll" resultType="hwkj.hwkj.entity.HR.LegalData">
+        select * from hwkj_legal_data where 1=1
+        <if test="legalData.Legal_Name!=null and legalData.Legal_Name!=''">and Legal_Name=#{legalData.Legal_Name}</if>
+        <if test="legalData.Company_Code!=null and legalData.Company_Code!=''">and Company_Code=#{legalData.Company_Code}</if>
+        order by Id desc 
+    </select>
+    <select id="queryLegalDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HR.LegalData">
+        select * from hwkj_legal_data where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by Id desc
+    </select>
+    <select id="queryLegalDataForExist" parameterType="hwkj.hwkj.entity.HR.LegalData" resultType="int">
+        select count(*) from hwkj_legal_data where 1=1
+        <if test="Legal_Name!=null and Legal_Name!=''">and Legal_Name=#{Legal_Name}</if>
+        <if test="Two_Initials!=null and Two_Initials!=''">and Two_Initials=#{Two_Initials}</if>
+        <if test="Country!=null and Country!=''">and Country=#{Country}</if>
+        <if test="City!=null and City!=''">and City=#{City}</if>
+    </select>
+    <select id="queryLegalDataLastData" resultType="hwkj.hwkj.entity.HR.LegalData">
+        select Company_Code from hwkj_legal_data where 1=1
+        <if test="Two_Initials!=null and Two_Initials!=''">and Two_Initials=#{Two_Initials}</if>
+        order by Company_Code desc limit 1
+    </select>
+</mapper>

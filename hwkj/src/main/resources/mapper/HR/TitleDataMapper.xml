@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.TitleDataDao">
+    <insert id="insertTitleData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.HR.TitleData">
+        insert into hwkj_title_data (Management,Management_Code,Upper,Status,Creator,Create_Date)
+         values (#{Management},#{Management_Code},#{Upper},#{Status},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteTitleData">
+        delete from hwkj_title_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateTitleData" parameterType="hwkj.hwkj.entity.HR.TitleData">
+        update hwkj_title_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Upper !=null and Upper !=''">Upper=#{Upper},</if>
+            <if test="Status !=null and Status !=''">Status=#{Status},</if>
+            <if test="Updated_By !=null and Updated_By !=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date !=null and Update_Date !=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryTitleDataList" resultType="hwkj.hwkj.entity.HR.TitleData">
+        select * from hwkj_title_data where 1=1
+        <if test="titleDataPageModel.page!=null and titleDataPageModel.rows!=null"></if>
+        <if test="titleData.Management!=null and titleData.Management!=''">and Management=#{titleData.Management}</if>
+        <if test="titleData.Status!=null and titleData.Status!=''">and Status=#{titleData.Status}</if>
+        order by Id desc limit #{titleDataPageModel.startRow},#{titleDataPageModel.rows}
+    </select>
+    <select id="queryTitleDataCount" resultType="int">
+        select count(*) from hwkj_title_data where 1=1
+        <if test="titleDataPageModel.page!=null and titleDataPageModel.rows!=null"></if>
+        <if test="titleData.Management!=null and titleData.Management!=''">and Management=#{titleData.Management}</if>
+        <if test="titleData.Status!=null and titleData.Status!=''">and Status=#{titleData.Status}</if>
+    </select>
+    <select id="queryTitleDataForDownLoadAll" resultType="hwkj.hwkj.entity.HR.TitleData">
+        select * from hwkj_title_data where 1=1
+        <if test="titleData.Management!=null and titleData.Management!=''">and Management=#{titleData.Management}</if>
+        <if test="titleData.Status!=null and titleData.Status!=''">and Status=#{titleData.Status}</if>
+        order by Id desc
+    </select>
+    <select id="queryTitleDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HR.TitleData">
+        select * from hwkj_title_data where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by Id desc
+    </select>
+    <select id="queryTitleDataForExist" parameterType="hwkj.hwkj.entity.HR.TitleData" resultType="int">
+        select count(*) from hwkj_title_data where 1=1
+        <if test="Management!=null and Management!=''">and Management=#{Management}</if>
+        <if test="Management_Code!=null and Management_Code!=''">or Management_Code=#{Management_Code}</if>
+    </select>
+    <select id="queryTitleDataForOption" parameterType="hwkj.hwkj.entity.HR.TitleData" resultType="hwkj.hwkj.entity.HR.TitleData">
+        select Management from hwkj_title_data where 1=1
+        <if test="Status!=null and Status!=''">and Status=#{Status}</if>
+        group by (Management)  order by Id desc
+    </select>
+    <select id="queryTitleDataForUploadManagement" resultType="int">
+        select count(*) from hwkj_title_data where 1=1
+        <if test="Management!=null and Management!=''">and Management=#{Management}</if>
+        <if test="Status!=null and Status!=''">and Status=#{Status}</if>
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjLegalDataMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjLegalData">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Legal_Name" jdbcType="VARCHAR" property="legalName" />
+    <result column="Two_Initials" jdbcType="VARCHAR" property="twoInitials" />
+    <result column="Company_Code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="Country" jdbcType="VARCHAR" property="country" />
+    <result column="City" jdbcType="VARCHAR" property="city" />
+    <result column="Industry" jdbcType="VARCHAR" property="industry" />
+    <result column="Legal" jdbcType="VARCHAR" property="legal" />
+    <result column="Taxpayer_Number" jdbcType="VARCHAR" property="taxpayerNumber" />
+    <result column="Registration_Number" jdbcType="VARCHAR" property="registrationNumber" />
+    <result column="Registered_Time" jdbcType="VARCHAR" property="registeredTime" />
+    <result column="Registered_Capital" jdbcType="DOUBLE" property="registeredCapital" />
+    <result column="Registered_Address" jdbcType="VARCHAR" property="registeredAddress" />
+    <result column="Bank" jdbcType="VARCHAR" property="bank" />
+    <result column="Bank_Account" jdbcType="VARCHAR" property="bankAccount" />
+    <result column="Bank_Address" jdbcType="VARCHAR" property="bankAddress" />
+    <result column="Currency" jdbcType="VARCHAR" property="currency" />
+    <result column="Office_Address" jdbcType="VARCHAR" property="officeAddress" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+</mapper>

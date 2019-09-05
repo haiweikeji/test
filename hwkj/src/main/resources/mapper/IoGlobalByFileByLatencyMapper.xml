@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.IoGlobalByFileByLatencyMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.IoGlobalByFileByLatency">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="file" jdbcType="INTEGER" property="file" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="total_latency" jdbcType="INTEGER" property="totalLatency" />
+    <result column="count_read" jdbcType="INTEGER" property="countRead" />
+    <result column="read_latency" jdbcType="INTEGER" property="readLatency" />
+    <result column="count_write" jdbcType="INTEGER" property="countWrite" />
+    <result column="write_latency" jdbcType="INTEGER" property="writeLatency" />
+    <result column="count_misc" jdbcType="INTEGER" property="countMisc" />
+    <result column="misc_latency" jdbcType="INTEGER" property="miscLatency" />
+  </resultMap>
+</mapper>

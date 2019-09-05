@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.XUserSummaryByStagesMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.XUserSummaryByStages">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="user" jdbcType="INTEGER" property="user" />
+    <result column="event_name" jdbcType="INTEGER" property="eventName" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="total_latency" jdbcType="INTEGER" property="totalLatency" />
+    <result column="avg_latency" jdbcType="INTEGER" property="avgLatency" />
+  </resultMap>
+</mapper>

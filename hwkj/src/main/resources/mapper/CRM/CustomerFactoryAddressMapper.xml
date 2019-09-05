@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerFactoryAddressDao">
+    <insert id="insertCustomerFactoryAddress" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        insert into hwkj_customer_factory_address
+        (Customer_Code,Factory_Address,Factory_Code,Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Factory_Address},#{Factory_Code},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerFactoryAddress" parameterType="java.lang.Integer">
+        delete from hwkj_customer_factory_address where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerFactoryAddress" parameterType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        update hwkj_customer_factory_address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Factory_Address!=null">Factory_Address=#{Factory_Address},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerFactoryAddressList" resultType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        select f.Id,f.Customer_Code,b.Chinese_Abbreviation,b.English_Abbreviation,
+        b.Country,b.City,f.Factory_Address,f.Factory_Code,f.Creator,f.Create_Date,f.Updated_By,f.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_factory_address f on
+        b.Customer_Code=f.Customer_Code where 1=1 and f.Id is not null
+        <if test="customerFactoryAddressPageModel.page!=null and customerFactoryAddressPageModel.rows!=null"></if>
+        <if test="customerFactoryAddress.Chinese_Abbreviation!=null and customerFactoryAddress.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerFactoryAddress.Chinese_Abbreviation}</if>
+        <if test="customerFactoryAddress.Customer_Code!=null and customerFactoryAddress.Customer_Code!=''">and f.Customer_Code=#{customerFactoryAddress.Customer_Code}</if>
+        <if test="customerFactoryAddress.Factory_Address!=null and customerFactoryAddress.Factory_Address!=''">and f.Factory_Address=#{customerFactoryAddress.Factory_Address}</if>
+        order by (f.Id) limit #{customerFactoryAddressPageModel.startRow},#{customerFactoryAddressPageModel.rows}
+    </select>
+    <select id="queryCustomerFactoryAddressCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data b left join hwkj_customer_factory_address f on
+        b.Customer_Code=f.Customer_Code where 1=1 and f.Id is not null
+        <if test="customerFactoryAddressPageModel.page!=null and customerFactoryAddressPageModel.rows!=null"></if>
+        <if test="customerFactoryAddress.Chinese_Abbreviation!=null and customerFactoryAddress.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerFactoryAddress.Chinese_Abbreviation}</if>
+        <if test="customerFactoryAddress.Customer_Code!=null and customerFactoryAddress.Customer_Code!=''">and f.Customer_Code=#{customerFactoryAddress.Customer_Code}</if>
+        <if test="customerFactoryAddress.Factory_Address!=null and customerFactoryAddress.Factory_Address!=''">and f.Factory_Address=#{customerFactoryAddress.Factory_Address}</if>
+    </select>
+    <select id="queryCustomerFactoryAddressById" resultType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        select * from hwkj_customer_factory_address where Id=#{Id}
+    </select>
+    <select id="queryCustomerFactoryAddressForDownLoadAll" resultType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        select f.Id,f.Customer_Code,b.Chinese_Abbreviation,b.English_Abbreviation,
+        b.Country,b.City,f.Factory_Address,f.Factory_Code,f.Creator,f.Create_Date,f.Updated_By,f.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_factory_address f on
+        b.Customer_Code=f.Customer_Code where 1=1 and f.Id is not null
+        <if test="customerFactoryAddress.Chinese_Abbreviation!=null and customerFactoryAddress.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerFactoryAddress.Chinese_Abbreviation}</if>
+        <if test="customerFactoryAddress.Customer_Code!=null and customerFactoryAddress.Customer_Code!=''">and f.Customer_Code=#{customerFactoryAddress.Customer_Code}</if>
+        <if test="customerFactoryAddress.Factory_Address!=null and customerFactoryAddress.Factory_Address!=''">and f.Factory_Address=#{customerFactoryAddress.Factory_Address}</if>
+        order by f.Id desc
+    </select>
+    <select id="queryCustomerFactoryAddressForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        select f.Id,f.Customer_Code,b.Chinese_Abbreviation,b.English_Abbreviation,
+        b.Country,b.City,f.Factory_Address,f.Factory_Code,f.Creator,f.Create_Date,f.Updated_By,f.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_factory_address f on
+        b.Customer_Code=f.Customer_Code where 1=1 and f.Id is not null and f.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by f.Id desc
+    </select>
+    <select id="queryCustomerFactoryAddressForFactoryAddressByCustomerCode" resultType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        select Factory_Address from hwkj_customer_factory_address where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+    </select>
+    <select id="queryCustomerFactoryAddressDataExist" resultType="int">
+        select count(*) from hwkj_customer_factory_address where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Factory_Address!=null">and Factory_Address=#{Factory_Address}</if>
+    </select>
+    <select id="queryCustomerFactoryAddressDataLastData" resultType="hwkj.hwkj.entity.CRM.CustomerFactoryAddress">
+        select Factory_Code from hwkj_customer_factory_address where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+        order by Factory_Code desc limit 1
+    </select>
+    <select id="queryCustomerFactoryAddressForUploadFactoryAddress" resultType="int">
+        select count(*) from hwkj_customer_factory_address where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+        <if test="Factory_Address!=null and Factory_Address!=''">and Factory_Address=#{Factory_Address}</if>
+    </select>
+</mapper>

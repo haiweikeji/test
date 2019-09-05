@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.EmployeePunchDataDao">
+    <select id="queryEmployeePunchDataList" resultType="hwkj.hwkj.entity.HR.EmployeePunchData">
+        select pd.China_Name as Name,o.Dept,p.Job_Number,d.Station,
+        p.Attendance_Date,p.Morning_Work_Time,p.Morning_Punch_Time,p.Morning_Punch_Result,
+        p.Morning_Punch_Address,p.Morning_Punch_Equipment,p.Afternoon_Work_Time,p.Afternoon_Punch_Time,
+        p.Afternoon_Punch_Result,p.Afternoon_Punch_Address,p.Afternoon_Punch_Equipment,
+        p.Early_Amount,p.Early_Time,p.Later_Amount,p.Later_Time
+        from hwkj_employee_punch_data p left join hwkj_employee_personal_data pd on
+        p.Job_Number=pd.Job_Number left join hwkj_employee_department_data d on
+        pd.Job_Number=d.Job_Number left join hwkj_org_data o on
+        d.Org_Code=o.Org_Code where 1=1
+        <bind name="pattern1" value="'%' + employeePunchData.Morning_Punch_Result + '%'"></bind>
+        <bind name="pattern2" value="'%' + employeePunchData.Afternoon_Punch_Result + '%'"></bind>
+        <if test="employeePunchDataPageModel.page!=null and employeePunchDataPageModel.rows!=null"></if>
+        <if test="employeePunchData.Job_Number!=null and employeePunchData.Job_Number!=''">and p.Job_Number=#{employeePunchData.Job_Number}</if>
+        <if test="employeePunchData.Attendance_Date_From!=null and employeePunchData.Attendance_Date_From!=''">and date_format(p.Attendance_Date,'%Y-%m-%d')&gt;='${employeePunchData.Attendance_Date_From}'</if>
+        <if test="employeePunchData.Attendance_Date_To!=null and employeePunchData.Attendance_Date_To!=''">and date_format(p.Attendance_Date,'%Y-%m-%d')&lt;='${employeePunchData.Attendance_Date_To}'</if>
+        <if test="employeePunchData.Morning_Punch_Result!=null and employeePunchData.Morning_Punch_Result!=''">and p.Morning_Punch_Result like #{pattern1}</if>
+        <if test="employeePunchData.Name!=null and employeePunchData.Name!=''">and pd.China_Name=#{employeePunchData.Name}</if>
+        <if test="employeePunchData.Month_Summary_From!=null and employeePunchData.Month_Summary_From!=''">and date_format(p.Attendance_Date,'%Y-%m')&gt;='${employeePunchData.Month_Summary_From}'</if>
+        <if test="employeePunchData.Month_Summary_To!=null and employeePunchData.Month_Summary_To!=''">and date_format(p.Attendance_Date,'%Y-%m')&lt;='${employeePunchData.Month_Summary_To}'</if>
+        <if test="employeePunchData.Afternoon_Punch_Result!=null and employeePunchData.Afternoon_Punch_Result!=''">and p.Afternoon_Punch_Result like #{pattern2}</if>
+        order by (p.Job_Number) limit #{employeePunchDataPageModel.startRow},#{employeePunchDataPageModel.rows}
+    </select>
+    <select id="queryEmployeePunchDataCount" resultType="int">
+        select count(*) from hwkj_employee_punch_data p left join hwkj_employee_personal_data pd on
+        p.Job_Number=pd.Job_Number left join hwkj_employee_department_data d on
+        pd.Job_Number=d.Job_Number left join hwkj_org_data o on
+        d.Org_Code=o.Org_Code where 1=1
+        <bind name="pattern1" value="'%' + employeePunchData.Morning_Punch_Result + '%'"></bind>
+        <bind name="pattern2" value="'%' + employeePunchData.Afternoon_Punch_Result + '%'"></bind>
+        <if test="employeePunchDataPageModel.page!=null and employeePunchDataPageModel.rows!=null"></if>
+        <if test="employeePunchData.Job_Number!=null and employeePunchData.Job_Number!=''">and p.Job_Number=#{employeePunchData.Job_Number}</if>
+        <if test="employeePunchData.Attendance_Date_From!=null and employeePunchData.Attendance_Date_From!=''">and date_format(p.Attendance_Date,'%Y-%m-%d')&gt;='${employeePunchData.Attendance_Date_From}'</if>
+        <if test="employeePunchData.Attendance_Date_To!=null and employeePunchData.Attendance_Date_To!=''">and date_format(p.Attendance_Date,'%Y-%m-%d')&lt;='${employeePunchData.Attendance_Date_To}'</if>
+        <if test="employeePunchData.Morning_Punch_Result!=null and employeePunchData.Morning_Punch_Result!=''">and p.Morning_Punch_Result like #{pattern1}</if>
+        <if test="employeePunchData.Name!=null and employeePunchData.Name!=''">and pd.China_Name=#{employeePunchData.Name}</if>
+        <if test="employeePunchData.Month_Summary_From!=null and employeePunchData.Month_Summary_From!=''">and date_format(p.Attendance_Date,'%Y-%m')&gt;='${employeePunchData.Month_Summary_From}'</if>
+        <if test="employeePunchData.Month_Summary_To!=null and employeePunchData.Month_Summary_To!=''">and date_format(p.Attendance_Date,'%Y-%m')&lt;='${employeePunchData.Month_Summary_To}'</if>
+        <if test="employeePunchData.Afternoon_Punch_Result!=null and employeePunchData.Afternoon_Punch_Result!=''">and p.Afternoon_Punch_Result like #{pattern2}</if>
+    </select>
+    <select id="queryEmployeePunchDataForDownLoadAll" resultType="hwkj.hwkj.entity.HR.EmployeePunchData">
+        select pd.China_Name as Name,o.Dept,p.Job_Number,d.Station,
+        p.Attendance_Date,p.Morning_Work_Time,p.Morning_Punch_Time,p.Morning_Punch_Result,
+        p.Morning_Punch_Address,p.Morning_Punch_Equipment,p.Afternoon_Work_Time,p.Afternoon_Punch_Time,
+        p.Afternoon_Punch_Result,p.Afternoon_Punch_Address,p.Afternoon_Punch_Equipment,
+        p.Early_Amount,p.Early_Time,p.Later_Amount,p.Later_Time
+        from hwkj_employee_punch_data p left join hwkj_employee_personal_data pd on
+        p.Job_Number=pd.Job_Number left join hwkj_employee_department_data d on
+        pd.Job_Number=d.Job_Number left join hwkj_org_data o on
+        d.Org_Code=o.Org_Code where 1=1
+        <bind name="pattern1" value="'%' + employeePunchData.Morning_Punch_Result + '%'"></bind>
+        <bind name="pattern2" value="'%' + employeePunchData.Afternoon_Punch_Result + '%'"></bind>
+        <if test="employeePunchData.Job_Number!=null and employeePunchData.Job_Number!=''">and p.Job_Number=#{employeePunchData.Job_Number}</if>
+        <if test="employeePunchData.Attendance_Date_From!=null and employeePunchData.Attendance_Date_From!=''">and date_format(p.Attendance_Date,'%Y-%m-%d')&gt;='${employeePunchData.Attendance_Date_From}'</if>
+        <if test="employeePunchData.Attendance_Date_To!=null and employeePunchData.Attendance_Date_To!=''">and date_format(p.Attendance_Date,'%Y-%m-%d')&lt;='${employeePunchData.Attendance_Date_To}'</if>
+        <if test="employeePunchData.Morning_Punch_Result!=null and employeePunchData.Morning_Punch_Result!=''">and p.Morning_Punch_Result like #{pattern1}</if>
+        <if test="employeePunchData.Name!=null and employeePunchData.Name!=''">and pd.China_Name=#{employeePunchData.Name}</if>
+        <if test="employeePunchData.Month_Summary_From!=null and employeePunchData.Month_Summary_From!=''">and date_format(p.Attendance_Date,'%Y-%m')&gt;='${employeePunchData.Month_Summary_From}'</if>
+        <if test="employeePunchData.Month_Summary_To!=null and employeePunchData.Month_Summary_To!=''">and date_format(p.Attendance_Date,'%Y-%m')&lt;='${employeePunchData.Month_Summary_To}'</if>
+        <if test="employeePunchData.Afternoon_Punch_Result!=null and employeePunchData.Afternoon_Punch_Result!=''">and p.Afternoon_Punch_Result like #{pattern2}</if>
+        order by (p.Job_Number)
+    </select>
+    <select id="queryEmployeePunchDataForDownLoad" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.HR.EmployeePunchData">
+        select pd.China_Name as Name,o.Dept,p.Job_Number,d.Station,
+        p.Attendance_Date,p.Morning_Work_Time,p.Morning_Punch_Time,p.Morning_Punch_Result,
+        p.Morning_Punch_Address,p.Morning_Punch_Equipment,p.Afternoon_Work_Time,p.Afternoon_Punch_Time,
+        p.Afternoon_Punch_Result,p.Afternoon_Punch_Address,p.Afternoon_Punch_Equipment,
+        p.Early_Amount,p.Early_Time,p.Later_Amount,p.Later_Time
+        from hwkj_employee_punch_data p left join hwkj_employee_personal_data pd on
+        p.Job_Number=pd.Job_Number left join hwkj_employee_department_data d on
+        pd.Job_Number=d.Job_Number left join hwkj_org_data o on
+        d.Org_Code=o.Org_Code where 1=1 and p.Job_Number in
+        <foreach collection="array" item="Job_Number" open="(" separator="," close=")">
+            <if test="Job_Number!=null and Job_Number!=''">#{Job_Number}</if>
+        </foreach>
+        order by (p.Job_Number)
+    </select>
+    <insert id="uploadEmployeePunchData" parameterType="java.util.List">
+        insert into hwkj_employee_punch_data
+        (Job_Number,Attendance_Date,Morning_Work_Time,Morning_Punch_Time,Morning_Punch_Result,
+        Morning_Punch_Address,Morning_Punch_Equipment,Afternoon_Work_Time,Afternoon_Punch_Time,
+        Afternoon_Punch_Result,Afternoon_Punch_Address,Afternoon_Punch_Equipment,Early_Amount,
+        Early_Time,Later_Amount,Later_Time)
+        values
+        <foreach collection="list" item="employeePunchDataList" separator=",">
+            (#{employeePunchDataList.Job_Number},#{employeePunchDataList.Attendance_Date},#{employeePunchDataList.Morning_Work_Time},
+            #{employeePunchDataList.Morning_Punch_Time},#{employeePunchDataList.Morning_Punch_Result},#{employeePunchDataList.Morning_Punch_Address},
+            #{employeePunchDataList.Morning_Punch_Equipment},#{employeePunchDataList.Afternoon_Work_Time},#{employeePunchDataList.Afternoon_Punch_Time},
+            #{employeePunchDataList.Afternoon_Punch_Result},#{employeePunchDataList.Afternoon_Punch_Address},#{employeePunchDataList.Afternoon_Punch_Equipment},
+            #{employeePunchDataList.Early_Amount},#{employeePunchDataList.Early_Time},#{employeePunchDataList.Later_Amount}, #{employeePunchDataList.Later_Time})
+        </foreach>
+    </insert>
+</mapper>

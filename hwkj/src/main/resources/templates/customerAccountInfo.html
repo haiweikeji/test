@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">CustomerName:</span>
+        <input id="chinese_Abbreviation" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CustomerCode:</span>
+        <input id="customer_Code"class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CreditLevel:</span>
+        <input id="credit_Level" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">Creator&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input id="creator" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CreateDate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input id="dateFrom" name="dateFrom" class="easyui-datebox" style="width: 120px;height: 25px">&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</span>
+        <input id="dateTo" name="dateTo" class="easyui-datebox" style="width: 120px;height: 25px">
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newCustomerAccountInfo()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Add" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Add" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="credit_Code_Add" name="credit_Code" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'Credit_Code_Add'" label="信用代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="taxpayer_Number_Add" name="taxpayer_Number" class="easyui-textbox" style="width: 230px;" required="true" data-options="validType:'Taxpayer_Number_Add'" label="纳税人识别号:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="registration_Number_Add" name="registration_Number" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'Registration_Number_Add'" label="工商注册号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="registration_Time" class="easyui-datebox" style="width: 230px;" required="true" label="注册时间:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="registered_Capital_Add" name="registered_Capital" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'Registered_Capital_Add'" label="注册资金(万):" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="currency" class="easyui-combobox" style="width: 230px" required="required" label="币别:" >
+                    <option></option>
+                    <option>人民币</option>
+                    <option>港元</option>
+                    <option>美元</option>
+                    <option>欧元</option>
+                    <option>英镑</option>
+                    <option>日元</option>
+                    <option>新台币</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="credit_Level" class="easyui-textbox" style="width: 230px" required="required" label="信用等级:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="credit_Amount_Add" name="credit_Amount" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Credit_Amount_Add'" label="信用额度(万):"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="invoice_Address" class="easyui-textbox" style="width: 230px" required="required" label="发票地址:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="bank" class="easyui-textbox" style="width: 230px" required="required" label="开户银行:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="bank_Account_Add" name="bank_Account" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Bank_Account_Add'" label="银行账号:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="bank_Address" class="easyui-textbox" style="width: 230px" required="required" label="银行地址:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="force_Time" class="easyui-datebox" style="width: 230px" required="required" label="生效时间:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="failure_Time" class="easyui-datebox" style="width: 230px" required="required" label="失效时间:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="acceptable_Currency" class="easyui-textbox" style="width: 230px" required="required" label="可接受币别:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Update" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Update" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true"  label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="credit_Code_Update" name="credit_Code" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'Credit_Code_Update'" label="信用代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="taxpayer_Number_Update" name="taxpayer_Number" class="easyui-textbox" style="width: 230px;" required="true" data-options="validType:'Taxpayer_Number_Update'" label="纳税人识别号:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="registration_Number_Update" name="registration_Number" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'Registration_Number_Update'" label="工商注册号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="registration_Time_Update" name="registration_Time" class="easyui-datebox" style="width: 230px;" required="true" label="注册时间:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="registered_Capital_Update" name="registered_Capital" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'Registered_Capital_Update'" label="注册资金(万):" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="currency_Update" name="currency" class="easyui-combobox" style="width: 230px" required="required" label="币别:" >
+                    <option></option>
+                    <option>人民币</option>
+                    <option>港元</option>
+                    <option>美元</option>
+                    <option>欧元</option>
+                    <option>英镑</option>
+                    <option>日元</option>
+                    <option>新台币</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="credit_Level_Update" name="credit_Level" class="easyui-textbox" style="width: 230px" required="required" label="信用等级:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="credit_Amount_Update" name="credit_Amount" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Credit_Amount_Update'" label="信用额度(万):"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="invoice_Address_Update" name="invoice_Address" class="easyui-textbox" style="width: 230px" required="required" label="发票地址:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="bank_Update" name="bank" class="easyui-textbox" style="width: 230px" required="required" label="开户银行:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="bank_Account_Update" name="bank_Account" class="easyui-textbox" style="width: 230px" required="required" data-options="validType:'Bank_Account_Update'" label="银行账号:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="bank_Address_Update" name="bank_Address" class="easyui-textbox" style="width: 230px" required="required" label="银行地址:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="force_Time_Update" name="force_Time" class="easyui-datebox" style="width: 230px" required="required" label="生效时间:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="failure_Time_Update" name="failure_Time" class="easyui-datebox" style="width: 230px" required="required" label="失效时间:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="acceptable_Currency_Update" name="acceptable_Currency" class="easyui-textbox" style="width: 230px" required="required" label="可接受币别:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="id_Update" name="id" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryCustomerAccountInfoFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $.extend($.fn.validatebox.defaults.rules, {
+        Credit_Code_Add:{
+            validator : function(value) {
+                var reg = /^[a-zA-Z0-9]/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的社会统一信用代码'
+        },
+        Credit_Code_Update:{
+            validator : function(value) {
+                var reg = /^[a-zA-Z0-9]/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的社会统一信用代码'
+        },
+        Taxpayer_Number_Add:{
+            validator : function(value) {
+                var reg = /^[a-zA-Z0-9]/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的纳税人识别号'
+        },
+        Taxpayer_Number_Update:{
+            validator : function(value) {
+                var reg = /^[a-zA-Z0-9]/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的纳税人识别号'
+        },
+        Registration_Number_Add:{
+            validator : function(value) {
+                var reg = /^[a-zA-Z0-9]/;
+                if(reg.test(value) && value.length==18){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的工商注册号'
+        },
+        Registration_Number_Update:{
+            validator : function(value) {
+                var reg = /^[a-zA-Z0-9]/;
+                if(reg.test(value) && value.length==18){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的工商注册号'
+        },
+        Registered_Capital_Add:{
+            validator : function(value) {
+                var reg = /^[0-9]+$|^([0-9]+)([.][0-9])$|^([0-9]+)([.][0-9]{2})$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的注册资金格式'
+        },
+        Registered_Capital_Update:{
+            validator : function(value) {
+                var reg = /^[0-9]+$|^([0-9]+)([.][0-9])$|^([0-9]+)([.][0-9]{2})$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的注册资金格式'
+        },
+        Credit_Amount_Add:{
+            validator : function(value) {
+                var reg = /^[0-9]+$|^([0-9]+)([.][0-9])$|^([0-9]+)([.][0-9]{2})$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的信用额度格式'
+        },
+        Credit_Amount_Update:{
+            validator : function(value) {
+                var reg = /^[0-9]+$|^([0-9]+)([.][0-9])$|^([0-9]+)([.][0-9]{2})$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的信用额度格式'
+        },
+        Bank_Account_Add:{
+            validator : function(value) {
+                var reg = /^[0-9]{16}$|^[0-9]{19}$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的银行帐号'
+        },
+        Bank_Account_Update:{
+            validator : function(value) {
+                var reg = /^[0-9]{16}$|^[0-9]{19}$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的银行帐号'
+        }
+    });
+    /*$(function () {
+        $("#registered_Capital_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#registered_Capital_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#credit_Amount_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#credit_Amount_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#bank_Account_Add").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#bank_Account_Update").numberbox({
+            min: 0,
+        });
+    });*/
+    $(function () {
+        $("#customer_Code_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Add").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerAccountInfoAllCustomerCode.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Add").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#customer_Code_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Update").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerAccountInfoAllCustomerCode.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Update").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'customer_Code',title:'客户代码',align:'center',titleAlign: true},
+                        {field:'chinese_Abbreviation',title:'中文简称',align:'center',titleAlign: true},
+                        {field:'credit_Code',title:'社会信用代码',align:'center',titleAlign: true},
+                        {field:'taxpayer_Number',title:'纳税人识别号',align:'center',titleAlign: true},
+                        {field:'registration_Number',title:'工商注册号',align:'center',titleAlign: true},
+                        {field:'registration_Time',title:'注册时间',align:'center',titleAlign: true},
+                        {field:'registered_Capital',title:'注册资金(万)',align:'center',titleAlign: true},
+                        {field:'currency',title:'币别',align:'center',titleAlign: true},
+                        {field:'credit_Level',title:'信用等级',align:'center',titleAlign: true},
+                        {field:'credit_Amount',title:'信用额度(万)',align:'center',titleAlign: true},
+                        {field:'invoice_Address',title:'发票地址',align:'center',titleAlign: true},
+                        {field:'bank',title:'开户银行',align:'center',titleAlign: true},
+                        {field:'bank_Account',title:'银行帐号',align:'center',titleAlign: true},
+                        {field:'bank_Address',title:'银行地址',align:'center',titleAlign: true},
+                        {field:'acceptable_Currency',title:'可接受币别',align:'center',titleAlign: true},
+                        {field:'force_Time',title:'生效时间',align:'center',titleAlign: true},
+                        {field:'failure_Time',title:'失效时间',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryCustomerAccountInfo.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Chinese_Abbreviation:$("#chinese_Abbreviation").val(),Customer_Code:$("#customer_Code").val(),Credit_Level:$("#credit_Level").val(),Creator:$("#creator").val(),DateFrom:$("#dateFrom").val(),DateTo:$("#dateTo").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Chinese_Abbreviation,Customer_Code,Credit_Level,Creator,DateFrom,DateTo){//分页触发
+                 findOption(page, rows,Chinese_Abbreviation,Customer_Code,Credit_Level,Creator,DateFrom,DateTo);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Chinese_Abbreviation,Customer_Code,Credit_Level,Creator,DateFrom,DateTo)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Chinese_Abbreviation:Chinese_Abbreviation,Customer_Code:Customer_Code,Credit_Level:Credit_Level,Creator:Creator,DateFrom:DateFrom,DateTo:DateTo});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryCustomerAccountInfo.do",
+            data : {
+                page:page,
+                rows:rows,
+                Chinese_Abbreviation:Chinese_Abbreviation,
+                Customer_Code:Customer_Code,
+                Credit_Level:Credit_Level,
+                Creator:Creator,
+                DateFrom:DateFrom,
+                DateTo:DateTo,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var Old_Customer_Code;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            Old_Customer_Code="";
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $("#dlg2").dialog('close');
+            }
+            url = 'customerAccountInfoUpdate.do';
+            Old_Customer_Code=checked[0].customer_Code;
+            $.ajax({
+                url:"queryCustomerAccountInfoNotExistCustomerCode.do",
+                type:"post",
+                dataType:"json",
+                success:function (data) {
+                    $("#customer_Code_Update").combobox("loadData",data.customerCodeList);
+                    //$("#chinese_Abbreviation_Update").textbox('setValue',"");
+                }
+            });
+        }
+    };
+    function newCustomerAccountInfo(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'customerAccountInfoAdd.do';
+        $.ajax({
+            url:"queryCustomerAccountInfoNotExistCustomerCode.do",
+            type:"post",
+            dataType:"json",
+            success:function (data) {
+                $("#customer_Code_Add").combobox("loadData",data.customerCodeList);
+                $("#chinese_Abbreviation_Add").textbox('setValue',"");
+            }
+        });
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else {
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        if (!$("#fm2").form('validate')) {
+            return;
+        }
+        $.ajax({
+            url:url,
+            type:'post',
+            dataType:'json',
+            data:{
+                Id:$("#id_Update").val(),
+                Customer_Code:$("#customer_Code_Update").val(),
+                Chinese_Abbreviation:$("#chinese_Abbreviation_Update").val(),
+                Credit_Code:$("#credit_Code_Update").val(),
+                Taxpayer_Number:$("#taxpayer_Number_Update").val(),
+                Registration_Number:$("#registration_Number_Update").val(),
+                Registration_Time:$("#registration_Time_Update").val(),
+                Registered_Capital:$("#registered_Capital_Update").val(),
+                Currency:$("#currency_Update").val(),
+                Credit_Level:$("#credit_Level_Update").val(),
+                Credit_Amount:$("#credit_Amount_Update").val(),
+                Invoice_Address:$("#invoice_Address_Update").val(),
+                Bank:$("#bank_Update").val(),
+                Bank_Account:$("#bank_Account_Update").val(),
+                Bank_Address:$("#bank_Address_Update").val(),
+                force_Time:$("#force_Time_Update").val(),
+                Failure_Time:$("#failure_Time_Update").val(),
+                Acceptable_Currency:$("#acceptable_Currency_Update").val(),
+                Old_Customer_Code:Old_Customer_Code
+            },
+            success: function(result){
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="NoUpdate"){
+                    $.messager.alert("提示信息","请选择更新内容或者联系管理员!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新数据是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'customerAccountInfoRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Chinese_Abbreviation=$("#chinese_Abbreviation").val();
+        var Customer_Code=$("#customer_Code").val();
+        var DateFrom=$("#dateFrom").val();
+        var DateTo=$("#dateTo").val();
+        var Credit_Level=$("#credit_Level").val();
+        var Creator=$("#creator").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="customerAccountInfoDownLoadExcel.do?id="+id;
+        }else {
+            location.href="customerAccountInfoDownLoadExcelAll.do?Chinese_Abbreviation="+Chinese_Abbreviation+"&Customer_Code="+Customer_Code+
+                "&DateFrom="+DateFrom+"&DateTo="+DateTo+"&Credit_Level="+Credit_Level+"&Creator="+Creator;
+        }
+    };
+    function DownloadModel(){
+        location.href="customerAccountInfoDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'customerAccountInfoUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="customer_Code"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列客户代码是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,11)=="credit_Code"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(12)+"列统一社会信用代码格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,15)=="taxpayer_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(16)+"列纳税人识别号格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,19)=="registration_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(20)+"列工商注册号格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,17)=="registration_Time"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(18)+"列注册时间格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,18)=="registered_Capital"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(19)+"列注册资金格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="credit_Amount"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列信用额度格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="bank_Account"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列银行账号格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,10)=="force_Time"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(11)+"列生效时间格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,12)=="failure_Time"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(13)+"列失效时间格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+    })(jQuery);
+</script>
+</body>
+</html>

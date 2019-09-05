@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.OrgDataDao">
+    <!--<sql id="sql_count">
+        SELECT COUNT(*)
+    </sql>
+    <sql id="sql_select">
+        SELECT *
+    </sql>
+    <sql id="sql_where">
+        FROM hwkj_org_data
+    </sql>
+    <select id="queryOrgDataListWithPage" parameterType="hwkj.hwkj.entity.pagingquery.PageModel" resultType="hwkj.hwkj.entity.HR.OrgData">
+        <include refid="sql_select"></include>
+        <include refid="sql_where"></include>
+        <if test="page != null and  rows!= null">
+            limit #{startRow},#{rows}
+        </if>
+    </select>
+    <select id="queryOrgDataCountWithPage" parameterType="hwkj.hwkj.entity.pagingquery.PageModel" resultType="Integer">
+        <include refid="sql_count"></include>
+        <include refid="sql_where"></include>
+    </select>-->
+    <!--求BG事业群不重复count -->
+    <select id="bgCount" parameterType="hwkj.hwkj.entity.HR.OrgData" resultType="hwkj.hwkj.entity.HR.OrgData">
+      <!-- select count(*) from hwkj_org_data group by(BG)-->
+        select * from  hwkj_org_data group by(BG)
+    </select>
+    <!--求BU事业处不重复count -->
+    <select id="buCount" parameterType="hwkj.hwkj.entity.HR.OrgData" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where BG=#{BG} group by(BU)
+    </select>
+
+    <!--求Dept部门不重复count -->
+    <select id="deptCount" parameterType="hwkj.hwkj.entity.HR.OrgData" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where BG=#{BG} and BU=#{BU} group by(Dept)
+    </select>
+
+    <!--求Ke不重复count -->
+    <select id="keCount" parameterType="hwkj.hwkj.entity.HR.OrgData" resultType="hwkj.hwkj.entity.HR.OrgData">
+         select * from hwkj_org_data where BG=#{BG} and BU=#{BU} and Dept=#{Dept} group by(Ke)
+    </select>
+
+    <!--求Zu不重复count -->
+    <select id="zuCount" parameterType="hwkj.hwkj.entity.HR.OrgData" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where BG=#{BG} and BU=#{BU} and Dept=#{Dept} and Ke=#{Ke} group by(Zu)
+    </select>
+
+    <select id="queryOrgDataById" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where id=#{id}
+    </select>
+
+    <insert id="insertOrgData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.HR.OrgData">
+        insert into hwkj_org_data (Group_Name,Group_Code,Legal_Name,Company_Code,BG,BU,Region,Dept,Ke,Zu,Cost_Code,
+        Org_Code,Status,Creator,Create_Date
+        )values(#{Group_Name},#{Group_Code},#{Legal_Name},#{Company_Code},#{BG},#{BU},#{Region},#{Dept},#{Ke},#{Zu},#{Cost_Code},
+        #{Org_Code},#{Status},#{Creator},#{Create_Date}
+        )
+    </insert>
+    <delete id="deleteOrgData" parameterType="java.lang.Integer">
+        delete from hwkj_org_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateOrgData" parameterType="hwkj.hwkj.entity.HR.OrgData">
+        update hwkj_org_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Legal_Name!=null">Legal_Name=#{Legal_Name},</if>
+            <if test="Company_Code!=null">Company_Code=#{Company_Code},</if>
+            <if test="BG!=null">BG=#{BG},</if>
+            <if test="BU!=null">BU=#{BU},</if>
+            <if test="Region!=null">Region=#{Region},</if>
+            <if test="Dept!=null">Dept=#{Dept},</if>
+            <if test="Ke!=null">Ke=#{Ke},</if>
+            <if test="Zu!=null">Zu=#{Zu},</if>
+            <if test="Cost_Code!=null">Cost_Code=#{Cost_Code},</if>
+            <if test="Org_Code!=null">Org_Code=#{Org_Code},</if>
+            <if test="Status!=null">Status=#{Status},</if>
+            <if test="Creator!=null">Creator=#{Creator},</if>
+            <if test="Create_Date!=null">Create_Date=#{Create_Date},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryOrgDataList"  resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where 1=1
+        <if test="orgDataPageModel.page!=null and orgDataPageModel.rows!=null"></if>
+        <if test="orgData.BG!=null and orgData.BG!=''">and BG=#{orgData.BG}  </if>
+        <if test="orgData.BU!=null and orgData.BU!='' ">and BU=#{orgData.BU}  </if>
+        <if test="orgData.Dept!=null and orgData.Dept!='' ">and Dept=#{orgData.Dept}</if>
+        <if test="orgData.Ke!=null and orgData.Ke!='' ">and Ke=#{orgData.Ke} </if>
+        <if test="orgData.Zu!=null and orgData.Zu!='' ">and Zu=#{orgData.Zu}</if>
+        <if test="orgData.Legal_Name!=null and orgData.Legal_Name!='' ">and Legal_Name=#{orgData.Legal_Name}</if>
+        <if test="orgData.Region!=null and orgData.Region!='' ">and Region=#{orgData.Region}</if>
+        order by Id desc limit #{orgDataPageModel.startRow},#{orgDataPageModel.rows}
+    </select>
+
+    <select id="queryOrgDataCount" resultType="int">
+        select count(*) from hwkj_org_data where 1=1
+        <if test="orgDataPageModel.page!=null and orgDataPageModel.rows!=null"></if>
+        <if test="orgData.BG!=null and orgData.BG!=''">and BG=#{orgData.BG}  </if>
+        <if test="orgData.BU!=null and orgData.BU!='' ">and BU=#{orgData.BU}  </if>
+        <if test="orgData.Dept!=null and orgData.Dept!='' ">and Dept=#{orgData.Dept}</if>
+        <if test="orgData.Ke!=null and orgData.Ke!='' ">and Ke=#{orgData.Ke} </if>
+        <if test="orgData.Zu!=null and orgData.Zu!='' ">and Zu=#{orgData.Zu}</if>
+        <if test="orgData.Legal_Name!=null and orgData.Legal_Name!='' ">and Legal_Name=#{orgData.Legal_Name}</if>
+        <if test="orgData.Region!=null and orgData.Region!='' ">and Region=#{orgData.Region}</if>
+    </select>
+    <select id="queryOrgDataForDownLoadAll" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where 1=1
+        <if test="orgData.BG!=null and orgData.BG!=''">and BG=#{orgData.BG}  </if>
+        <if test="orgData.BU!=null and orgData.BU!='' ">and BU=#{orgData.BU}  </if>
+        <if test="orgData.Dept!=null and orgData.Dept!='' ">and Dept=#{orgData.Dept}</if>
+        <if test="orgData.Ke!=null and orgData.Ke!='' ">and Ke=#{orgData.Ke} </if>
+        <if test="orgData.Zu!=null and orgData.Zu!='' ">and Zu=#{orgData.Zu}</if>
+        <if test="orgData.Legal_Name!=null and orgData.Legal_Name!='' ">and Legal_Name=#{orgData.Legal_Name}</if>
+        <if test="orgData.Region!=null and orgData.Region!='' ">and Region=#{orgData.Region}</if>
+        order by Id desc
+    </select>
+    <select id="queryOrgDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select * from hwkj_org_data where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by Id desc
+    </select>
+    <select id="queryOrgDataForOption" resultType="hwkj.hwkj.entity.HR.OrgData">
+        select BG,BU,Dept,Ke,Zu,Org_Code from hwkj_org_data where 1=1
+        <if test="Status !=null and Status !=''">and Status=#{Status}</if>
+        <if test="Org_Code !=null and Org_Code !=''">and Org_Code=#{Org_Code}</if>
+        group by (Org_Code) order by Id desc
+    </select>
+    <select id="queryOrgDataForUploadOrgCode" resultType="int">
+        select count(*) from hwkj_org_data where 1=1
+        <if test="Org_Code!=null and Org_Code!=''">and Org_Code=#{Org_Code}</if>
+        <if test="Status !=null and Status !=''">and Status=#{Status}</if>
+    </select>
+</mapper>

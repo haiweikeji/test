@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerContactDao">
+    <insert id="insertCustomerContact" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerContact">
+        insert into hwkj_customer_contact
+        (Customer_Code,Contact_Chinese_Name,Contact_English_Name,Sex,Title,Dept,Authority,Language,
+        Company_Telephone,Phone_Number,Company_Mail,Private_Mail,WeChat_Number,Id_Card,Passport_Number,
+        Birth_Date,Native_Place,Nation,Religious_Belief,Interests,Diet_Taboo,
+        Habit,Member_Family,Status,BPM,Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Contact_Chinese_Name},#{Contact_English_Name},#{Sex},#{Title},#{Dept},#{Authority},#{Language},
+        #{Company_Telephone},#{Phone_Number},#{Company_Mail},#{Private_Mail},#{WeChat_Number},#{Id_Card},#{Passport_Number},
+        #{Birth_Date},#{Native_Place},#{Nation},#{Religious_Belief},#{Interests},#{Diet_Taboo},
+        #{Habit},#{Member_Family},#{Status},#{BPM},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerContact" parameterType="java.lang.Integer">
+        delete from hwkj_customer_contact where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerContact" parameterType="hwkj.hwkj.entity.CRM.CustomerContact">
+        update hwkj_customer_contact
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Contact_Chinese_Name!=null">Contact_Chinese_Name=#{Contact_Chinese_Name},</if>
+            <if test="Contact_English_Name!=null">Contact_English_Name=#{Contact_English_Name},</if>
+            <if test="Sex!=null">Sex=#{Sex},</if>
+            <if test="Title!=null">Title=#{Title},</if>
+            <if test="Dept!=null">Dept=#{Dept},</if>
+            <if test="Authority!=null">Authority=#{Authority},</if>
+            <if test="Language!=null">Language=#{Language},</if>
+            <if test="Company_Telephone!=null">Company_Telephone=#{Company_Telephone},</if>
+            <if test="Phone_Number!=null">Phone_Number=#{Phone_Number},</if>
+            <if test="Company_Mail!=null">Company_Mail=#{Company_Mail},</if>
+            <if test="Private_Mail!=null">Private_Mail=#{Private_Mail},</if>
+            <if test="WeChat_Number!=null">WeChat_Number=#{WeChat_Number},</if>
+            <if test="Id_Card!=null">Id_Card=#{Id_Card},</if>
+            <if test="Passport_Number!=null">Passport_Number=#{Passport_Number},</if>
+            <if test="Birth_Date!=null">Birth_Date=#{Birth_Date},</if>
+            <if test="Native_Place!=null">Native_Place=#{Native_Place},</if>
+            <if test="Nation!=null">Nation=#{Nation},</if>
+            <if test="Religious_Belief!=null">Religious_Belief=#{Religious_Belief},</if>
+            <if test="Interests!=null">Interests=#{Interests},</if>
+            <if test="Diet_Taboo!=null">Diet_Taboo=#{Diet_Taboo},</if>
+            <if test="Habit!=null">Habit=#{Habit},</if>
+            <if test="Member_Family!=null">Member_Family=#{Member_Family},</if>
+            <if test="Status!=null">Status=#{Status},</if>
+            <if test="BPM!=null">BPM=#{BPM},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerContactList" resultType="hwkj.hwkj.entity.CRM.CustomerContact">
+        select c.Id,c.Customer_Code,b.Chinese_Abbreviation,b.Country,b.City,c.Contact_Chinese_Name,
+        c.Contact_English_Name,c.Sex,c.Title,c.Dept,c.Authority,c.Language,c.Company_Telephone,
+        c.Phone_Number,c.Company_Mail,c.Private_Mail,c.WeChat_Number,c.Id_Card,c.Passport_Number,
+        c.Birth_Date,a.Bank,a.Bank_Account,c.Native_Place,c.Nation,c.Religious_Belief,c.Diet_Taboo,
+        c.Interests,c.Habit,c.Member_Family,c.Status,c.BPM,c.Creator,c.Create_Date,c.Updated_By,c.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_contact c on
+        b.Customer_Code=c.Customer_Code left join
+        hwkj_customer_account_info a on c.Customer_Code=a.Customer_Code where 1=1 and c.Id is not null
+        <if test="customerContactPageModel.page!=null and customerContactPageModel.rows!=null"></if>
+        <if test="customerContact.Chinese_Abbreviation!=null and customerContact.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerContact.Chinese_Abbreviation}</if>
+        <if test="customerContact.Customer_Code!=null and customerContact.Customer_Code!=''">and c.Customer_Code=#{customerContact.Customer_Code}</if>
+        <if test="customerContact.Contact_Chinese_Name!=null and customerContact.Contact_Chinese_Name!=''">and c.Contact_Chinese_Name=#{customerContact.Contact_Chinese_Name}</if>
+        <if test="customerContact.BPM!=null and customerContact.BPM!=''">and c.BPM=#{customerContact.BPM}</if>
+        <if test="customerContact.Status!=null and customerContact.Status!=''">and c.Status=#{customerContact.Status}</if>
+        order by (c.Id) desc limit #{customerContactPageModel.startRow},#{customerContactPageModel.rows}
+    </select>
+    <select id="queryCustomerContactCount" resultType="int">
+        select count(*) from hwkj_customer_base_data b left join hwkj_customer_contact c on
+        b.Customer_Code=c.Customer_Code left join
+        hwkj_customer_account_info a on c.Customer_Code=a.Customer_Code where 1=1 and c.Id is not null
+        <if test="customerContactPageModel.page!=null and customerContactPageModel.rows!=null"></if>
+        <if test="customerContact.Chinese_Abbreviation!=null and customerContact.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerContact.Chinese_Abbreviation}</if>
+        <if test="customerContact.Customer_Code!=null and customerContact.Customer_Code!=''">and c.Customer_Code=#{customerContact.Customer_Code}</if>
+        <if test="customerContact.Contact_Chinese_Name!=null and customerContact.Contact_Chinese_Name!=''">and c.Contact_Chinese_Name=#{customerContact.Contact_Chinese_Name}</if>
+        <if test="customerContact.BPM!=null and customerContact.BPM!=''">and c.BPM=#{customerContact.BPM}</if>
+        <if test="customerContact.Status!=null and customerContact.Status!=''">and c.Status=#{customerContact.Status}</if>
+    </select>
+    <select id="queryCustomerContactForDownLoadAll" resultType="hwkj.hwkj.entity.CRM.CustomerContact">
+        select c.Id,c.Customer_Code,b.Chinese_Abbreviation,b.Country,b.City,c.Contact_Chinese_Name,
+        c.Contact_English_Name,c.Sex,c.Title,c.Dept,c.Authority,c.Language,c.Company_Telephone,
+        c.Phone_Number,c.Company_Mail,c.Private_Mail,c.WeChat_Number,c.Id_Card,c.Passport_Number,
+        c.Birth_Date,a.Bank,a.Bank_Account,c.Native_Place,c.Nation,c.Religious_Belief,c.Diet_Taboo,
+        c.Interests,c.Habit,c.Member_Family,c.Status,c.BPM,c.Creator,c.Create_Date,c.Updated_By,c.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_contact c on
+        b.Customer_Code=c.Customer_Code left join
+        hwkj_customer_account_info a on c.Customer_Code=a.Customer_Code where 1=1 and c.Id is not null
+        <if test="customerContact.Chinese_Abbreviation!=null and customerContact.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerContact.Chinese_Abbreviation}</if>
+        <if test="customerContact.Customer_Code!=null and customerContact.Customer_Code!=''">and c.Customer_Code=#{customerContact.Customer_Code}</if>
+        <if test="customerContact.Contact_Chinese_Name!=null and customerContact.Contact_Chinese_Name!=''">and c.Contact_Chinese_Name=#{customerContact.Contact_Chinese_Name}</if>
+        <if test="customerContact.BPM!=null and customerContact.BPM!=''">and c.BPM=#{customerContact.BPM}</if>
+        <if test="customerContact.Status!=null and customerContact.Status!=''">and c.Status=#{customerContact.Status}</if>
+        order by (c.Id) desc
+    </select>
+    <select id="queryCustomerContactForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerContact">
+        select c.Id,c.Customer_Code,b.Chinese_Abbreviation,b.Country,b.City,c.Contact_Chinese_Name,
+        c.Contact_English_Name,c.Sex,c.Title,c.Dept,c.Authority,c.Language,c.Company_Telephone,
+        c.Phone_Number,c.Company_Mail,c.Private_Mail,c.WeChat_Number,c.Id_Card,c.Passport_Number,
+        c.Birth_Date,a.Bank,a.Bank_Account,c.Native_Place,c.Nation,c.Religious_Belief,c.Diet_Taboo,
+        c.Interests,c.Habit,c.Member_Family,c.Status,c.BPM,c.Creator,c.Create_Date,c.Updated_By,c.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_contact c on
+        b.Customer_Code=c.Customer_Code left join
+        hwkj_customer_account_info a on c.Customer_Code=a.Customer_Code where 1=1 and c.Id is not null and c.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by c.Id desc
+    </select>
+    <select id="queryCustomerContactForExist" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null and Contact_Chinese_Name!=''">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+    </select>
+    <select id="queryCustomerContactByCustomerCode" resultType="hwkj.hwkj.entity.CRM.CustomerContact">
+        select Contact_Chinese_Name from
+        hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+    </select>
+    <select id="queryCustomerContactByCustomerCodeAndContactChineseName" resultType="hwkj.hwkj.entity.CRM.CustomerContact">
+        select Contact_English_Name,Title,Dept,BPM from
+        hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null and Contact_Chinese_Name!=''">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+    </select>
+    <select id="queryCustomerContactForAllExist" parameterType="hwkj.hwkj.entity.CRM.CustomerContact" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+        <if test="Contact_English_Name!=null">and Contact_English_Name=#{Contact_English_Name}</if>
+        <if test="Sex!=null">and Sex=#{Sex}</if>
+        <if test="Title!=null">and Title=#{Title}</if>
+        <if test="Dept!=null">and Dept=#{Dept}</if>
+        <if test="Authority!=null">and Authority=#{Authority}</if>
+        <if test="Language!=null">and Language=#{Language}</if>
+        <if test="Company_Telephone!=null">and Company_Telephone=#{Company_Telephone}</if>
+        <if test="Phone_Number!=null">and Phone_Number=#{Phone_Number}</if>
+        <if test="Company_Mail!=null">and Company_Mail=#{Company_Mail}</if>
+        <if test="Private_Mail!=null">and Private_Mail=#{Private_Mail}</if>
+        <if test="WeChat_Number!=null">and WeChat_Number=#{WeChat_Number}</if>
+        <if test="Id_Card!=null">and Id_Card=#{Id_Card}</if>
+        <if test="Passport_Number!=null">and Passport_Number=#{Passport_Number}</if>
+        <if test="Birth_Date!=null">and Birth_Date=#{Birth_Date}</if>
+        <if test="Native_Place!=null">and Native_Place=#{Native_Place}</if>
+        <if test="Nation!=null">and Nation=#{Nation}</if>
+        <if test="Religious_Belief!=null">and Religious_Belief=#{Religious_Belief}</if>
+        <if test="Interests!=null">and Interests=#{Interests}</if>
+        <if test="Diet_Taboo!=null">and Diet_Taboo=#{Diet_Taboo}</if>
+        <if test="Habit!=null">and Habit=#{Habit}</if>
+        <if test="Member_Family!=null">and Member_Family=#{Member_Family}</if>
+        <if test="Status!=null">and Status=#{Status}</if>
+        <if test="BPM!=null">and BPM=#{BPM}</if>
+    </select>
+    <select id="queryCustomerContactForUploadContactChineseName" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+    </select>
+    <select id="queryCustomerContactForUploadContactEnglishName" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+        <if test="Contact_English_Name!=null and Contact_English_Name!=''">and Contact_English_Name=#{Contact_English_Name}</if>
+    </select>
+    <select id="queryCustomerContactForUploadTitle" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+        <if test="Contact_English_Name!=null and Contact_English_Name!=''">and Contact_English_Name=#{Contact_English_Name}</if>
+        <if test="Title!=null and Title!=''">and Title=#{Title}</if>
+    </select>
+    <select id="queryCustomerContactForUploadDept" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+        <if test="Contact_English_Name!=null and Contact_English_Name!=''">and Contact_English_Name=#{Contact_English_Name}</if>
+        <if test="Title!=null and Title!=''">and Title=#{Title}</if>
+        <if test="Dept!=null and Dept!=''">and Dept=#{Dept}</if>
+    </select>
+    <select id="queryCustomerContactForUploadBPM" resultType="int">
+        select count(*) from hwkj_customer_contact where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Contact_Chinese_Name!=null">and Contact_Chinese_Name=#{Contact_Chinese_Name}</if>
+        <if test="Contact_English_Name!=null and Contact_English_Name!=''">and Contact_English_Name=#{Contact_English_Name}</if>
+        <if test="Title!=null and Title!=''">and Title=#{Title}</if>
+        <if test="Dept!=null and Dept!=''">and Dept=#{Dept}</if>
+        <if test="BPM!=null and BPM!=''">and BPM=#{BPM}</if>
+    </select>
+</mapper>
