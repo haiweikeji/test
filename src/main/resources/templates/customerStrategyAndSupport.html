@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">CustomerName:</span>
+        <input id="chinese_Abbreviation" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">CustomerCode:</span>
+        <input id="customer_Code"class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">DateFrom:</span>
+        <input id="date_From" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">DateTo:</span>
+        <input id="date_To" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newCustomerStrategyAndSupport()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Add" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Add" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="date_From" class="easyui-datebox" style="width: 230px" required="true" label="开始日期:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="date_To" class="easyui-datebox" style="width: 230px;" required="true" label="结束日期:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="top_Three_Customer" class="easyui-textbox" style="width: 230px" required="true" label="前三大客户:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="top_Three_Product" class="easyui-textbox" style="width: 230px;" required="true" label="前三大产品:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="annual_Output_Add" name="annual_Output" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'annual_Output_Add'" label="年产量:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="annual_Revenue_Add" name="new_Annual_Revenue" class="easyui-textbox" style="width: 230px" required="required" label="占客户年营收比率:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <span>商业战略:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="business_Strategy_Add" name="business_Strategy" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>支援需求:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="support_Need_Add" name="support_Need" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input id="customer_Code_Update" name="customer_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'customer_Code',textField:'customer_Code'" label="客户代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="chinese_Abbreviation_Update" name="chinese_Abbreviation" class="easyui-textbox" style="width: 230px;" required="true" label="中文简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="date_From" class="easyui-datebox" style="width: 230px" required="true" label="开始日期:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="date_To" class="easyui-datebox" style="width: 230px;" required="true" label="结束日期:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="top_Three_Customer" class="easyui-textbox" style="width: 230px" required="true" label="前三大客户:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="top_Three_Product" class="easyui-textbox" style="width: 230px;" required="true" label="前三大产品:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="annual_Output_Update" name="annual_Output" class="easyui-textbox" style="width: 230px" required="true" data-options="validType:'annual_Output_Update'" label="年产量:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="annual_Revenue_Update" name="new_Annual_Revenue" class="easyui-textbox" style="width: 230px" required="required" label="占客户年营收比率:" />
+            </div>
+            <div style="margin-bottom:10px">
+                <span>商业战略:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="business_Strategy_Update" name="business_Strategy" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>支援需求:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input id="support_Need_Update" name="support_Need" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 60px;width: 500px" />
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="id_Update" name="id" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryCustomerStrategyAndSupportFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $.extend($.fn.validatebox.defaults.rules,{
+        annual_Output_Add:{
+            validator:function (value) {
+                var reg = /^[1-9]+[0-9]+([,，][1-9]+[0-9]+)([,，][1-9]+[0-9]+)$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的格式'
+        },
+        annual_Output_Update:{
+            validator:function (value) {
+                var reg = /^[1-9]+[0-9]+([,，][1-9]+[0-9]+)([,，][1-9]+[0-9]+)$/;
+                if(reg.test(value)){
+                    return true;
+                }
+                return false;
+            },
+            message : '请输入正确的格式'
+        },
+    });
+    $(function () {
+        $("#annual_Revenue_Add").numberbox({
+            min: 0,
+            max: 100,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#annual_Revenue_Update").numberbox({
+            min: 0,
+            max: 100,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#customer_Code_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Add").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerStrategyAndSupportCustomerCode.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Add").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#customer_Code_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Customer_Code=$("#customer_Code_Update").combobox('getText');
+                $.ajax({
+                    url:"queryCustomerStrategyAndSupportCustomerCode.do",
+                    type:"post",
+                    data:{Customer_Code:Customer_Code},
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.customerCodeList;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#chinese_Abbreviation_Update").textbox('setValue',data[0].chinese_Abbreviation);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'customer_Code',title:'客户代码',align:'center',titleAlign: true},
+                        {field:'chinese_Abbreviation',title:'中文简称',align:'center',titleAlign: true},
+                        {field:'english_Abbreviation',title:'英文简称',align:'center',titleAlign: true},
+                        {field:'date_From',title:'开始日期',align:'center',titleAlign: true},
+                        {field:'date_To',title:'结束日期',align:'center',titleAlign: true},
+                        {field:'top_Three_Customer',title:'前三大客户',align:'center',titleAlign: true},
+                        {field:'top_Three_Product',title:'前三大产品',align:'center',titleAlign: true},
+                        {field:'annual_Output',title:'年产量',align:'center',titleAlign: true},
+                        {field:'new_Annual_Revenue',title:'占客户年营收比率',align:'center',titleAlign: true},
+                        {field:'business_Strategy',title:'商业战略',align:'center',titleAlign: true},
+                        {field:'support_Need',title:'支援需求',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryCustomerStrategyAndSupport.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Chinese_Abbreviation:$("#chinese_Abbreviation").val(),Customer_Code:$("#customer_Code").val(),Date_From:$("#date_From").val(),Date_To:$("#date_To").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Chinese_Abbreviation,Customer_Code,Date_From,Date_To){//分页触发
+                 findOption(page, rows,Chinese_Abbreviation,Customer_Code,Date_From,Date_To);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Chinese_Abbreviation,Customer_Code,Date_From,Date_To)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Chinese_Abbreviation:Chinese_Abbreviation,Customer_Code:Customer_Code,Date_From:Date_From,Date_To:Date_To});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryCustomerStrategyAndSupport.do",
+            data : {
+                page:page,
+                rows:rows,
+                Chinese_Abbreviation:Chinese_Abbreviation,
+                Customer_Code:Customer_Code,
+                Date_From:Date_From,
+                Date_To:Date_To
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("操作提示", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("操作提示","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            url = 'customerStrategyAndSupportUpdate.do';
+            $.ajax({
+                url:"queryCustomerStrategyAndSupportCustomerCode.do",
+                type:"post",
+                data:{Customer_Code:""},
+                dataType:"json",
+                success:function (data) {
+                    $("#customer_Code_Update").combobox("loadData",data.customerCodeList);
+                }
+            });
+        }
+    };
+    function newCustomerStrategyAndSupport(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'customerStrategyAndSupportAdd.do';
+        $.ajax({
+            url:"queryCustomerStrategyAndSupportCustomerCode.do",
+            type:"post",
+            data:{Customer_Code:""},
+            dataType:"json",
+            success:function (data) {
+                $("#customer_Code_Add").combobox("loadData",data.customerCodeList);
+                $("#chinese_Abbreviation_Add").textbox('setValue',"");
+            }
+        });
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增数据失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="NoUpdateOrExist"){
+                    $.messager.alert("提示信息","请选择更新内容或更新内容已存在!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index,item){
+                id.push(item.id);
+            });
+            url = 'customerStrategyAndSupportRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","成功删除数据!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Chinese_Abbreviation=$("#chinese_Abbreviation").val();
+        var Customer_Code=$("#customer_Code").val();
+        var Date_From=$("#date_From").val();
+        var Date_To=$("#date_To").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="customerStrategyAndSupportDownLoadExcel.do?id="+id;
+        }else {
+            location.href="customerStrategyAndSupportDownLoadExcelAll.do?Chinese_Abbreviation="+Chinese_Abbreviation+"&Customer_Code="+Customer_Code+
+                "&Date_From="+Date_From+"&Date_To="+Date_To;
+        }
+    };
+    function DownloadModel(){
+        location.href="customerStrategyAndSupportDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'customerStrategyAndSupportUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="customer_Code"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列客户代码是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="annual_Output"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列年产量是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,14)=="annual_Revenue"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(15)+"列占客户年营收比率是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+
+    })(jQuery);
+</script>
+</body>
+</html>

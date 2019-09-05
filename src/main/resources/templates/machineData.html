@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">设备类型:</span>
+        <input id="machine_Type" class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">设备名称:</span>
+        <input id="machine_Name"class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">品牌:</span>
+        <input id="brand"class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">型号:</span>
+        <input id="model_Number"class="easyui-textbox" style="width: 90px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">规格:</span>
+        <input id="size"class="easyui-textbox" style="width: 110px;height: 25px" />&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newMachineData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="FileUpload()" style="width:90px"><span style="align-content: center">图片上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" style="width: 98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px;height: 700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="machine_Name" class="easyui-textbox" style="width: 230px" required="true" label="设备名称:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="speed_Type" class="easyui-textbox" style="width: 230px;" label="速度类型:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machine_Type" class="easyui-textbox" style="width: 230px" required="true" label="设备类别:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="speed_Unit" class="easyui-textbox" style="width: 230px;"  label="速度单位:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="brand" class="easyui-textbox" style="width: 230px" required="true" label="品牌:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="max_Speed_Add" name="max_Speed" class="easyui-textbox" style="width: 230px;"  label="最高运行速度:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="model_Number" class="easyui-textbox" style="width: 230px" required="true" label="型号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="max_Pressure_Add" name="max_Pressure" class="easyui-textbox" style="width: 230px;"  label="最大压力(吨):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="size" class="easyui-textbox" style="width: 230px"  label="规格:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="air_Type" class="easyui-textbox" style="width: 230px;"  label="用气种类:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="country_Origin" class="easyui-textbox" style="width: 230px"  label="原产地:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="rated_Pressure_Add" name="rated_Pressure" class="easyui-textbox" style="width: 230px;"  label="额定气压(Pa):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="contour_Size" class="easyui-textbox" style="width: 230px"  label="设备外形尺寸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="unit_Gas_Consumption_Add" name="unit_Gas_Consumption" class="easyui-textbox" style="width: 230px;"  label="单位耗气量(升):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machine_Tool_Accuracy_Grade" class="easyui-textbox" style="width: 230px"  label="机床精度等级:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="rated_Voltage_Add" name="rated_Voltage" class="easyui-textbox" style="width: 230px;"  label="额定电压(V):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="max_Machining_Size" class="easyui-textbox" style="width: 230px"  label="最大加工尺寸(mm):" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="current_Rating_Add" name="current_Rating" class="easyui-textbox" style="width: 230px;"  label="额定电流(A):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="min_Machining_Size" class="easyui-textbox" style="width: 230px"  label="最小加工尺寸(mm):" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="power_Rating_Add" name="power_Rating" class="easyui-textbox" style="width: 230px;"  label="额定功率(W):" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="track_Travel" class="easyui-textbox" style="width: 230px"  label="轨道行程:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="spindle_Cone_Hole_Type" class="easyui-textbox" style="width: 230px;"  label="主轴锥孔类型:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="tool_Magazine_Type" class="easyui-textbox" style="width: 230px"  label="刀库种类:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="manufacturer_Abbreviation" class="easyui-textbox" style="width: 230px;"  label="制造商简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machining_Product" class="easyui-textbox" style="width: 230px" required="true" label="适用加工的产品:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="factory_Time" class="easyui-datebox" style="width: 230px;"  label="最早出厂时间:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="equipment_Advantages" class="easyui-textbox" style="width: 230px" required="true" label="设备优点简述:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="life_Cycle_State" class="easyui-combobox" style="width: 230px;"  label="生命周期状态:">
+                    <option></option>
+                    <option>研发中</option>
+                    <option>导入中</option>
+                    <option>试产中</option>
+                    <option>量产中</option>
+                    <option>EOL</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="weight_Add" name="weight" class="easyui-textbox" style="width: 230px;" label="设备重量(kg):"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="drawing_Files" class="easyui-filebox" multiple="true" style="width: 230px" label="图纸:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="specification_Files" class="easyui-filebox" multiple="true" style="width: 230px"  label="规格书:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="photo_Files" class="easyui-filebox" multiple="true" data-options="prompt:'文件上传'" style="width: 230px"  label="照片:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <span>描述:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <textarea name="described" style="height: 60px;width: 500px"></textarea>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>备注:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <textarea name="remark" style="height: 60px;width: 500px"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:580px;height: 700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machine_Name" class="easyui-textbox" style="width: 230px" required="true" label="设备名称:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="speed_Type" class="easyui-textbox" style="width: 230px;" label="速度类型:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machine_Type" class="easyui-textbox" style="width: 230px" required="true" label="设备类别:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="speed_Unit" class="easyui-textbox" style="width: 230px;"  label="速度单位:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="brand" class="easyui-textbox" style="width: 230px" required="true" label="品牌:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="max_Speed_Update" name="max_Speed" class="easyui-textbox" style="width: 230px;"  label="最高运行速度:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="model_Number" class="easyui-textbox" style="width: 230px" required="true" label="型号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="max_Pressure_Update" name="max_Pressure" class="easyui-textbox" style="width: 230px;"  label="最大压力(吨):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="size" class="easyui-textbox" style="width: 230px"  label="规格:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="air_Type" class="easyui-textbox" style="width: 230px;"  label="用气种类:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="country_Origin" class="easyui-textbox" style="width: 230px"  label="原产地:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="rated_Pressure_Update" name="rated_Pressure" class="easyui-textbox" style="width: 230px;"  label="额定气压(Pa):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="contour_Size" class="easyui-textbox" style="width: 230px"  label="设备外形尺寸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="unit_Gas_Consumption_Update" name="unit_Gas_Consumption" class="easyui-textbox" style="width: 230px;"  label="单位耗气量(升):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machine_Tool_Accuracy_Grade" class="easyui-textbox" style="width: 230px"  label="机床精度等级:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="rated_Voltage_Update" name="rated_Voltage" class="easyui-textbox" style="width: 230px;"  label="额定电压(V):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="max_Machining_Size" class="easyui-textbox" style="width: 230px"  label="最大加工尺寸(mm):" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="current_Rating_Update" name="current_Rating" class="easyui-textbox" style="width: 230px;"  label="额定电流(A):"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="min_Machining_Size" class="easyui-textbox" style="width: 230px"  label="最小加工尺寸(mm):" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="power_Rating_Update" name="power_Rating" class="easyui-textbox" style="width: 230px;"  label="额定功率(W):" />
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="track_Travel" class="easyui-textbox" style="width: 230px"  label="轨道行程:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="spindle_Cone_Hole_Type" class="easyui-textbox" style="width: 230px;"  label="主轴锥孔类型:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="tool_Magazine_Type" class="easyui-textbox" style="width: 230px"  label="刀库种类:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="manufacturer_Abbreviation" class="easyui-textbox" style="width: 230px;"  label="制造商简称:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="machining_Product" class="easyui-textbox" style="width: 230px" required="true" label="适用加工的产品:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="factory_Time" class="easyui-datebox" style="width: 230px;"  label="最早出厂时间:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="equipment_Advantages" class="easyui-textbox" style="width: 230px" required="true" label="设备优点简述:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="life_Cycle_State" class="easyui-combobox" style="width: 230px;"  label="生命周期状态:">
+                    <option></option>
+                    <option>研发中</option>
+                    <option>导入中</option>
+                    <option>试产中</option>
+                    <option>量产中</option>
+                    <option>EOL</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="weight_Update" name="weight" class="easyui-textbox" style="width: 230px;"  label="设备重量(kg):"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="drawing_Files" class="easyui-filebox" multiple="true" style="width: 230px" label="图纸:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="specification_Files" class="easyui-filebox" multiple="true" style="width: 230px"  label="规格书:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="photo_Files" class="easyui-filebox" multiple="true" data-options="prompt:'文件上传'" style="width: 230px"  label="照片:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <span>描述:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <textarea name="described" style="height: 60px;width: 500px"></textarea>
+                </div>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>备注:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <textarea name="remark" style="height: 60px;width: 500px"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg4" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons4'">
+        <form id="fm4" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="brand" class="easyui-textbox" style="width: 230px" required="true" label="品牌:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="model_Number" class="easyui-textbox" style="width: 230px" required="true" label="型号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="drawing_Files" class="easyui-filebox" multiple="true" style="width: 230px" label="图纸:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="specification_Files" class="easyui-filebox" multiple="true" style="width: 230px"  label="规格书:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="photo_Files" class="easyui-filebox" multiple="true"  style="width: 230px"  label="照片:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons4">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser4()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg4').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<div style="display: none">
+    <div id="photo" class="datagrid-toolbar" style="padding:5px;">
+        <img id="img" src="" alt="">
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryMachineDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    /**
+     * 最高运行速度
+     */
+    $(function () {
+        $("#max_Speed_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#max_Speed_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 最大压力(吨)
+     */
+    $(function () {
+        $("#max_Pressure_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#max_Pressure_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 额定气压Pa
+     */
+    $(function () {
+        $("#rated_Pressure_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#rated_Pressure_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 单位耗气量升
+     */
+    $(function () {
+        $("#unit_Gas_Consumption_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#unit_Gas_Consumption_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 额定电压V
+     */
+    $(function () {
+        $("#rated_Voltage_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#rated_Voltage_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 额定电流A
+     */
+    $(function () {
+        $("#rated_Voltage_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#rated_Voltage_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 额定功率W
+     */
+    $(function () {
+        $("#power_Rating_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#power_Rating_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    /**
+     * 设备重量kg
+     */
+    $(function () {
+        $("#weight_Add").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#weight_Update").numberbox({
+            min: 0,
+            precision: 2,
+        });
+    });
+    $(function () {
+        $("#product_Name_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Product_Name=$("#product_Name_Add").combobox('getText');
+                $.ajax({
+                    url:"queryMaterialEngineeringDataByProductName.do",
+                    type:"post",
+                    data:{"Product_Name":Product_Name},
+                    dataType:"json",
+                    success:function (data) {
+                        $("#category_Add").textbox("setValue",(data.commodityList)[0].category);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#product_Name_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Product_Name=$("#product_Name_Update").combobox('getText');
+                $.ajax({
+                    url:"queryMaterialEngineeringDataByProductName.do",
+                    type:"post",
+                    data:{"Product_Name":Product_Name},
+                    dataType:"json",
+                    success:function (data) {
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#category_Update").textbox("setValue",(data.commodityList)[0].category);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'machine_Name',title:'设备名称',align:'center',width:'100px',titleAlign: true},
+                        {field:'machine_Type',title:'设备类型',align:'center',width:'100px',titleAlign: true},
+                        {field:'brand',title:'品牌',align:'center',width:'100px',titleAlign: true},
+                        {field:'model_Number',title:'型号',align:'center',width:'100px',titleAlign: true},
+                        {field:'size',title:'规格',align:'center',width:'100px',titleAlign: true},
+                        {field:'country_Origin',title:'原产地',align:'center',width:'100px',titleAlign: true},
+                        {field:'described',title:'描述',align:'center',width:'100px',titleAlign: true},
+                        {field:'machine_Tool_Accuracy_Grade',title:'机床精度等级',align:'center',width:'100px',titleAlign: true},
+                        {field:'max_Machining_Size',title:'最大加工尺寸(mm)',align:'center',width:'200px',titleAlign: true},
+                        {field:'min_Machining_Size',title:'最小加工尺寸(mm)',align:'center',titleAlign: true},
+                        {field:'track_Travel',title:'轨道行程',align:'center',titleAlign: true},
+                        {field:'machining_Product',title:'适用加工的产品',align:'center',titleAlign: true},
+                        {field:'equipment_Advantages',title:'设备优点简述',align:'center',titleAlign: true},
+                        {field:'tool_Magazine_Type',title:'刀库种类',align:'center',titleAlign: true},
+                        {field:'spindle_Cone_Hole_Type',title:'主轴锥孔类型',align:'center',titleAlign: true},
+                        {field:'speed_Type',title:'速度类型',align:'center',titleAlign: true},
+                        {field:'speed_Unit',title:'速度单位',align:'center',titleAlign: true},
+                        {field:'max_Speed',title:'最高运行速度',align:'center',titleAlign: true},
+                        {field:'max_Pressure',title:'最大压力(吨)',align:'center',titleAlign: true},
+                        {field:'air_Type',title:'用气种类',align:'center',titleAlign: true},
+                        {field:'rated_Pressure',title:'额定气压(Pa)',align:'center',titleAlign: true},
+                        {field:'unit_Gas_Consumption',title:'单位耗气量(升)',align:'center',titleAlign: true},
+                        {field:'rated_Voltage',title:'额定电压(V)',align:'center',titleAlign: true},
+                        {field:'current_Rating',title:'额定电流(A)',align:'center',width:'100px',titleAlign: true},
+                        {field:'power_Rating',title:'额定功率(W)',align:'center',width:'100px',titleAlign: true},
+                        {field:'contour_Size',title:'设备外形尺寸(cm)',align:'center',titleAlign: true},
+                        {field:'weight',title:'设备重量(kg)',align:'center',titleAlign: true},
+                        {field:'manufacturer_Abbreviation',title:'制造商简称',align:'center',titleAlign: true},
+                        {field:'factory_Time',title:'最早出厂时间',align:'center',titleAlign: true},
+                        {field:'life_Cycle_State',title:'生命周期状态',align:'center',titleAlign: true},
+                        {field:'drawing',title:'图纸',align:'center',titleAlign: true,formatter:showDrawing},
+                        {field:'specification',title:'规格书',align:'center',titleAlign: true,formatter:showSpecification},
+                        {field:'photo',title:'图片',align:'center',titleAlign: true,formatter:showPhoto},
+                        {field:'remark',title:'备注',align:'center',width:'200px',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryMachineData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Machine_Type:$("#machine_Type").val(),Machine_Name:$("#machine_Name").val(),
+                             Brand:$("#brand").val(),Model_Number:$("#model_Number").val(),s:$("#size").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                nowrap:false,//换行
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Machine_Type,Machine_Name,Brand,Model_Number,Size){//分页触发
+                 findOption(page, rows,Machine_Type,Machine_Name,Brand,Model_Number,Size);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Machine_Type,Machine_Name,Brand,Model_Number,Size)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Machine_Type:Machine_Type,Machine_Name:Machine_Name,
+                                                 Brand:Brand,Model_Number:Model_Number,Size:Size});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryMachineData.do",
+            data : {
+                page:page,
+                rows:rows,
+                Machine_Type:Machine_Type,
+                Machine_Name:Machine_Name,
+                Brand:Brand,
+                Model_Number:Model_Number,
+                Size:Size
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            url = 'machineDataUpdate.do';
+        }
+    };
+    function newMachineData(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'machineDataAdd.do';
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增品牌+型号+规格是否已存在或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新的品牌+型号+规格是否已存在或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index,item){
+                id.push(item.id);
+            });
+            url = 'machineDataRemove.do';
+        }
+    };
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (data) {
+                if(data.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","成功删除数据!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(data.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var Machine_Type=$("#machine_Type").val();
+        var Machine_Name=$("#machine_Name").val();
+        var Brand=$("#brand").val();
+        var Model_Number=$("#model_Number").val();
+        var Size=$("#size").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="machineDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href="machineDataDownLoadExcelAll.do?Machine_Type="+Machine_Type+"&Machine_Name="+Machine_Name+
+                "&Brand="+Brand+"&Model_Number="+Model_Number+"&Size="+Size;
+        }
+    };
+    function DownloadModel(){
+        location.href="machineDataDownLoadModel.do";
+    };
+    /**
+     * 图纸,规格书,图片部分上传
+     */
+    function FileUpload(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg4').dialog('open').dialog('center').dialog('setTitle','FileUpload');
+            $('#fm4').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg4').dialog('close');
+            }
+            url = 'machineDataFileUpload.do';
+        }
+    };
+    function saveUser4(){
+        $('#fm4').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message="success"){
+                    $('#dlg4').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","上传成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message="error"){
+                    $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'machineDataUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(data){
+                var data = eval('('+data+')');
+                if(data.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(data.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+data.message.substring(6)+"列是否已存在或者联系管理员!","error");
+                }
+                else if(data.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+data.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(data.message.substring(0,16)=="life_cycle_state"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+data.message.substring(17)+"列生命周期状态是否填写错误或者联系管理员!","error");
+                }
+                else if(data.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (data.message=="error"){
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+    })(jQuery);
+    function showDrawing(cellValue, options, rowObject) {
+        if(cellValue!=null && cellValue!=""){
+            var drawing=[];
+            drawing=cellValue.split(",");
+            var rValue="";
+            for(var i=0;i<drawing.length;i++){
+                if(drawing[i]!=""){
+                    rValue+="<a href='"+drawing[i]+"' target='_blank'>"+drawing[i].substring(34)+"</a>"+"</br>";
+                }
+            }
+            return rValue;
+        }
+    };
+    function showSpecification(cellValue, options, rowObject) {
+        if(cellValue!=null && cellValue!=""){
+            var specification=[];
+            specification=cellValue.split(",");
+            var rValue="";
+            for(var i=0;i<specification.length;i++){
+                if(specification[i]!=""){
+                    rValue+="<a href='"+specification[i]+"' target='_blank'>"+specification[i].substring(40)+"</a>"+"</br>";
+                }
+            }
+            return rValue;
+        }
+    };
+    function showPhoto(cellValue, options, rowObject) {
+        if(cellValue!=null && cellValue!=""){
+            var photo=[];
+            photo=cellValue.split(",");
+            var rValue="";
+            for(var i=0;i<photo.length;i++){
+                if(photo[i]!=""){
+                    rValue+="<a href='"+photo[i]+"' target='_blank'>"+photo[i].substring(32)+"</a>"+"</br>";
+                }
+            }
+            return rValue;
+        }
+    }
+</script>
+</body>
+</html>

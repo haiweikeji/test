@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <title>系统首页</title>
+    <style type="text/css">
+        #picture{
+            width: 100%;
+            height: 850px;
+        }
+    </style>
+</head>
+<div id="picture" style="background:url(/hwkj/image/hwkj.png) no-repeat; background-size: cover;">
+    <div data-options=" region:'west',split:true,style:{position:'absolute',left:190,top:450}"
+         class="easyui-panel " title="用户登录" style="width:290px;text-align: center;">
+        <div style="padding:10px 50px 20px 50px">
+            <form id="fm" action="index.do" method="post">
+                <table cellpadding="5">
+                    <tr>
+                        <td><input name="job_Number" class="easyui-textbox" required="required" data-options="prompt:'账号'" iconCls="icon-man" iconAlign=left style="width:100%;height:32px"/></td>
+                    </tr>
+                    <tr>
+                        <td><input name="password" class="easyui-textbox" required="required" type="password" data-options="prompt:'密码'" iconCls="icon-lock" iconAlign=left style="width:100%;height:32px"></td>
+                    </tr>
+                    <tr>
+                        <td><span th:text="${login_error}"></span></td>
+                    </tr>
+                    <!--<tr>
+                        <td><input class="easyui-textbox" data-options="prompt:'验证码',validType:'validate'" iconCls="icon-filter" iconAlign=left style="width:55%;height:32px" />
+                            <img src="" alt="" width="56" height="32" align='absMiddle' /> </td>
+                    </tr>-->
+                </table>
+                <div style="text-align:center;padding:5px; ">
+                    <input class="easyui-linkbutton" type="submit" value="登录" style="width:45%;height:32px"/>
+                    <!--<a href="#" class="easyui-linkbutton" style="width:45%;height:32px">注册</a>-->
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

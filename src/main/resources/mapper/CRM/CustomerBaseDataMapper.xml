@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerBaseDataDao">
+    <insert id="insertCustomerBaseData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        insert into hwkj_customer_base_data
+        (Customer_Code,Four_Initials,Chinese_Full_Name,Chinese_Abbreviation,English_Full_Name,English_Abbreviation,
+        Foxconn_Group,Country,City,Industry,Company_Owner,Annual_Revenue,Industry_Rank,Enterprise_Nature,
+        Employee_Qty,Customer_Level,Deliver_Term,Payment_Term,Receive_Term,Office_Address,Registered_Address,Status,Development_Date,BPM,Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Four_Initials},#{Chinese_Full_Name},#{Chinese_Abbreviation},#{English_Full_Name},#{English_Abbreviation},
+        #{Foxconn_Group},#{Country},#{City},#{Industry},#{Company_Owner},#{Annual_Revenue},#{Industry_Rank},#{Enterprise_Nature},
+        #{Employee_Qty},#{Customer_Level},#{Deliver_Term},#{Payment_Term},#{Receive_Term},#{Office_Address},#{Registered_Address},#{Status},#{Development_Date},#{BPM},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerBaseData" parameterType="java.lang.Integer">
+        delete from hwkj_customer_base_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerBaseData" parameterType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        update hwkj_customer_base_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Four_Initials!=null">Four_Initials=#{Four_Initials},</if>
+            <if test="Chinese_Full_Name!=null">Chinese_Full_Name=#{Chinese_Full_Name},</if>
+            <if test="Chinese_Abbreviation!=null">Chinese_Abbreviation=#{Chinese_Abbreviation},</if>
+            <if test="English_Full_Name!=null">English_Full_Name=#{English_Full_Name},</if>
+            <if test="English_Abbreviation!=null">English_Abbreviation=#{English_Abbreviation},</if>
+            <if test="Foxconn_Group!=null">Foxconn_Group=#{Foxconn_Group},</if>
+            <if test="Country!=null">Country=#{Country},</if>
+            <if test="City!=null">City=#{City},</if>
+            <if test="Industry!=null">Industry=#{Industry},</if>
+            <if test="Company_Owner!=null">Company_Owner=#{Company_Owner},</if>
+            <if test="Annual_Revenue!=null">Annual_Revenue=#{Annual_Revenue},</if>
+            <if test="Industry_Rank!=null">Industry_Rank=#{Industry_Rank},</if>
+            <if test="Enterprise_Nature!=null">Enterprise_Nature=#{Enterprise_Nature},</if>
+            <if test="Employee_Qty!=null">Employee_Qty=#{Employee_Qty},</if>
+            <if test="Customer_Level!=null">Customer_Level=#{Customer_Level},</if>
+            <if test="Deliver_Term!=null">Deliver_Term=#{Deliver_Term},</if>
+            <if test="Payment_Term!=null">Payment_Term=#{Payment_Term},</if>
+            <if test="Receive_Term!=null">Receive_Term=#{Receive_Term},</if>
+            <if test="Office_Address!=null">Office_Address=#{Office_Address},</if>
+            <if test="Registered_Address!=null">Registered_Address=#{Registered_Address},</if>
+            <if test="Status!=null">Status=#{Status},</if>
+            Development_Date=#{Development_Date},
+            <if test="BPM!=null">BPM=#{BPM},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerBaseDataList" resultMap="CustomerBaseDataMap">
+        select b.Id,b.Customer_Code,b.Four_Initials,b.Chinese_Full_Name,b.Chinese_Abbreviation,b.English_Full_Name,
+        b.English_Abbreviation,b.Foxconn_Group,b.Country,b.City,b.Industry,b.Company_Owner,
+        a.Registered_Capital,a.Currency,b.Annual_Revenue,b.Industry_Rank,b.Enterprise_Nature,b.Employee_Qty,
+        b.Customer_Level,b.Deliver_Term,b.Payment_Term,b.Receive_Term,a.Credit_Level,a.Credit_Amount,b.Office_Address,b.Registered_Address,
+        b.Status,b.Development_Date,b.BPM,b.Creator,b.Create_Date,b.Updated_By,b.Update_Date from
+        hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1
+        <if test="customerBaseDataPageModel.page!=null and customerBaseDataPageModel.rows!=null"></if>
+        <if test="customerBaseData.Chinese_Abbreviation!=null and customerBaseData.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerBaseData.Chinese_Abbreviation}</if>
+        <if test="customerBaseData.Customer_Code!=null and customerBaseData.Customer_Code!=''">and b.Customer_Code=#{customerBaseData.Customer_Code}</if>
+        <if test="customerBaseData.City!=null and customerBaseData.City!=''and customerBaseData.City!='null' ">and b.City=#{customerBaseData.City}</if>
+        <if test="customerBaseData.RevenueFrom!=null and customerBaseData.RevenueFrom!=''">and b.Annual_Revenue >='${customerBaseData.RevenueFrom}'</if>
+        <if test="customerBaseData.RevenueTo!=null and customerBaseData.RevenueTo!=''">and b.Annual_Revenue &lt;='${customerBaseData.RevenueTo}'</if>
+        <if test="customerBaseData.Foxconn_Group!=null and customerBaseData.Foxconn_Group!='' and customerBaseData.Foxconn_Group!='null'">and b.Foxconn_Group=#{customerBaseData.Foxconn_Group}</if>
+        <if test="customerBaseData.Country!=null and customerBaseData.Country!=''">and b.Country=#{customerBaseData.Country}</if>
+        <if test="customerBaseData.BPM!=null and customerBaseData.BPM!=''">and b.BPM=#{customerBaseData.BPM}</if>
+        <if test="customerBaseData.DateFrom!=null and customerBaseData.DateFrom!=''">and date_format(b.Create_Date,'%Y-%m-%d') &gt;='${customerBaseData.DateFrom}'</if>
+        <if test="customerBaseData.DateTo!=null and customerBaseData.DateTo!=''">and date_format(b.Create_Date,'%Y-%m-%d') &lt;='${customerBaseData.DateTo}'</if>
+        <if test="customerBaseData.Credit_Level!=null and customerBaseData.Credit_Level!=''">and a.Credit_Level=#{customerBaseData.Credit_Level}</if>
+        <if test="customerBaseData.Industry!=null and customerBaseData.Industry!=''">and b.Industry=#{customerBaseData.Industry}</if>
+        <if test="customerBaseData.Creator!=null and customerBaseData.Creator!=''">and b.Creator=#{customerBaseData.Creator}</if>
+        order by b.Id desc limit #{customerBaseDataPageModel.startRow},#{customerBaseDataPageModel.rows}
+    </select>
+    <select id="queryCustomerBaseDataForDownLoad" resultMap="CustomerBaseDataMap">
+        select b.Id,b.Customer_Code,b.Four_Initials,b.Chinese_Full_Name,b.Chinese_Abbreviation,b.English_Full_Name,
+        b.English_Abbreviation,b.Foxconn_Group,b.Country,b.City,b.Industry,b.Company_Owner,
+        a.Registered_Capital,a.Currency,b.Annual_Revenue,b.Industry_Rank,b.Enterprise_Nature,b.Employee_Qty,
+        b.Customer_Level,b.Deliver_Term,b.Payment_Term,b.Receive_Term,a.Credit_Level,a.Credit_Amount,b.Office_Address,b.Registered_Address,
+        b.Status,b.Development_Date,b.BPM,b.Creator,b.Create_Date,b.Updated_By,b.Update_Date from
+        hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1 and b.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by b.Id desc
+    </select>
+    <select id="queryCustomerBaseDataForDownLoadAll" resultMap="CustomerBaseDataMap">
+        select b.Id,b.Customer_Code,b.Four_Initials,b.Chinese_Full_Name,b.Chinese_Abbreviation,b.English_Full_Name,
+        b.English_Abbreviation,b.Foxconn_Group,b.Country,b.City,b.Industry,b.Company_Owner,
+        a.Registered_Capital,a.Currency,b.Annual_Revenue,b.Industry_Rank,b.Enterprise_Nature,b.Employee_Qty,
+        b.Customer_Level,b.Deliver_Term,b.Payment_Term,b.Receive_Term,a.Credit_Level,a.Credit_Amount,b.Office_Address,b.Registered_Address,
+        b.Status,b.Development_Date,b.BPM,b.Creator,b.Create_Date,b.Updated_By,b.Update_Date from
+        hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1
+        <if test="customerBaseData.Chinese_Abbreviation!=null and customerBaseData.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerBaseData.Chinese_Abbreviation}</if>
+        <if test="customerBaseData.Customer_Code!=null and customerBaseData.Customer_Code!=''">and b.Customer_Code=#{customerBaseData.Customer_Code}</if>
+        <if test="customerBaseData.City!=null and customerBaseData.City!=''and customerBaseData.City!='null' ">and b.City=#{customerBaseData.City}</if>
+        <if test="customerBaseData.RevenueFrom!=null and customerBaseData.RevenueFrom!=''">and b.Annual_Revenue >='${customerBaseData.RevenueFrom}'</if>
+        <if test="customerBaseData.RevenueTo!=null and customerBaseData.RevenueTo!=''">and b.Annual_Revenue &lt;='${customerBaseData.RevenueTo}'</if>
+        <if test="customerBaseData.Foxconn_Group!=null and customerBaseData.Foxconn_Group!='' and customerBaseData.Foxconn_Group!='null'">and b.Foxconn_Group=#{customerBaseData.Foxconn_Group}</if>
+        <if test="customerBaseData.Country!=null and customerBaseData.Country!=''">and b.Country=#{customerBaseData.Country}</if>
+        <if test="customerBaseData.BPM!=null and customerBaseData.BPM!=''">and b.BPM=#{customerBaseData.BPM}</if>
+        <if test="customerBaseData.DateFrom!=null and customerBaseData.DateFrom!=''">and date_format(b.Create_Date,'%Y-%m-%d') &gt;='${customerBaseData.DateFrom}'</if>
+        <if test="customerBaseData.DateTo!=null and customerBaseData.DateTo!=''">and date_format(b.Create_Date,'%Y-%m-%d') &lt;='${customerBaseData.DateTo}'</if>
+        <if test="customerBaseData.Credit_Level!=null and customerBaseData.Credit_Level!=''">and a.Credit_Level=#{customerBaseData.Credit_Level}</if>
+        <if test="customerBaseData.Industry!=null and customerBaseData.Industry!=''">and b.Industry=#{customerBaseData.Industry}</if>
+        <if test="customerBaseData.Creator!=null and customerBaseData.Creator!=''">and b.Creator=#{customerBaseData.Creator}</if>
+        order by b.Id desc
+    </select>
+    <resultMap id="CustomerBaseDataMap" type="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        <id property="Id" column="Id" />
+        <result property="Id" column="Id" />
+        <result property="Customer_Code" column="Customer_Code" />
+        <result property="Four_Initials" column="Four_Initials" />
+        <result property="Chinese_Full_Name" column="Chinese_Full_Name" />
+        <result property="Chinese_Abbreviation" column="Chinese_Abbreviation" />
+        <result property="English_Full_Name" column="English_Full_Name" />
+        <result property="English_Abbreviation" column="English_Abbreviation" />
+        <result property="Foxconn_Group" column="Foxconn_Group" />
+        <result property="Country" column="Country" />
+        <result property="City" column="City" />
+        <result property="Industry" column="Industry" />
+        <result property="Company_Owner" column="Company_Owner" />
+        <result property="Annual_Revenue" column="Annual_Revenue" />
+        <result property="Industry_Rank" column="Industry_Rank" />
+        <result property="Enterprise_Nature" column="Enterprise_Nature" />
+        <result property="Employee_Qty" column="Employee_Qty" />
+        <result property="Customer_Level" column="Customer_Level" />
+        <result property="Deliver_Term" column="Deliver_Term" />
+        <result property="Payment_Term" column="Payment_Term" />
+        <result property="Receive_Term" column="Receive_Term" />
+        <result property="Office_Address" column="Office_Address" />
+        <result property="Registered_Address" column="Registered_Address" />
+        <result property="Status" column="Status" />
+        <result property="Development_Date" column="Development_Date" />
+        <result property="BPM" column="BPM" />
+        <result property="Creator" column="Creator" />
+        <result property="Create_Date" column="Create_Date" />
+        <result property="Updated_By" column="Updated_By" />
+        <result property="Update_Date" column="Update_Date" />
+        <result property="Registered_Capital" column="Registered_Capital" />
+        <result property="Currency" column="Currency" />
+        <result property="Credit_Level" column="Credit_Level" />
+        <result property="Credit_Amount" column="Credit_Amount" />
+    </resultMap>
+    <select id="queryCustomerBaseDataCount" resultType="int">
+        select count(*) from
+        hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1
+        <if test="customerBaseDataPageModel.page!=null and customerBaseDataPageModel.rows!=null"></if>
+        <if test="customerBaseData.Chinese_Abbreviation!=null and customerBaseData.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerBaseData.Chinese_Abbreviation}</if>
+        <if test="customerBaseData.Customer_Code!=null and customerBaseData.Customer_Code!=''">and b.Customer_Code=#{customerBaseData.Customer_Code}</if>
+        <if test="customerBaseData.City!=null and customerBaseData.City!=''and customerBaseData.City!='null' ">and b.City=#{customerBaseData.City}</if>
+        <if test="customerBaseData.RevenueFrom!=null and customerBaseData.RevenueFrom!=''">and b.Annual_Revenue >='${customerBaseData.RevenueFrom}'</if>
+        <if test="customerBaseData.RevenueTo!=null and customerBaseData.RevenueTo!=''">and b.Annual_Revenue &lt;='${customerBaseData.RevenueTo}'</if>
+        <if test="customerBaseData.Foxconn_Group!=null and customerBaseData.Foxconn_Group!='' and customerBaseData.Foxconn_Group!='null'">and b.Foxconn_Group=#{customerBaseData.Foxconn_Group}</if>
+        <if test="customerBaseData.Country!=null and customerBaseData.Country!=''">and b.Country=#{customerBaseData.Country}</if>
+        <if test="customerBaseData.BPM!=null and customerBaseData.BPM!=''">and b.BPM=#{customerBaseData.BPM}</if>
+        <if test="customerBaseData.DateFrom!=null and customerBaseData.DateFrom!=''">and date_format(b.Create_Date,'%Y-%m-%d') &gt;='${customerBaseData.DateFrom}'</if>
+        <if test="customerBaseData.DateTo!=null and customerBaseData.DateTo!=''">and date_format(b.Create_Date,'%Y-%m-%d') &lt;='${customerBaseData.DateTo}'</if>
+        <if test="customerBaseData.Credit_Level!=null and customerBaseData.Credit_Level!=''">and a.Credit_Level=#{customerBaseData.Credit_Level}</if>
+        <if test="customerBaseData.Industry!=null and customerBaseData.Industry!=''">and b.Industry=#{customerBaseData.Industry}</if>
+        <if test="customerBaseData.Creator!=null and customerBaseData.Creator!=''">and b.Creator=#{customerBaseData.Creator}</if>
+    </select>
+    <select id="queryCustomerBaseDataForExist" parameterType="hwkj.hwkj.entity.CRM.CustomerBaseData" resultType="int">
+        select count(*) from hwkj_customer_base_data where 1=1
+        <if test="Four_Initials!=null and Four_Initials!=''">and Four_Initials=#{Four_Initials}</if>
+        <if test="Chinese_Full_Name!=null and Chinese_Full_Name!=''">and Chinese_Full_Name=#{Chinese_Full_Name}</if>
+        <if test="Country!=null and Country!=''">and Country=#{Country}</if>
+        <if test="City!=null and City!=''">and City=#{City}</if>
+    </select>
+    <select id="queryCustomerBaseDataById" resultType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        select * from hwkj_customer_base_data where Id=#{Id}
+    </select>
+    <select id="queryCustomerBaseDataForCustomerCode" parameterType="hwkj.hwkj.entity.CRM.CustomerBaseData" resultType="int">
+        select count(*) from hwkj_customer_base_data where
+        Four_Initials=#{Four_Initials} and Chinese_Full_Name=#{Chinese_Full_Name} and Country=#{Country} and City=#{City} and
+        Deliver_Term=#{Deliver_Term} and Payment_Term=#{Payment_Term} and Receive_Term=#{Receive_Term}
+    </select>
+    <select id="queryCustomerBaseDataGenerateCustomerCode" parameterType="hwkj.hwkj.entity.CRM.CustomerBaseData" resultType="int">
+        select count(*) from hwkj_customer_base_data where
+        Four_Initials=#{Four_Initials} and Chinese_Full_Name=#{Chinese_Full_Name} and Country=#{Country} and City=#{City}
+    </select>
+    <select id="queryCustomerBaseDataAllCustomerCode" resultType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        select Customer_Code,Chinese_Abbreviation,English_Abbreviation,Country,City
+        from hwkj_customer_base_data where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+    </select>
+    <select id="queryCustomerBaseDataForChineseAbbreviationExist" resultType="int">
+        select count(*) from hwkj_customer_base_data where 1=1
+        <if test="Chinese_Abbreviation!=null and Chinese_Abbreviation!=''">and Chinese_Abbreviation=#{Chinese_Abbreviation}</if>
+    </select>
+    <select id="queryCustomerBaseDataLastData" resultType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        select Customer_Code from hwkj_customer_base_data where 1=1
+        <if test="Four_Initials!=null and Four_Initials!=''">and Four_Initials=#{Four_Initials}</if>
+        order by Customer_Code desc limit 1
+    </select>
+    <select id="queryCustomerBaseDataOptionChineseAbbreviation" resultType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        select Chinese_Abbreviation from hwkj_customer_base_data where 1=1 group by Chinese_Abbreviation
+    </select>
+    <select id="queryCustomerBaseDataNotExistCustomerCodeForCustomerAccountInfo" resultType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        select b.Customer_Code from hwkj_customer_base_data b left join hwkj_customer_account_info c
+        on b.Customer_Code=c.Customer_Code where c.Customer_Code is null order by b.Id desc
+        <!--SELECT Customer_Code FROM hwkj_customer_base_data where Customer_Code not in
+        (select Customer_Code from hwkj_customer_account_info)-->
+    </select>
+    <select id="queryCustomerBaseDataNotExistCustomerCodeForCustomerContact" resultType="hwkj.hwkj.entity.CRM.CustomerBaseData">
+        select b.Customer_Code from hwkj_customer_base_data b left join hwkj_customer_contact c
+        on b.Customer_Code=c.Customer_Code where c.Customer_Code is null order by b.Id desc
+    </select>
+    <select id="queryCustomerBaseDataForUploadCustomerCode" resultType="int">
+        select count(*) from hwkj_customer_base_data where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+    </select>
+</mapper>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.Engineering.MaterialEngineeringDataDao">
+    <insert id="insertMaterialEngineeringData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        insert into hwkj_material_engineering_data
+        (Material_Number,Version,Product_Name,Material_Type,Category,Size,Texture_Material,
+        Model_Number,Described,Brand,Manufacturer_Abbreviation,Manufacturer_Material_Number,
+        Country_Origin,Drawing,Specification,Photo,Quantity_Unit,Net_Weight,Gross_Weight,
+        Weight_Unit,Volume,Packaging,Minimum_Packing_Capacity,Standard_Packing_Method,
+        Life_Cycle_State,Package_Quantity,Force_Time,Failure_Time,Remark,Creator,Create_Date)
+        values
+        (#{Material_Number},#{Version},#{Product_Name},#{Material_Type},#{Category},#{Size},#{Texture_Material},
+        #{Model_Number},#{Described},#{Brand},#{Manufacturer_Abbreviation},#{Manufacturer_Material_Number},
+        #{Country_Origin},#{Drawing},#{Specification},#{Photo},#{Quantity_Unit},#{Net_Weight},#{Gross_Weight},
+        #{Weight_Unit},#{Volume},#{Packaging},#{Minimum_Packing_Capacity},#{Standard_Packing_Method},
+        #{Life_Cycle_State},#{Package_Quantity},#{Force_Time},#{Failure_Time},#{Remark},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteMaterialEngineeringData">
+        delete from hwkj_material_engineering_data where Id=#{Id}
+    </delete>
+    <update id="updateMaterialEngineeringData" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        update hwkj_material_engineering_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Material_Number!=null and Material_Number!=''">Material_Number=#{Material_Number},</if>
+            <if test="Version!=null and Version!=''">Version=#{Version},</if>
+            <if test="Product_Name!=null and Product_Name!=''">Product_Name=#{Product_Name},</if>
+            <if test="Material_Type!=null and Material_Type!=''">Material_Type=#{Material_Type},</if>
+            <if test="Category!=null and Category!=''">Category=#{Category},</if>
+            <if test="Size!=null and Size!=''">Size=#{Size},</if>
+            <if test="Texture_Material!=null and Texture_Material!=''">Texture_Material=#{Texture_Material},</if>
+            <if test="Model_Number!=null and Model_Number!=''">Model_Number=#{Model_Number},</if>
+            <if test="Described!=null and Described!=''">Described=#{Described},</if>
+            <if test="Brand!=null and Brand!=''">Brand=#{Brand},</if>
+            <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">Manufacturer_Abbreviation=#{Manufacturer_Abbreviation},</if>
+            <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">Manufacturer_Material_Number=#{Manufacturer_Material_Number},</if>
+            <if test="Country_Origin!=null and Country_Origin!=''">Country_Origin=#{Country_Origin},</if>
+            <if test="Drawing!=null and Drawing!=''">Drawing=#{Drawing},</if>
+            <if test="Specification!=null and Specification!=''">Specification=#{Specification},</if>
+            <if test="Photo!=null and Photo!=''">Photo=#{Photo},</if>
+            <if test="Quantity_Unit!=null and Quantity_Unit!=''">Quantity_Unit=#{Quantity_Unit},</if>
+            <if test="Net_Weight!=null and Net_Weight!=''">Net_Weight=#{Net_Weight},</if>
+            <if test="Gross_Weight!=null and Gross_Weight!=''">Gross_Weight=#{Gross_Weight},</if>
+            <if test="Weight_Unit!=null and Weight_Unit!=''">Weight_Unit=#{Weight_Unit},</if>
+            <if test="Volume!=null and Volume!=''">Volume=#{Volume},</if>
+            <if test="Packaging!=null and Packaging!=''">Packaging=#{Packaging},</if>
+            <if test="Minimum_Packing_Capacity!=null and Minimum_Packing_Capacity!=''">Minimum_Packing_Capacity=#{Minimum_Packing_Capacity},</if>
+            <if test="Standard_Packing_Method!=null and Standard_Packing_Method!=''">Standard_Packing_Method=#{Standard_Packing_Method},</if>
+            <if test="Life_Cycle_State!=null and Life_Cycle_State!=''">Life_Cycle_State=#{Life_Cycle_State},</if>
+            <if test="Package_Quantity!=null and Package_Quantity!=''">Package_Quantity=#{Package_Quantity},</if>
+            <if test="Force_Time!=null and Force_Time!=''">Force_Time=#{Force_Time},</if>
+            <if test="Failure_Time!=null and Failure_Time!=''">Failure_Time=#{Failure_Time},</if>
+            <if test="Remark!=null and Remark!=''">Remark=#{Remark},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <update id="materialEngineeringDataFileUpload" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        update hwkj_material_engineering_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Drawing!=null and Drawing!=''">Drawing=#{Drawing},</if>
+            <if test="Specification!=null and Specification!=''">Specification=#{Specification},</if>
+            <if test="Photo!=null and Photo!=''">Photo=#{Photo},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryMaterialEngineeringDataList" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select * from hwkj_material_engineering_data where 1=1
+        <if test="materialEngineeringDataPageModel.page!=null and materialEngineeringDataPageModel.rows!=null"></if>
+        <if test="materialEngineeringData.Material_Number!=null and materialEngineeringData.Material_Number!=''">and Material_Number=#{materialEngineeringData.Material_Number}</if>
+        <if test="materialEngineeringData.Manufacturer_Material_Number!=null and materialEngineeringData.Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{materialEngineeringData.Manufacturer_Material_Number}</if>
+        <if test="materialEngineeringData.Size!=null and materialEngineeringData.Size!=''">and Size=#{materialEngineeringData.Size}</if>
+        <if test="materialEngineeringData.Model_Number!=null and materialEngineeringData.Model_Number!=''">and Model_Number=#{materialEngineeringData.Model_Number}</if>
+        <if test="materialEngineeringData.Date_From!=null and materialEngineeringData.Date_From!=''">and date_format(Create_Date,'%Y-%m-%d')&gt;='${materialEngineeringData.Date_From}'</if>
+        <if test="materialEngineeringData.Date_To!=null and materialEngineeringData.Date_To!=''">and date_format(Create_Date,'%Y-%m-%d')&lt;='${materialEngineeringData.Date_To}'</if>
+        <if test="materialEngineeringData.Material_Type!=null and materialEngineeringData.Material_Type!=''">and Material_Type=#{materialEngineeringData.Material_Type}</if>
+        <if test="materialEngineeringData.Category!=null and materialEngineeringData.Category!=''">and Category=#{materialEngineeringData.Category}</if>
+        <if test="materialEngineeringData.Brand!=null and materialEngineeringData.Brand!=''">and Brand=#{materialEngineeringData.Brand}</if>
+        <if test="materialEngineeringData.Life_Cycle_State!=null and materialEngineeringData.Life_Cycle_State!=''">and Life_Cycle_State=#{materialEngineeringData.Life_Cycle_State}</if>
+        order by Id desc limit #{materialEngineeringDataPageModel.startRow},#{materialEngineeringDataPageModel.rows}
+    </select>
+    <select id="queryMaterialEngineeringDataCount" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="materialEngineeringDataPageModel.page!=null and materialEngineeringDataPageModel.rows!=null"></if>
+        <if test="materialEngineeringData.Material_Number!=null and materialEngineeringData.Material_Number!=''">and Material_Number=#{materialEngineeringData.Material_Number}</if>
+        <if test="materialEngineeringData.Manufacturer_Material_Number!=null and materialEngineeringData.Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{materialEngineeringData.Manufacturer_Material_Number}</if>
+        <if test="materialEngineeringData.Size!=null and materialEngineeringData.Size!=''">and Size=#{materialEngineeringData.Size}</if>
+        <if test="materialEngineeringData.Model_Number!=null and materialEngineeringData.Model_Number!=''">and Model_Number=#{materialEngineeringData.Model_Number}</if>
+        <if test="materialEngineeringData.Date_From!=null and materialEngineeringData.Date_From!=''">and date_format(Create_Date,'%Y-%m-%d')&gt;='${materialEngineeringData.Date_From}'</if>
+        <if test="materialEngineeringData.Date_To!=null and materialEngineeringData.Date_To!=''">and date_format(Create_Date,'%Y-%m-%d')&lt;='${materialEngineeringData.Date_To}'</if>
+        <if test="materialEngineeringData.Material_Type!=null and materialEngineeringData.Material_Type!=''">and Material_Type=#{materialEngineeringData.Material_Type}</if>
+        <if test="materialEngineeringData.Category!=null and materialEngineeringData.Category!=''">and Category=#{materialEngineeringData.Category}</if>
+        <if test="materialEngineeringData.Brand!=null and materialEngineeringData.Brand!=''">and Brand=#{materialEngineeringData.Brand}</if>
+        <if test="materialEngineeringData.Life_Cycle_State!=null and materialEngineeringData.Life_Cycle_State!=''">and Life_Cycle_State=#{materialEngineeringData.Life_Cycle_State}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataById" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select * from hwkj_material_engineering_data where Id=#{Id}
+    </select>
+    <select id="queryMaterialEngineeringDataForDownLoadAll" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select * from hwkj_material_engineering_data where 1=1
+        <if test="materialEngineeringData.Material_Number!=null and materialEngineeringData.Material_Number!=''">and Material_Number=#{materialEngineeringData.Material_Number}</if>
+        <if test="materialEngineeringData.Manufacturer_Material_Number!=null and materialEngineeringData.Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{materialEngineeringData.Manufacturer_Material_Number}</if>
+        <if test="materialEngineeringData.Size!=null and materialEngineeringData.Size!=''">and Size=#{materialEngineeringData.Size}</if>
+        <if test="materialEngineeringData.Model_Number!=null and materialEngineeringData.Model_Number!=''">and Model_Number=#{materialEngineeringData.Model_Number}</if>
+        <if test="materialEngineeringData.Date_From!=null and materialEngineeringData.Date_From!=''">and date_format(Create_Date,'%Y-%m-%d')&gt;='${materialEngineeringData.Date_From}'</if>
+        <if test="materialEngineeringData.Date_To!=null and materialEngineeringData.Date_To!=''">and date_format(Create_Date,'%Y-%m-%d')&lt;='${materialEngineeringData.Date_To}'</if>
+        <if test="materialEngineeringData.Material_Type!=null and materialEngineeringData.Material_Type!=''">and Material_Type=#{materialEngineeringData.Material_Type}</if>
+        <if test="materialEngineeringData.Category!=null and materialEngineeringData.Category!=''">and Category=#{materialEngineeringData.Category}</if>
+        <if test="materialEngineeringData.Brand!=null and materialEngineeringData.Brand!=''">and Brand=#{materialEngineeringData.Brand}</if>
+        <if test="materialEngineeringData.Life_Cycle_State!=null and materialEngineeringData.Life_Cycle_State!=''">and Life_Cycle_State=#{materialEngineeringData.Life_Cycle_State}</if>
+        order by Id desc
+    </select>
+    <select id="queryMaterialEngineeringDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select * from hwkj_material_engineering_data where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by Id desc
+    </select>
+    <insert id="materialEngineeringDataUpload" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="java.util.List">
+        insert into hwkj_material_engineering_data
+        (Material_Number,Version,Product_Name,Material_Type,Category,Size,Texture_Material,
+        Model_Number,Described,Brand,Manufacturer_Abbreviation,Manufacturer_Material_Number,
+        Country_Origin,Quantity_Unit,Net_Weight,Gross_Weight,
+        Weight_Unit,Volume,Packaging,Minimum_Packing_Capacity,Standard_Packing_Method,
+        Life_Cycle_State,Package_Quantity,Force_Time,Failure_Time,Remark,Creator,Create_Date)
+        values
+        <foreach collection="list" item="materialEngineeringDataList" separator=",">
+            (#{materialEngineeringDataList.Material_Number},#{materialEngineeringDataList.Version},
+            #{materialEngineeringDataList.Product_Name},#{materialEngineeringDataList.Material_Type},
+            #{materialEngineeringDataList.Category},#{materialEngineeringDataList.Size},#{materialEngineeringDataList.Texture_Material},
+            #{materialEngineeringDataList.Model_Number},#{materialEngineeringDataList.Described},
+            #{materialEngineeringDataList.Brand},#{materialEngineeringDataList.Manufacturer_Abbreviation},
+            #{materialEngineeringDataList.Manufacturer_Material_Number},#{materialEngineeringDataList.Country_Origin},
+            #{materialEngineeringDataList.Quantity_Unit},#{materialEngineeringDataList.Net_Weight},
+            #{materialEngineeringDataList.Gross_Weight},#{materialEngineeringDataList.Weight_Unit},
+            #{materialEngineeringDataList.Volume},#{materialEngineeringDataList.Packaging},
+            #{materialEngineeringDataList.Minimum_Packing_Capacity},#{materialEngineeringDataList.Standard_Packing_Method},
+            #{materialEngineeringDataList.Life_Cycle_State},#{materialEngineeringDataList.Package_Quantity},
+            #{materialEngineeringDataList.Force_Time},#{materialEngineeringDataList.Failure_Time},
+            #{materialEngineeringDataList.Remark},#{materialEngineeringDataList.Creator},#{materialEngineeringDataList.Create_Date})
+        </foreach>
+    </insert>
+    <select id="queryMaterialEngineeringDataForExist" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{Manufacturer_Material_Number}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataOptionMaterialNumber" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select Material_Number from hwkj_material_engineering_data
+        where 1=1 group by Material_Number order by Id
+    </select>
+    <select id="queryMaterialEngineeringDataOptionVersion" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select Version from hwkj_material_engineering_data
+        where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        group by Version order by Id
+    </select>
+    <select id="queryMaterialEngineeringDataOptionManufacturerAbbreviation"  resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select Manufacturer_Abbreviation from hwkj_material_engineering_data
+        where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        group by Manufacturer_Abbreviation order by Id
+    </select>
+    <select id="queryMaterialEngineeringDataOptionManufacturerMaterialNumber" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select Manufacturer_Material_Number from hwkj_material_engineering_data
+        where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        group by Manufacturer_Material_Number order by Id
+    </select>
+    <select id="queryMaterialEngineeringDataFourDataExist" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{Manufacturer_Material_Number}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataByMaterialNumber" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select * from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataByMaterialNumberAndVersion" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select * from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataByVersion" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataByManufacturerAbbreviation" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataByManufacturerMaterialNumber" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{Manufacturer_Material_Number}</if>
+    </select>
+    <select id="queryMaterial" parameterType="java.lang.String" resultType="hwkj.hwkj.entity.SCM.VendorCode">
+
+    </select>
+    <select id="queryMaterialEngineeringDataForOptionBrand" resultType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData">
+        select Brand from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataForUploadBrand" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataForAllExist" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null ">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null ">and Version=#{Version}</if>
+        <if test="Product_Name!=null ">and Product_Name=#{Product_Name}</if>
+        <if test="Material_Type!=null ">and Material_Type=#{Material_Type}</if>
+        <if test="Category!=null ">and Category=#{Category}</if>
+        <if test="Size!=null ">and Size=#{Size}</if>
+        <if test="Texture_Material!=null ">and Texture_Material=#{Texture_Material}</if>
+        <if test="Model_Number!=null ">and Model_Number=#{Model_Number}</if>
+        <if test="Described!=null ">and Described=#{Described}</if>
+        <if test="Brand!=null ">and Brand=#{Brand}</if>
+        <if test="Manufacturer_Abbreviation!=null ">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        <if test="Manufacturer_Material_Number!=null ">and Manufacturer_Material_Number=#{Manufacturer_Material_Number}</if>
+        <if test="Country_Origin!=null ">and Country_Origin=#{Country_Origin}</if>
+        <if test="Quantity_Unit!=null ">and Quantity_Unit=#{Quantity_Unit}</if>
+        <if test="Net_Weight!=null ">and Net_Weight=#{Net_Weight}</if>
+        <if test="Gross_Weight!=null ">and Gross_Weight=#{Gross_Weight}</if>
+        <if test="Weight_Unit!=null ">and Weight_Unit=#{Weight_Unit}</if>
+        <if test="Volume!=null ">and Volume=#{Volume}</if>
+        <if test="Packaging!=null ">and Packaging=#{Packaging}</if>
+        <if test="Minimum_Packing_Capacity!=null ">and Minimum_Packing_Capacity=#{Minimum_Packing_Capacity}</if>
+        <if test="Standard_Packing_Method!=null ">and Standard_Packing_Method=#{Standard_Packing_Method}</if>
+        <if test="Life_Cycle_State!=null ">and Life_Cycle_State=#{Life_Cycle_State}</if>
+        <if test="Package_Quantity!=null ">and Package_Quantity=#{Package_Quantity}</if>
+        <if test="Force_Time!=null ">and Force_Time=#{Force_Time}</if>
+        <if test="Failure_Time!=null ">and Failure_Time=#{Failure_Time}</if>
+        <if test="Remark!=null ">and Remark=#{Remark}</if>
+    </select>
+    <select id="queryMaterialEngineeringDataCheckMaterialNumberAndVersion" parameterType="hwkj.hwkj.entity.Engineering.MaterialEngineeringData" resultType="int">
+        select count(*) from hwkj_material_engineering_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Product_Name!=null and Product_Name!=''">and Product_Name=#{Product_Name}</if>
+        <if test="Material_Type!=null and Material_Type!=''">and Material_Type=#{Material_Type}</if>
+        <if test="Size!=null and Size!=''">and Size=#{Size}</if>
+        <if test="Described!=null and Described!=''">and Described=#{Described}</if>
+        <if test="Category!=null and Category!=''">and Category=#{Category}</if>
+        <if test="Model_Number!=null and Model_Number!=''">and Model_Number=#{Model_Number}</if>
+    </select>
+</mapper>

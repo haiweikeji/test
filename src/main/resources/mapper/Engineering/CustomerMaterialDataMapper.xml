@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.Engineering.CustomerMaterialDataDao">
+    <insert id="insertCustomerMaterialData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.Engineering.CustomerMaterialData">
+        insert into hwkj_customer_material_data
+        (Customer_Abbreviation,Customer_Material_Number,Customer_Version,Material_Number,Version,Customer_Described,
+        Manufacturer_Abbreviation,Manufacturer_Material_Number,
+        Force_Time,Failure_Time,Remark,Creator,Create_Date)
+        values
+        (#{Customer_Abbreviation},#{Customer_Material_Number},#{Customer_Version},#{Material_Number},#{Version},#{Customer_Described},
+        #{Manufacturer_Abbreviation},#{Manufacturer_Material_Number},
+        #{Force_Time},#{Failure_Time},#{Remark},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerMaterialData" parameterType="java.lang.Integer">
+        delete from hwkj_customer_material_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerMaterialData" parameterType="hwkj.hwkj.entity.Engineering.CustomerMaterialData">
+        update hwkj_customer_material_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Abbreviation!=null and Customer_Abbreviation!=''">Customer_Abbreviation=#{Customer_Abbreviation},</if>
+            <if test="Customer_Material_Number!=null and Customer_Material_Number!=''">Customer_Material_Number=#{Customer_Material_Number},</if>
+            <if test="Customer_Version!=null and Customer_Version!=''">Customer_Version=#{Customer_Version},</if>
+            <if test="Material_Number!=null and Material_Number!=''">Material_Number=#{Material_Number},</if>
+            <if test="Version!=null and Version!=''">Version=#{Version},</if>
+            <if test="Customer_Described!=null and Customer_Described!=''">Customer_Described=#{Customer_Described},</if>
+            <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">Manufacturer_Abbreviation=#{Manufacturer_Abbreviation},</if>
+            <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">Manufacturer_Material_Number=#{Manufacturer_Material_Number},</if>
+            <if test="Force_Time!=null and Force_Time!=''">Force_Time=#{Force_Time},</if>
+            <if test="Failure_Time!=null and Failure_Time!=''">Failure_Time=#{Failure_Time},</if>
+            <if test="Remark!=null and Remark!=''">Remark=#{Remark},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerMaterialDataList" resultType="hwkj.hwkj.entity.Engineering.CustomerMaterialData">
+        select c.Id,c.Customer_Abbreviation,c.Customer_Material_Number,c.Customer_Version,
+        c.Material_Number,c.Version,e.Described,c.Customer_Described,c.Manufacturer_Abbreviation,
+        c.Manufacturer_Material_Number,e.Life_Cycle_State,c.Force_Time,c.Failure_Time,
+        c.Remark,c.Creator,c.Create_Date,c.Updated_By,c.Update_Date
+        from hwkj_customer_material_data c left join hwkj_material_engineering_data e on
+        c.Material_Number=e.Material_Number and c.Version=e.Version and
+        c.Manufacturer_Abbreviation=e.Manufacturer_Abbreviation and
+        c.Manufacturer_Material_Number=e.Manufacturer_Material_Number where 1=1
+        <if test="customerMaterialDataPageModel.page!=null and customerMaterialDataPageModel.rows!=null"></if>
+        <if test="customerMaterialData.Customer_Abbreviation!=null and customerMaterialData.Customer_Abbreviation!=''">and c.Customer_Abbreviation=#{customerMaterialData.Customer_Abbreviation}</if>
+        <if test="customerMaterialData.Customer_Material_Number!=null and customerMaterialData.Customer_Material_Number!=''">and c.Customer_Material_Number=#{customerMaterialData.Customer_Material_Number}</if>
+        <if test="customerMaterialData.Material_Number!=null and customerMaterialData.Material_Number!=''">and e.Material_Number=#{customerMaterialData.Material_Number}</if>
+        <if test="customerMaterialData.Manufacturer_Material_Number!=null and customerMaterialData.Manufacturer_Material_Number!=''">and c.Manufacturer_Material_Number=#{customerMaterialData.Manufacturer_Material_Number}</if>
+        <if test="customerMaterialData.Date_From!=null and customerMaterialData.Date_From!=''">and date_format(c.Create_Date,'%Y-%m-%d')&gt;='${customerMaterialData.Date_From}'</if>
+        <if test="customerMaterialData.Date_To!=null and customerMaterialData.Date_To!=''">and date_format(c.Create_Date,'%Y-%m-%d')&lt;='${customerMaterialData.Date_To}'</if>
+        <if test="customerMaterialData.Life_Cycle_State!=null and customerMaterialData.Life_Cycle_State!=''">and e.Life_Cycle_State=#{customerMaterialData.Life_Cycle_State}</if>
+        order by c.Id desc limit #{customerMaterialDataPageModel.startRow},#{customerMaterialDataPageModel.rows}
+    </select>
+    <select id="queryCustomerMaterialDataCount" resultType="int">
+        select count(*) from hwkj_customer_material_data c left join hwkj_material_engineering_data e on
+        c.Material_Number=e.Material_Number and c.Version=e.Version and
+        c.Manufacturer_Abbreviation=e.Manufacturer_Abbreviation and
+        c.Manufacturer_Material_Number=e.Manufacturer_Material_Number where 1=1
+        <if test="customerMaterialDataPageModel.page!=null and customerMaterialDataPageModel.rows!=null"></if>
+        <if test="customerMaterialData.Customer_Abbreviation!=null and customerMaterialData.Customer_Abbreviation!=''">and c.Customer_Abbreviation=#{customerMaterialData.Customer_Abbreviation}</if>
+        <if test="customerMaterialData.Customer_Material_Number!=null and customerMaterialData.Customer_Material_Number!=''">and c.Customer_Material_Number=#{customerMaterialData.Customer_Material_Number}</if>
+        <if test="customerMaterialData.Material_Number!=null and customerMaterialData.Material_Number!=''">and e.Material_Number=#{customerMaterialData.Material_Number}</if>
+        <if test="customerMaterialData.Manufacturer_Material_Number!=null and customerMaterialData.Manufacturer_Material_Number!=''">and c.Manufacturer_Material_Number=#{customerMaterialData.Manufacturer_Material_Number}</if>
+        <if test="customerMaterialData.Date_From!=null and customerMaterialData.Date_From!=''">and date_format(c.Create_Date,'%Y-%m-%d')&gt;='${customerMaterialData.Date_From}'</if>
+        <if test="customerMaterialData.Date_To!=null and customerMaterialData.Date_To!=''">and date_format(c.Create_Date,'%Y-%m-%d')&lt;='${customerMaterialData.Date_To}'</if>
+        <if test="customerMaterialData.Life_Cycle_State!=null and customerMaterialData.Life_Cycle_State!=''">and e.Life_Cycle_State=#{customerMaterialData.Life_Cycle_State}</if>
+    </select>
+    <select id="CustomerMaterialData" resultType="hwkj.hwkj.entity.Engineering.CustomerMaterialData">
+        select * from hwkj_customer_material_data where Id=#{Id}
+    </select>
+    <select id="queryCustomerMaterialDataForDownLoadAll" resultType="hwkj.hwkj.entity.Engineering.CustomerMaterialData">
+        select c.Id,c.Customer_Abbreviation,c.Customer_Material_Number,c.Customer_Version,
+        c.Material_Number,c.Version,e.Described,c.Customer_Described,c.Manufacturer_Abbreviation,
+        c.Manufacturer_Material_Number,e.Life_Cycle_State,c.Force_Time,c.Failure_Time,
+        c.Remark,c.Creator,c.Create_Date,c.Updated_By,c.Update_Date
+        from hwkj_customer_material_data c left join hwkj_material_engineering_data e on
+        c.Material_Number=e.Material_Number and c.Version=e.Version and
+        c.Manufacturer_Abbreviation=e.Manufacturer_Abbreviation and
+        c.Manufacturer_Material_Number=e.Manufacturer_Material_Number where 1=1
+        <if test="customerMaterialData.Customer_Abbreviation!=null and customerMaterialData.Customer_Abbreviation!=''">and c.Customer_Abbreviation=#{customerMaterialData.Customer_Abbreviation}</if>
+        <if test="customerMaterialData.Customer_Material_Number!=null and customerMaterialData.Customer_Material_Number!=''">and c.Customer_Material_Number=#{customerMaterialData.Customer_Material_Number}</if>
+        <if test="customerMaterialData.Material_Number!=null and customerMaterialData.Material_Number!=''">and e.Material_Number=#{customerMaterialData.Material_Number}</if>
+        <if test="customerMaterialData.Manufacturer_Material_Number!=null and customerMaterialData.Manufacturer_Material_Number!=''">and c.Manufacturer_Material_Number=#{customerMaterialData.Manufacturer_Material_Number}</if>
+        <if test="customerMaterialData.Date_From!=null and customerMaterialData.Date_From!=''">and date_format(c.Create_Date,'%Y-%m-%d')&gt;='${customerMaterialData.Date_From}'</if>
+        <if test="customerMaterialData.Date_To!=null and customerMaterialData.Date_To!=''">and date_format(c.Create_Date,'%Y-%m-%d')&lt;='${customerMaterialData.Date_To}'</if>
+        <if test="customerMaterialData.Life_Cycle_State!=null and customerMaterialData.Life_Cycle_State!=''">and e.Life_Cycle_State=#{customerMaterialData.Life_Cycle_State}</if>
+        order by c.Id desc
+    </select>
+    <select id="queryCustomerMaterialDataForDownLoad" resultType="hwkj.hwkj.entity.Engineering.CustomerMaterialData">
+        select c.Id,c.Customer_Abbreviation,c.Customer_Material_Number,c.Customer_Version,
+        c.Material_Number,c.Version,e.Described,c.Customer_Described,c.Manufacturer_Abbreviation,
+        c.Manufacturer_Material_Number,e.Life_Cycle_State,c.Force_Time,c.Failure_Time,
+        c.Remark,c.Creator,c.Create_Date,c.Updated_By,c.Update_Date
+        from hwkj_customer_material_data c left join hwkj_material_engineering_data e on
+        c.Material_Number=e.Material_Number and c.Version=e.Version and
+        c.Manufacturer_Abbreviation=e.Manufacturer_Abbreviation and
+        c.Manufacturer_Material_Number=e.Manufacturer_Material_Number where 1=1
+        <if test="Id!=null and Id!=''">and c.Id=#{Id}</if>
+    </select>
+    <select id="queryCustomerMaterialDataForExist" parameterType="hwkj.hwkj.entity.Engineering.CustomerMaterialData" resultType="int">
+        select count(*) from hwkj_customer_material_data where 1=1
+        <if test="Customer_Abbreviation!=null and Customer_Abbreviation!=''">and Customer_Abbreviation=#{Customer_Abbreviation}</if>
+        <if test="Customer_Material_Number!=null and Customer_Material_Number!=''">and Customer_Material_Number=#{Customer_Material_Number}</if>
+        <if test="Customer_Version!=null">and Customer_Version=#{Customer_Version}</if>
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{Manufacturer_Material_Number}</if>
+    </select>
+    <select id="queryCustomerMaterialDataForAllExist" parameterType="hwkj.hwkj.entity.Engineering.CustomerMaterialData" resultType="int">
+        select count(*) from hwkj_customer_material_data where 1=1
+        <if test="Customer_Abbreviation!=null and Customer_Abbreviation!=''">and Customer_Abbreviation=#{Customer_Abbreviation}</if>
+        <if test="Customer_Material_Number!=null and Customer_Material_Number!=''">and Customer_Material_Number=#{Customer_Material_Number}</if>
+        <if test="Customer_Version!=null">and Customer_Version=#{Customer_Version}</if>
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Manufacturer_Abbreviation!=null and Manufacturer_Abbreviation!=''">and Manufacturer_Abbreviation=#{Manufacturer_Abbreviation}</if>
+        <if test="Manufacturer_Material_Number!=null and Manufacturer_Material_Number!=''">and Manufacturer_Material_Number=#{Manufacturer_Material_Number}</if>
+        <if test="Force_Time!=null and Force_Time!=''">and Force_Time=#{Force_Time}</if>
+        <if test="Failure_Time!=null and Failure_Time!=''">and Failure_Time=#{Failure_Time}</if>
+        <if test="Customer_Described!=null">and Customer_Described=#{Customer_Described}</if>
+        <if test="Remark!=null">and Remark=#{Remark}</if>
+    </select>
+</mapper>

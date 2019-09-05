@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerManagementDao">
+    <insert id="insertCustomerManagement" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerManagement">
+        insert into hwkj_customer_management
+        (Customer_Code,Year,Quarter,Revenue,Overdue_Amount,Score,Important_Item,Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Year},#{Quarter},#{Revenue},#{Overdue_Amount},#{Score},#{Important_Item},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerManagement" parameterType="java.lang.Integer">
+        delete from hwkj_customer_management where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerManagement" parameterType="hwkj.hwkj.entity.CRM.CustomerManagement">
+        update hwkj_customer_management
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Year!=null">Year=#{Year},</if>
+            <if test="Quarter!=null">Quarter=#{Quarter},</if>
+            <if test="Revenue!=null">Revenue=#{Revenue},</if>
+            <if test="Overdue_Amount!=null">Overdue_Amount=#{Overdue_Amount},</if>
+            <if test="Score!=null">Score=#{Score},</if>
+            <if test="Important_Item!=null">Important_Item=#{Important_Item},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerManagementList" resultType="hwkj.hwkj.entity.CRM.CustomerManagement">
+        select m.Id,m.Customer_Code,b.Chinese_Abbreviation,m.Year,m.Quarter,m.Revenue,
+        m.Overdue_Amount,a.Currency,a.Credit_Level,m.Score,m.Important_Item,b.BPM,
+        m.Creator,m.Create_Date,m.Updated_By,m.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_management m on
+        b.Customer_Code=m.Customer_Code left join hwkj_customer_account_info a on
+        m.Customer_Code=a.Customer_Code where 1=1 and m.Id is not null
+        <if test="customerManagementPageModel.page!=null and customerManagementPageModel.rows!=null"></if>
+        <if test="customerManagement.Customer_Code!=null and customerManagement.Customer_Code!=''">and m.Customer_Code=#{customerManagement.Customer_Code}</if>
+        <if test="customerManagement.Chinese_Abbreviation!=null and customerManagement.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerManagement.Chinese_Abbreviation}</if>
+        <if test="customerManagement.Date_From!=null and customerManagement.Date_From!=''">and date_format(m.Year,'%Y')&gt;='${customerManagement.Date_From}'</if>
+        <if test="customerManagement.Date_To!=null and customerManagement.Date_To!=''">and date_format(m.Year,'%Y')&lt;='${customerManagement.Date_To}'</if>
+        <if test="customerManagement.BPM!=null and customerManagement.BPM!=''">and b.BPM=#{customerManagement.BPM}</if>
+        order by (m.Id) desc limit #{customerManagementPageModel.startRow},#{customerManagementPageModel.rows}
+    </select>
+    <select id="queryCustomerManagementCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data b left join hwkj_customer_management m on
+        b.Customer_Code=m.Customer_Code left join hwkj_customer_account_info a on
+        m.Customer_Code=a.Customer_Code where 1=1 and m.Id is not null
+        <if test="customerManagementPageModel.page!=null and customerManagementPageModel.rows!=null"></if>
+        <if test="customerManagement.Customer_Code!=null and customerManagement.Customer_Code!=''">and m.Customer_Code=#{customerManagement.Customer_Code}</if>
+        <if test="customerManagement.Chinese_Abbreviation!=null and customerManagement.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerManagement.Chinese_Abbreviation}</if>
+        <if test="customerManagement.Date_From!=null and customerManagement.Date_From!=''">and date_format(m.Year,'%Y')&gt;='${customerManagement.Date_From}'</if>
+        <if test="customerManagement.Date_To!=null and customerManagement.Date_To!=''">and date_format(m.Year,'%Y')&lt;='${customerManagement.Date_To}'</if>
+        <if test="customerManagement.BPM!=null and customerManagement.BPM!=''">and b.BPM=#{customerManagement.BPM}</if>
+    </select>
+    <select id="queryCustomerManagementById" resultType="hwkj.hwkj.entity.CRM.CustomerManagement">
+        select * from hwkj_customer_management where Id=#{Id}
+    </select>
+    <select id="queryCustomerManagementForDownLoadAll" resultType="hwkj.hwkj.entity.CRM.CustomerManagement">
+        select m.Id,m.Customer_Code,b.Chinese_Abbreviation,m.Year,m.Quarter,m.Revenue,
+        m.Overdue_Amount,a.Currency,a.Credit_Level,m.Score,m.Important_Item,b.BPM,
+        m.Creator,m.Create_Date,m.Updated_By,m.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_management m on
+        b.Customer_Code=m.Customer_Code left join hwkj_customer_account_info a on
+        m.Customer_Code=a.Customer_Code where 1=1 and m.Id is not null
+        <if test="customerManagement.Customer_Code!=null and customerManagement.Customer_Code!=''">and m.Customer_Code=#{customerManagement.Customer_Code}</if>
+        <if test="customerManagement.Chinese_Abbreviation!=null and customerManagement.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerManagement.Chinese_Abbreviation}</if>
+        <if test="customerManagement.Date_From!=null and customerManagement.Date_From!=''">and date_format(m.Year,'%Y')&gt;='${customerManagement.Date_From}'</if>
+        <if test="customerManagement.Date_To!=null and customerManagement.Date_To!=''">and date_format(m.Year,'%Y')&lt;='${customerManagement.Date_To}'</if>
+        <if test="customerManagement.BPM!=null and customerManagement.BPM!=''">and b.BPM=#{customerManagement.BPM}</if>
+        order by (m.Id) desc
+    </select>
+    <select id="queryCustomerManagementForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerManagement">
+        select m.Id,m.Customer_Code,b.Chinese_Abbreviation,m.Year,m.Quarter,m.Revenue,
+        m.Overdue_Amount,a.Currency,a.Credit_Level,m.Score,m.Important_Item,b.BPM,
+        m.Creator,m.Create_Date,m.Updated_By,m.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_management m on
+        b.Customer_Code=m.Customer_Code left join hwkj_customer_account_info a on
+        m.Customer_Code=a.Customer_Code where 1=1 and m.Id is not null and m.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by (m.Id) desc
+    </select>
+    <select id="queryCustomerManagementForAllExist" parameterType="hwkj.hwkj.entity.CRM.CustomerManagement" resultType="int">
+        select count(*) from hwkj_customer_management where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Year!=null">and Year=#{Year}</if>
+        <if test="Quarter!=null">and Quarter=#{Quarter}</if>
+        <if test="Revenue!=null">and Revenue=#{Revenue}</if>
+        <if test="Overdue_Amount!=null">and Overdue_Amount=#{Overdue_Amount}</if>
+        <if test="Score!=null">and Score=#{Score}</if>
+        <if test="Important_Item!=null">and Important_Item=#{Important_Item}</if>
+    </select>
+</mapper>

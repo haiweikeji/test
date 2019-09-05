@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.SCM.MaterialSupplyDataDao">
+    <insert id="insertMaterialSupplyData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        insert into hwkj_material_supply_data
+        (Material_Number,Version,Brand,Vendor_Code,
+        Minimum_Lower_Unit_Quantity,Purchasing_Lead_Days,Deliver_Term,Payment_Term,
+        Receive_Term,Supplier_Warranty_Period_Month,Force_Time,Failure_Time,Purchase,Remark,
+        Creator,Create_Date)
+        values
+        (#{Material_Number},#{Version},#{Brand},#{Vendor_Code},
+        #{Minimum_Lower_Unit_Quantity},#{Purchasing_Lead_Days},#{Deliver_Term},#{Payment_Term},
+        #{Receive_Term},#{Supplier_Warranty_Period_Month},#{Force_Time},#{Failure_Time},#{Purchase},#{Remark},
+        #{Creator},#{Create_Date});
+    </insert>
+    <delete id="deleteMaterialSupplyData" parameterType="java.lang.Integer">
+        delete from hwkj_material_supply_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateMaterialSupplyData" parameterType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        update hwkj_material_supply_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Material_Number!=null and Material_Number!=''">Material_Number=#{Material_Number},</if>
+            <if test="Version!=null and Version!=''">Version=#{Version},</if>
+            <if test="Brand!=null and Brand!=''">Brand=#{Brand},</if>
+            <if test="Vendor_Code!=null and Vendor_Code!=''">Vendor_Code=#{Vendor_Code},</if>
+            <if test="Minimum_Lower_Unit_Quantity!=null and Minimum_Lower_Unit_Quantity!=''">Minimum_Lower_Unit_Quantity=#{Minimum_Lower_Unit_Quantity},</if>
+            <if test="Purchasing_Lead_Days!=null and Purchasing_Lead_Days!=''">Purchasing_Lead_Days=#{Purchasing_Lead_Days},</if>
+            <if test="Deliver_Term!=null and Deliver_Term!=''">Deliver_Term=#{Deliver_Term},</if>
+            <if test="Payment_Term!=null and Payment_Term!=''">Payment_Term=#{Payment_Term},</if>
+            <if test="Receive_Term!=null and Receive_Term!=''">Receive_Term=#{Receive_Term},</if>
+            <if test="Supplier_Warranty_Period_Month!=null and Supplier_Warranty_Period_Month!=''">Supplier_Warranty_Period_Month=#{Supplier_Warranty_Period_Month},</if>
+            <if test="Force_Time!=null and Force_Time!=''">Force_Time=#{Force_Time},</if>
+            <if test="Failure_Time!=null and Failure_Time!=''">Failure_Time=#{Failure_Time},</if>
+            <if test="Purchase!=null and Purchase!=''">Purchase=#{Purchase},</if>
+            <if test="Remark!=null and Remark!=''">Remark=#{Remark},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryMaterialSupplyDataList" resultType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        select m.Id,m.Material_Number,m.Version,e.Product_Name,m.Brand,e.Model_Number,e.Size,
+        e.Manufacturer_Abbreviation,e.Manufacturer_Material_Number,v.Vendor_Chinese_Abbreviation,
+        m.Vendor_code,e.Material_Type,e.Category,e.Country_Origin,e.Quantity_Unit,m.Minimum_Lower_Unit_Quantity,
+        e.Minimum_Packing_Capacity,m.Purchasing_Lead_Days,m.Deliver_Term,m.Payment_Term,m.Receive_Term,
+        m.Supplier_Warranty_Period_Month,m.Force_Time,m.Failure_Time,m.Purchase,m.Remark,m.Creator,m.Create_Date,m.Updated_By,m.Update_Date
+        from hwkj_material_supply_data m left join hwkj_material_engineering_data e
+        on m.material_number=e.material_number and m.brand=e.brand left join hwkj_vendor_code v
+        on m.vendor_code=v.vendor_code where 1=1
+        <if test="materialSupplyDataPageModel.page!=null and materialSupplyDataPageModel.rows!=null"></if>
+        <if test="materialSupplyData.Material_Number!=null and materialSupplyData.Material_Number!=''">and m.Material_Number=#{materialSupplyData.Material_Number}</if>
+        <if test="materialSupplyData.Manufacturer_Material_Number!=null and materialSupplyData.Manufacturer_Material_Number!=''">and e.Manufacturer_Material_Number=#{materialSupplyData.Manufacturer_Material_Number}</if>
+        <if test="materialSupplyData.Size!=null and materialSupplyData.Size!=''">and e.Size=#{materialSupplyData.Size}</if>
+        <if test="materialSupplyData.Model_Number!=null and materialSupplyData.Model_Number!=''">and e.Model_Number=#{materialSupplyData.Model_Number}</if>
+        <if test="materialSupplyData.Deliver_Term!=null and materialSupplyData.Deliver_Term!=''">and m.Deliver_Term=#{materialSupplyData.Deliver_Term}</if>
+        <if test="materialSupplyData.Receive_Term!=null and materialSupplyData.Receive_Term!=''">and m.Receive_Term=#{materialSupplyData.Receive_Term}</if>
+        <if test="materialSupplyData.Material_Type!=null and materialSupplyData.Material_Type!=''">and e.Material_Type=#{materialSupplyData.Material_Type}</if>
+        <if test="materialSupplyData.Brand!=null and materialSupplyData.Brand!=''">and m.Brand=#{materialSupplyData.Brand}</if>
+        <if test="materialSupplyData.Minimum_Lower_Unit_Quantity!=null and materialSupplyData.Minimum_Lower_Unit_Quantity!=''">and m.Minimum_Lower_Unit_Quantity=#{materialSupplyData.Minimum_Lower_Unit_Quantity}</if>
+        <if test="materialSupplyData.Minimum_Packing_Capacity!=null and materialSupplyData.Minimum_Packing_Capacity!=''">and e.Minimum_Packing_Capacity=#{materialSupplyData.Minimum_Packing_Capacity}</if>
+        <if test="materialSupplyData.Payment_Term!=null and materialSupplyData.Payment_Term!=''">and m.Payment_Term=#{materialSupplyData.Payment_Term}</if>
+        <if test="materialSupplyData.Status!=null and materialSupplyData.Status!=''">and Status=#{materialSupplyData.Status}</if>
+        order by Id desc limit #{materialSupplyDataPageModel.startRow},#{materialSupplyDataPageModel.rows}
+    </select>
+    <select id="queryMaterialSupplyDataCount" resultType="int">
+        select count(*)
+        from hwkj_material_supply_data m left join hwkj_material_engineering_data e
+        on m.material_number=e.material_number and m.brand=e.brand left join hwkj_vendor_code v
+        on m.vendor_code=v.vendor_code where 1=1
+        <if test="materialSupplyDataPageModel.page!=null and materialSupplyDataPageModel.rows!=null"></if>
+        <if test="materialSupplyData.Material_Number!=null and materialSupplyData.Material_Number!=''">and m.Material_Number=#{materialSupplyData.Material_Number}</if>
+        <if test="materialSupplyData.Manufacturer_Material_Number!=null and materialSupplyData.Manufacturer_Material_Number!=''">and e.Manufacturer_Material_Number=#{materialSupplyData.Manufacturer_Material_Number}</if>
+        <if test="materialSupplyData.Size!=null and materialSupplyData.Size!=''">and e.Size=#{materialSupplyData.Size}</if>
+        <if test="materialSupplyData.Model_Number!=null and materialSupplyData.Model_Number!=''">and e.Model_Number=#{materialSupplyData.Model_Number}</if>
+        <if test="materialSupplyData.Deliver_Term!=null and materialSupplyData.Deliver_Term!=''">and m.Deliver_Term=#{materialSupplyData.Deliver_Term}</if>
+        <if test="materialSupplyData.Receive_Term!=null and materialSupplyData.Receive_Term!=''">and m.Receive_Term=#{materialSupplyData.Receive_Term}</if>
+        <if test="materialSupplyData.Material_Type!=null and materialSupplyData.Material_Type!=''">and e.Material_Type=#{materialSupplyData.Material_Type}</if>
+        <if test="materialSupplyData.Brand!=null and materialSupplyData.Brand!=''">and m.Brand=#{materialSupplyData.Brand}</if>
+        <if test="materialSupplyData.Minimum_Lower_Unit_Quantity!=null and materialSupplyData.Minimum_Lower_Unit_Quantity!=''">and m.Minimum_Lower_Unit_Quantity=#{materialSupplyData.Minimum_Lower_Unit_Quantity}</if>
+        <if test="materialSupplyData.Minimum_Packing_Capacity!=null and materialSupplyData.Minimum_Packing_Capacity!=''">and e.Minimum_Packing_Capacity=#{materialSupplyData.Minimum_Packing_Capacity}</if>
+        <if test="materialSupplyData.Payment_Term!=null and materialSupplyData.Payment_Term!=''">and m.Payment_Term=#{materialSupplyData.Payment_Term}</if>
+        <if test="materialSupplyData.Status!=null and materialSupplyData.Status!=''">and Status=#{materialSupplyData.Status}</if>
+    </select>
+    <select id="queryMaterialSupplyDataById" resultType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        select * from hwkj_material_supply_data where Id=#{Id}
+    </select>
+    <select id="queryMaterialSupplyDataForDownLoadAll" resultType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        select m.Id,m.Material_Number,m.Version,e.Product_Name,m.Brand,e.Model_Number,e.Size,
+        e.Manufacturer_Abbreviation,e.Manufacturer_Material_Number,v.Vendor_Chinese_Abbreviation,
+        m.Vendor_code,e.Material_Type,e.Category,e.Country_Origin,e.Quantity_Unit,m.Minimum_Lower_Unit_Quantity,
+        e.Minimum_Packing_Capacity,m.Purchasing_Lead_Days,m.Deliver_Term,m.Payment_Term,m.Receive_Term,
+        m.Supplier_Warranty_Period_Month,m.Force_Time,m.Failure_Time,m.Purchase,m.Remark,m.Creator,m.Create_Date,m.Updated_By,m.Update_Date
+        from hwkj_material_supply_data m left join hwkj_material_engineering_data e
+        on m.material_number=e.material_number and m.brand=e.brand left join hwkj_vendor_code v
+        on m.vendor_code=v.vendor_code where 1=1
+        <if test="materialSupplyData.Material_Number!=null and materialSupplyData.Material_Number!=''">and m.Material_Number=#{materialSupplyData.Material_Number}</if>
+        <if test="materialSupplyData.Manufacturer_Material_Number!=null and materialSupplyData.Manufacturer_Material_Number!=''">and e.Manufacturer_Material_Number=#{materialSupplyData.Manufacturer_Material_Number}</if>
+        <if test="materialSupplyData.Size!=null and materialSupplyData.Size!=''">and e.Size=#{materialSupplyData.Size}</if>
+        <if test="materialSupplyData.Model_Number!=null and materialSupplyData.Model_Number!=''">and e.Model_Number=#{materialSupplyData.Model_Number}</if>
+        <if test="materialSupplyData.Deliver_Term!=null and materialSupplyData.Deliver_Term!=''">and m.Deliver_Term=#{materialSupplyData.Deliver_Term}</if>
+        <if test="materialSupplyData.Receive_Term!=null and materialSupplyData.Receive_Term!=''">and m.Receive_Term=#{materialSupplyData.Receive_Term}</if>
+        <if test="materialSupplyData.Material_Type!=null and materialSupplyData.Material_Type!=''">and e.Material_Type=#{materialSupplyData.Material_Type}</if>
+        <if test="materialSupplyData.Brand!=null and materialSupplyData.Brand!=''">and m.Brand=#{materialSupplyData.Brand}</if>
+        <if test="materialSupplyData.Minimum_Lower_Unit_Quantity!=null and materialSupplyData.Minimum_Lower_Unit_Quantity!=''">and m.Minimum_Lower_Unit_Quantity=#{materialSupplyData.Minimum_Lower_Unit_Quantity}</if>
+        <if test="materialSupplyData.Minimum_Packing_Capacity!=null and materialSupplyData.Minimum_Packing_Capacity!=''">and e.Minimum_Packing_Capacity=#{materialSupplyData.Minimum_Packing_Capacity}</if>
+        <if test="materialSupplyData.Payment_Term!=null and materialSupplyData.Payment_Term!=''">and m.Payment_Term=#{materialSupplyData.Payment_Term}</if>
+        <if test="materialSupplyData.Status!=null and materialSupplyData.Status!=''">and Status=#{materialSupplyData.Status}</if>
+        order by m.Id desc
+    </select>
+    <select id="queryMaterialSupplyDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        select m.Id,m.Material_Number,m.Version,e.Product_Name,m.Brand,e.Model_Number,e.Size,
+        e.Manufacturer_Abbreviation,e.Manufacturer_Material_Number,v.Vendor_Chinese_Abbreviation,
+        m.Vendor_code,e.Material_Type,e.Category,e.Country_Origin,e.Quantity_Unit,m.Minimum_Lower_Unit_Quantity,
+        e.Minimum_Packing_Capacity,m.Purchasing_Lead_Days,m.Deliver_Term,m.Payment_Term,m.Receive_Term,
+        m.Supplier_Warranty_Period_Month,m.Force_Time,m.Failure_Time,m.Purchase,m.Remark,m.Creator,m.Create_Date,m.Updated_By,m.Update_Date
+        from hwkj_material_supply_data m left join hwkj_material_engineering_data e
+        on m.material_number=e.material_number and m.brand=e.brand left join hwkj_vendor_code v
+        on m.vendor_code=v.vendor_code where 1=1 and m.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by m.Id desc
+    </select>
+    <select id="queryMaterialSupplyDataForExist" parameterType="hwkj.hwkj.entity.SCM.MaterialSupplyData" resultType="int">
+        select count(*) from hwkj_material_supply_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+        <if test="Vendor_Code!=null and Vendor_Code!=''">and Vendor_Code=#{Vendor_Code}</if>
+    </select>
+    <select id="queryMaterialSupplyDataForOption" resultType="hwkj.hwkj.entity.SCM.MaterialSupplyData">
+        select * from hwkj_material_supply_data where 1=1
+        <if test="Vendor_Chinese_Full!=null and Vendor_Chinese_Full!=''">and Standard_Chinese_Full=#{Vendor_Chinese_Full}</if>
+        group by Standard_Chinese_Full order by Id
+    </select>
+    <select id="queryMaterialSupplyDataForAllExist" parameterType="hwkj.hwkj.entity.SCM.MaterialSupplyData" resultType="int">
+        select count(*) from hwkj_material_supply_data where 1=1
+        <if test="Material_Number!=null and Material_Number!=''">and Material_Number=#{Material_Number}</if>
+        <if test="Version!=null and Version!=''">and Version=#{Version}</if>
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+        <if test="Vendor_Code!=null and Vendor_Code!=''">and Vendor_Code=#{Vendor_Code}</if>
+        <if test="Minimum_Lower_Unit_Quantity!=null and Minimum_Lower_Unit_Quantity!=''">and Minimum_Lower_Unit_Quantity=#{Minimum_Lower_Unit_Quantity}</if>
+        <if test="Purchasing_Lead_Days!=null and Purchasing_Lead_Days!=''">and Purchasing_Lead_Days=#{Purchasing_Lead_Days}</if>
+        <if test="Deliver_Term!=null and Deliver_Term!=''">and Deliver_Term=#{Deliver_Term}</if>
+        <if test="Payment_Term!=null and Payment_Term!=''">and Payment_Term=#{Payment_Term}</if>
+        <if test="Receive_Term!=null and Receive_Term!=''">and Receive_Term=#{Receive_Term}</if>
+        <if test="Supplier_Warranty_Period_Month!=null and Supplier_Warranty_Period_Month!=''">and Supplier_Warranty_Period_Month=#{Supplier_Warranty_Period_Month}</if>
+        <if test="Force_Time!=null and Force_Time!=''">and Force_Time=#{Force_Time}</if>
+        <if test="Failure_Time!=null and Failure_Time!=''">and Failure_Time=#{Failure_Time}</if>
+        <if test="Purchase!=null and Purchase!=''">and Purchase=#{Purchase}</if>
+        <if test="Remark!=null">and Remark=#{Remark}</if>
+    </select>
+</mapper>

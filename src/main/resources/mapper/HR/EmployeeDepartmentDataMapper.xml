@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.EmployeeDepartmentDataDao">
+    <insert id="insertEmployeeDepartmentData" useGeneratedKeys="true" keyColumn="Id" keyProperty="Id" parameterType="hwkj.hwkj.entity.HR.EmployeeDepartmentData">
+      insert into hwkj_employee_department_data
+      (Job_Number,Org_Code,Management,Job_Type,Start_Service,End_Service,Entry_Position,
+      Job_Family,Station,Creator,Create_Date)
+      values
+      (#{Job_Number},#{Org_Code},#{Management},#{Job_Type},#{Start_Service},#{End_Service},
+      #{Entry_Position},#{Job_Family},#{Station},#{Creator},#{Create_Date})
+    </insert>
+    <update id="updateEmployeeDepartmentData" parameterType="hwkj.hwkj.entity.HR.EmployeeDepartmentData">
+        update hwkj_employee_department_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Job_Number!=null">Job_Number=#{Job_Number},</if>
+            <if test="Org_Code!=null">Org_Code=#{Org_Code},</if>
+            <if test="Management!=null">Management=#{Management},</if>
+            <if test="Job_Type!=null">Job_Type=#{Job_Type},</if>
+            <if test="Start_Service!=null">Start_Service=#{Start_Service},</if>
+            <if test="End_Service!=null">End_Service=#{End_Service},</if>
+            <if test="Entry_Position!=null">Entry_Position=#{Entry_Position},</if>
+            <if test="Job_Family!=null">Job_Family=#{Job_Family},</if>
+            <if test="Station!=null">Station=#{Station},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <!--<select id="queryEmployeeDepartmentDataByJobNumber" resultMap="EmployeeDepartmentDataMap">
+        SELECT d.Id,d.Job_Number,p.Chain_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        d.Job_Family,d.Station,p.Phone_Number,p.WeChat_Number,p.Company_Mail,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,d.Org_Code,d.Job_Type,d.Start_Service,d.End_Service,d.Leaving_Reason,d.Effective_Position,
+        p.Status,d.Creator,d.Create_Date,d.Updated_By,d.Update_Date
+        FROM hwkj_employee_personal_data p right join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where d.Job_Number=#{Job_Number}
+    </select>-->
+
+    <!--<select id="selectEmployeeDepartmentDataListWithPage" parameterType="hwkj.hwkj.entity.pagingquery.SelectEmployeeDepartmentDataModel" resultMap="EmployeeDepartmentDataMap" >
+        SELECT d.Id,d.Job_Number,p.Chain_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        d.Job_Family,d.Station,p.Phone_Number,p.WeChat_Number,p.Company_Mail,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,d.Org_Code,d.Job_Type,d.Start_Service,d.End_Service,d.Leaving_Reason,d.Effective_Position,
+        p.Status,d.Creator,d.Create_Date,d.Updated_By,d.Update_Date
+        FROM hwkj_employee_personal_data p right join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1
+        <if test="page != null and  rows != null"></if>
+        <if test="BG!=null and BG!=''">and o.BG=#{BG}</if>
+        <if test="BU!=null and BU!=''">and o.BU=#{BU}</if>
+        <if test="Dept!=null and Dept!=''">and o.Dept=#{Dept}</if>
+        <if test="Ke!=null and Ke!=''">and o.Ke=#{Ke}</if>
+        <if test="Zu!=null and Zu!=''">and o.Zu=#{Zu}</if>
+        <if test="Status!=null and Status!=''">and p.Status=#{Status}</if>
+        <if test="Job_Number!=null and Job_Number!=''">and d.Job_Number=#{Job_Number}</if>
+        <if test="Name!=null and Name!=''">and p.Chain_Name=#{Name}</if>
+        <if test="Sex!=null and Sex!=''">and p.Sex=#{Sex}</if>
+        <if test="DateFrom!=null and DateFrom!=''">and date_format(d.Create_Date,'%Y-%m-%d') &gt;='${DateFrom}'</if>
+        <if test="DateTo!=null and DateTo!=''">and date_format(d.Create_Date,'%Y-%m-%d') &lt;='${DateTo}'</if>
+        <if test="Job_Family!=null and Job_Family!=''">and d.Job_Family=#{Job_Family}</if>
+        <if test="Management!=null and Management!=''">and d.Management=#{Management}</if>
+        <if test="Entry_Position!=null and Entry_Position!=''">and d.Entry_Position=#{Entry_Position}</if>
+        <if test="Station!=null and Station!=''">and d.Station=#{Station}</if>
+        GROUP BY (d.Id) order by d.Id limit #{startRow},#{rows}
+    </select>
+
+    <select id="selectEmployeeDepartmentDataCountWithPage" parameterType="hwkj.hwkj.entity.pagingquery.SelectEmployeeDepartmentDataModel" resultType="int">
+        select count(*) FROM hwkj_employee_personal_data p right join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1
+        <if test="BG!=null and BG!=''">and o.BG=#{BG}</if>
+        <if test="BU!=null and BU!=''">and o.BU=#{BU}</if>
+        <if test="Dept!=null and Dept!=''">and o.Dept=#{Dept}</if>
+        <if test="Ke!=null and Ke!=''">and o.Ke=#{Ke}</if>
+        <if test="Zu!=null and Zu!=''">and o.Zu=#{Zu}</if>
+        <if test="Status!=null and Status!=''">and p.Status=#{Status}</if>
+        <if test="Job_Number!=null and Job_Number!=''">and d.Job_Number=#{Job_Number}</if>
+        <if test="Name!=null and Name!=''">and p.Chain_Name=#{Name}</if>
+        <if test="Sex!=null and Sex!=''">and p.Sex=#{Sex}</if>
+        <if test="DateFrom!=null and DateFrom!=''">and date_format(d.Create_Date,'%Y-%m-%d') &gt;='${DateFrom}'</if>
+        <if test="DateTo!=null and DateTo!=''">and date_format(d.Create_Date,'%Y-%m-%d') &lt;='${DateTo}'</if>
+        <if test="Job_Family!=null and Job_Family!=''">and d.Job_Family=#{Job_Family}</if>
+        <if test="Management!=null and Management!=''">and d.Management=#{Management}</if>
+        <if test="Entry_Position!=null and Entry_Position!=''">and d.Entry_Position=#{Entry_Position}</if>
+        <if test="Station!=null and Station!=''">and d.Station=#{Station}</if>
+    </select>-->
+    <!-- resultMap中的type表示返回什么类型的对象 -->
+    <!--<resultMap type="hwkj.hwkj.entity.HR.EmployeeDepartmentData" id="EmployeeDepartmentDataMap">-->
+        <!-- property 表示com.mybatis.bean.StudentTemp中的属性； column 表示表中的列名 -->
+        <!--<id property="Id" column="Id" />
+        <result property="Id" column="Id" />
+        <result property="Job_Number" column="Job_Number" />
+        <result property="Management" column="Management" />
+        <result property="Entry_Position" column="Entry_Position" />
+        <result property="Job_Family" column="Job_Family" />
+        <result property="Station" column="Station" />
+        <result property="Org_Code" column="Org_Code" />
+        <result property="Job_Type" column="Job_Type" />
+        <result property="Start_Service" column="Start_Service" />
+        <result property="End_Service" column="End_Service" />
+        <result property="Leaving_Reason" column="Leaving_Reason" />
+        <result property="Effective_Position" column="Effective_Position" />
+        <result property="Creator" column="Creator" />
+        <result property="Create_Date" column="Create_Date" />
+        <result property="Updated_By" column="Updated_By" />
+        <result property="Update_Date" column="Update_Date" />-->
+        <!-- association字面意思关联，这里只专门做一对一关联； property表示是com.mybatis.bean.StudentTemp中的属性名称；
+            javaType表示该属性是什么类型对象 -->
+       <!-- <association property="employeePersonalData" javaType="hwkj.hwkj.entity.HR.EmployeePersonalData">-->
+            <!-- property 表示com.mybatis.bean.Class中的属性； column 表示表中的列名 -->
+            <!--<id property="Job_Number" column="Job_Number" />
+            <result property="Chain_Name" column="Chain_Name" />
+            <result property="English_Name" column="English_Name" />
+            <result property="Sex" column="Sex" />
+            <result property="Age" column="Age" />
+            <result property="Phone_Number" column="Phone_Number" />
+            <result property="WeChat_Number" column="WeChat_Number" />
+            <result property="Company_Mail" column="Company_Mail" />
+            <result property="Status" column="Status" />
+        </association>
+        <association property="orgData" javaType="hwkj.hwkj.entity.HR.OrgData">-->
+            <!-- property 表示com.mybatis.bean.Class中的属性； column 表示表中的列名 -->
+           <!-- <id property="Org_Code" column="Org_Code" />
+            <result property="BG" column="BG" />
+            <result property="BU" column="BU" />
+            <result property="Region" column="Region" />
+            <result property="Dept" column="Dept" />
+            <result property="Ke" column="Ke" />
+            <result property="Zu" column="Zu" />
+        </association>
+    </resultMap>-->
+
+    <delete id="deleteEmployeeDepartmentData" parameterType="java.lang.Integer">
+        delete from hwkj_employee_department_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+
+    <!--<select id="downloadEmployeeDepartmentData" parameterType="hwkj.hwkj.entity.pagingquery.SelectEmployeeDepartmentDataModel" resultMap="EmployeeDepartmentDataMap">
+        SELECT d.Id,d.Job_Number,p.Chain_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        d.Job_Family,d.Station,p.Phone_Number,p.WeChat_Number,p.Company_Mail,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,d.Org_Code,d.Job_Type,d.Start_Service,d.End_Service,d.Leaving_Reason,d.Effective_Position,
+        p.Status,d.Creator,d.Create_Date,d.Updated_By,d.Update_Date
+        FROM hwkj_employee_personal_data p right join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1
+        <if test="page != null and  rows != null"></if>
+        <if test="BG!=null and BG!='' and BG!='null'">and o.BG=#{BG}</if>
+        <if test="BU!=null and BU!=''and BU!='null'">and o.BU=#{BU}</if>
+        <if test="Dept!=null and Dept!=''and Dept!='null'">and o.Dept=#{Dept}</if>
+        <if test="Ke!=null and Ke!=''and Ke!='null'">and o.Ke=#{Ke}</if>
+        <if test="Zu!=null and Zu!=''and Zu!='null'">and o.Zu=#{Zu}</if>
+        <if test="Status!=null and Status!=''and Status!='null'">and p.Status=#{Status}</if>
+        <if test="Job_Number!=null and Job_Number!=''">and d.Job_Number=#{Job_Number}</if>
+        <if test="Name!=null and Name!=''">and p.Chain_Name=#{Name}</if>
+        <if test="Sex!=null and Sex!=''and Sex!='null'">and p.Sex=#{Sex}</if>
+        <if test="DateFrom!=null and DateFrom!=''">and date_format(d.Create_Date,'%Y-%m-%d') &gt;='${DateFrom}'</if>
+        <if test="DateTo!=null and DateTo!=''">and date_format(d.Create_Date,'%Y-%m-%d') &lt;='${DateTo}'</if>
+        <if test="Job_Family!=null and Job_Family!=''and Job_Family!='null'">and d.Job_Family=#{Job_Family}</if>
+        <if test="Management!=null and Management!=''">and d.Management=#{Management}</if>
+        <if test="Entry_Position!=null and Entry_Position!=''">and d.Entry_Position=#{Entry_Position}</if>
+        <if test="Station!=null and Station!=''">and d.Station=#{Station}</if>
+        GROUP BY (d.Id) order by d.Id
+    </select>-->
+    <select id="queryEmployeeDepartmentDataList" resultType="hwkj.hwkj.entity.HR.EmployeeDepartmentData">
+        select d.Id,d.Job_Number,p.China_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        d.Job_Family,d.Station,p.Phone_Number,p.WeChat_Number,p.Company_Mail,p.Entry_Date,o.Legal_Name,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,d.Org_Code,d.Job_Type,d.Start_Service,d.End_Service,d.Move_Reason,
+        p.Status,d.Creator,d.Create_Date,d.Updated_By,d.Update_Date
+        from hwkj_employee_personal_data p left join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1 and d.Id is not null
+        <if test="employeeDepartmentDataPageModel.page != null and  employeeDepartmentDataPageModel.rows != null"></if>
+        <if test="employeeDepartmentData.BG!=null and employeeDepartmentData.BG!=''">and o.BG=#{employeeDepartmentData.BG}</if>
+        <if test="employeeDepartmentData.BU!=null and employeeDepartmentData.BU!=''">and o.BU=#{employeeDepartmentData.BU}</if>
+        <if test="employeeDepartmentData.Dept!=null and employeeDepartmentData.Dept!=''">and o.Dept=#{employeeDepartmentData.Dept}</if>
+        <if test="employeeDepartmentData.Ke!=null and employeeDepartmentData.Ke!=''">and o.Ke=#{employeeDepartmentData.Ke}</if>
+        <if test="employeeDepartmentData.Zu!=null and employeeDepartmentData.Zu!=''">and o.Zu=#{employeeDepartmentData.Zu}</if>
+        <if test="employeeDepartmentData.Status!=null and employeeDepartmentData.Status!=''">and p.Status=#{employeeDepartmentData.Status}</if>
+        <if test="employeeDepartmentData.Job_Number!=null and employeeDepartmentData.Job_Number!=''">and d.Job_Number=#{employeeDepartmentData.Job_Number}</if>
+        <if test="employeeDepartmentData.China_Name!=null and employeeDepartmentData.China_Name!=''">and p.China_Name=#{employeeDepartmentData.China_Name}</if>
+        <if test="employeeDepartmentData.Sex!=null and employeeDepartmentData.Sex!=''">and p.Sex=#{employeeDepartmentData.Sex}</if>
+        <if test="employeeDepartmentData.DateFrom!=null and employeeDepartmentData.DateFrom!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &gt;='${employeeDepartmentData.DateFrom}'</if>
+        <if test="employeeDepartmentData.DateTo!=null and employeeDepartmentData.DateTo!=''">and date_format(p.Entry_Date,'%Y-%m-%d') &lt;='${employeeDepartmentData.DateTo}'</if>
+        <if test="employeeDepartmentData.Job_Family!=null and employeeDepartmentData.Job_Family!=''">and d.Job_Family=#{employeeDepartmentData.Job_Family}</if>
+        <if test="employeeDepartmentData.Management!=null and employeeDepartmentData.Management!=''">and d.Management=#{employeeDepartmentData.Management}</if>
+        <if test="employeeDepartmentData.Entry_Position!=null and employeeDepartmentData.Entry_Position!=''">and d.Entry_Position=#{employeeDepartmentData.Entry_Position}</if>
+        <if test="employeeDepartmentData.Station!=null and employeeDepartmentData.Station!=''">and d.Station=#{employeeDepartmentData.Station}</if>
+        order by d.Id desc limit #{employeeDepartmentDataPageModel.startRow},#{employeeDepartmentDataPageModel.rows}
+    </select>
+    <select id="queryEmployeeDepartmentDataCount" resultType="int">
+        select count(*) from hwkj_employee_personal_data p left join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1 and d.Id is not null
+        <if test="employeeDepartmentData.BG!=null and employeeDepartmentData.BG!=''">and o.BG=#{employeeDepartmentData.BG}</if>
+        <if test="employeeDepartmentData.BU!=null and employeeDepartmentData.BU!=''">and o.BU=#{employeeDepartmentData.BU}</if>
+        <if test="employeeDepartmentData.Dept!=null and employeeDepartmentData.Dept!=''">and o.Dept=#{employeeDepartmentData.Dept}</if>
+        <if test="employeeDepartmentData.Ke!=null and employeeDepartmentData.Ke!=''">and o.Ke=#{employeeDepartmentData.Ke}</if>
+        <if test="employeeDepartmentData.Zu!=null and employeeDepartmentData.Zu!=''">and o.Zu=#{employeeDepartmentData.Zu}</if>
+        <if test="employeeDepartmentData.Status!=null and employeeDepartmentData.Status!=''">and p.Status=#{employeeDepartmentData.Status}</if>
+        <if test="employeeDepartmentData.Job_Number!=null and employeeDepartmentData.Job_Number!=''">and d.Job_Number=#{employeeDepartmentData.Job_Number}</if>
+        <if test="employeeDepartmentData.China_Name!=null and employeeDepartmentData.China_Name!=''">and p.China_Name=#{employeeDepartmentData.China_Name}</if>
+        <if test="employeeDepartmentData.Sex!=null and employeeDepartmentData.Sex!=''">and p.Sex=#{employeeDepartmentData.Sex}</if>
+        <if test="employeeDepartmentData.DateFrom!=null and employeeDepartmentData.DateFrom!=''">and date_format(d.Entry_Date,'%Y-%m-%d') &gt;='${employeeDepartmentData.DateFrom}'</if>
+        <if test="employeeDepartmentData.DateTo!=null and employeeDepartmentData.DateTo!=''">and date_format(d.Entry_Date,'%Y-%m-%d') &lt;='${employeeDepartmentData.DateTo}'</if>
+        <if test="employeeDepartmentData.Job_Family!=null and employeeDepartmentData.Job_Family!=''">and d.Job_Family=#{employeeDepartmentData.Job_Family}</if>
+        <if test="employeeDepartmentData.Management!=null and employeeDepartmentData.Management!=''">and d.Management=#{employeeDepartmentData.Management}</if>
+        <if test="employeeDepartmentData.Entry_Position!=null and employeeDepartmentData.Entry_Position!=''">and d.Entry_Position=#{employeeDepartmentData.Entry_Position}</if>
+        <if test="employeeDepartmentData.Station!=null and employeeDepartmentData.Station!=''">and d.Station=#{employeeDepartmentData.Station}</if>
+    </select>
+    <select id="queryEmployeeDepartmentDataForDownLoadAll" resultType="hwkj.hwkj.entity.HR.EmployeeDepartmentData">
+        select d.Id,d.Job_Number,p.China_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        d.Job_Family,d.Station,p.Phone_Number,p.WeChat_Number,p.Company_Mail,p.Entry_Date,o.Legal_Name,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,d.Org_Code,d.Job_Type,d.Start_Service,d.End_Service,d.Move_Reason,
+        p.Status,d.Creator,d.Create_Date,d.Updated_By,d.Update_Date
+        from hwkj_employee_personal_data p left join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1 and d.Id is not null
+        <if test="employeeDepartmentData.BG!=null and employeeDepartmentData.BG!=''">and o.BG=#{employeeDepartmentData.BG}</if>
+        <if test="employeeDepartmentData.BU!=null and employeeDepartmentData.BU!=''">and o.BU=#{employeeDepartmentData.BU}</if>
+        <if test="employeeDepartmentData.Dept!=null and employeeDepartmentData.Dept!=''">and o.Dept=#{employeeDepartmentData.Dept}</if>
+        <if test="employeeDepartmentData.Ke!=null and employeeDepartmentData.Ke!=''">and o.Ke=#{employeeDepartmentData.Ke}</if>
+        <if test="employeeDepartmentData.Zu!=null and employeeDepartmentData.Zu!=''">and o.Zu=#{employeeDepartmentData.Zu}</if>
+        <if test="employeeDepartmentData.Status!=null and employeeDepartmentData.Status!=''">and p.Status=#{employeeDepartmentData.Status}</if>
+        <if test="employeeDepartmentData.Job_Number!=null and employeeDepartmentData.Job_Number!=''">and d.Job_Number=#{employeeDepartmentData.Job_Number}</if>
+        <if test="employeeDepartmentData.China_Name!=null and employeeDepartmentData.China_Name!=''">and p.China_Name=#{employeeDepartmentData.China_Name}</if>
+        <if test="employeeDepartmentData.Sex!=null and employeeDepartmentData.Sex!=''">and p.Sex=#{employeeDepartmentData.Sex}</if>
+        <if test="employeeDepartmentData.DateFrom!=null and employeeDepartmentData.DateFrom!=''">and date_format(d.Entry_Date,'%Y-%m-%d') &gt;='${employeeDepartmentData.DateFrom}'</if>
+        <if test="employeeDepartmentData.DateTo!=null and employeeDepartmentData.DateTo!=''">and date_format(d.Entry_Date,'%Y-%m-%d') &lt;='${employeeDepartmentData.DateTo}'</if>
+        <if test="employeeDepartmentData.Job_Family!=null and employeeDepartmentData.Job_Family!=''">and d.Job_Family=#{employeeDepartmentData.Job_Family}</if>
+        <if test="employeeDepartmentData.Management!=null and employeeDepartmentData.Management!=''">and d.Management=#{employeeDepartmentData.Management}</if>
+        <if test="employeeDepartmentData.Entry_Position!=null and employeeDepartmentData.Entry_Position!=''">and d.Entry_Position=#{employeeDepartmentData.Entry_Position}</if>
+        <if test="employeeDepartmentData.Station!=null and employeeDepartmentData.Station!=''">and d.Station=#{employeeDepartmentData.Station}</if>
+        order by d.Id desc
+    </select>
+    <select id="queryEmployeeDepartmentDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HR.EmployeeDepartmentData">
+        select d.Id,d.Job_Number,p.China_Name,p.English_Name,p.Sex,p.Age,d.Management,d.Entry_Position,
+        d.Job_Family,d.Station,p.Phone_Number,p.WeChat_Number,p.Company_Mail,p.Entry_Date,o.Legal_Name,o.BG,o.BU,o.Region,o.Dept,
+        o.Ke,o.Zu,d.Org_Code,d.Job_Type,d.Start_Service,d.End_Service,d.Move_Reason,
+        p.Status,d.Creator,d.Create_Date,d.Updated_By,d.Update_Date
+        from hwkj_employee_personal_data p left join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number left join hwkj_org_data o on d.Org_Code=o.Org_Code where 1=1 and d.Id is not null and d.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by d.Id desc
+    </select>
+    <select id="queryEmployeeDepartmentDataForExist" resultType="int">
+        select count(*) from hwkj_employee_department_data where 1=1
+        <if test="Job_Number!=null and Job_Number!=''">and Job_Number=#{Job_Number}</if>
+    </select>
+    <select id="queryEmployeeDepartmentDataForAllExist" parameterType="hwkj.hwkj.entity.HR.EmployeeDepartmentData" resultType="int">
+        select count(*) from hwkj_employee_department_data where 1=1
+        <if test="Job_Number!=null">and Job_Number=#{Job_Number}</if>
+        <if test="Org_Code!=null">and Org_Code=#{Org_Code}</if>
+        <if test="Management!=null">and Management=#{Management}</if>
+        <if test="Job_Type!=null">and Job_Type=#{Job_Type}</if>
+        <if test="Start_Service!=null">and Start_Service=#{Start_Service}</if>
+        <if test="End_Service!=null">and End_Service=#{End_Service}</if>
+        <if test="Entry_Position!=null">and Entry_Position=#{Entry_Position}</if>
+        <if test="Job_Family!=null">and Job_Family=#{Job_Family}</if>
+        <if test="Station!=null">and Station=#{Station}</if>
+    </select>
+</mapper>

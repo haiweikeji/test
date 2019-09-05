@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.WaitClassesGlobalByAvgLatencyMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.WaitClassesGlobalByAvgLatency">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="event_class" jdbcType="VARCHAR" property="eventClass" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="total_latency" jdbcType="LONGVARCHAR" property="totalLatency" />
+    <result column="min_latency" jdbcType="LONGVARCHAR" property="minLatency" />
+    <result column="avg_latency" jdbcType="LONGVARCHAR" property="avgLatency" />
+    <result column="max_latency" jdbcType="LONGVARCHAR" property="maxLatency" />
+  </resultMap>
+</mapper>

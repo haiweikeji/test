@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/demo/demo.css">
+    <script type="text/javascript" src="easyUi/jquery.min.js"></script>
+    <script type="text/javascript" src="easyUi/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="easyUi/locale/easyui-lang-zh_CN.js"></script>
+    <title>系统首页</title>
+    <style type="text/css">
+        .picture{
+            width: 100%;
+            height:850px;
+        }
+    </style>
+</head>
+<body>
+<div class="picture" style="background: url(/hwkj/image/hwkj.png) no-repeat;background-size: cover;">
+    <div data-options=" region:'west',split:true,style:{position:'absolute',left:50,top:150}"
+         class="easyui-panel " title="用户登录" style="width:300px;text-align: center;">
+        <div style="padding:10px 60px 20px 60px">
+            <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+                <table cellpadding="5">
+                    <tr>
+                        <td><input class="easyui-textbox" data-options="prompt:'账号'" iconCls="icon-man" iconAlign=left style="width:100%;height:32px"/></td>
+                    </tr>
+                    <tr>
+                        <td><input class="easyui-textbox" data-options="prompt:'密码'" iconCls="icon-lock" iconAlign=left style="width:100%;height:32px"></input></td>
+                    </tr>
+                </table>
+            </form>
+            <div style="text-align:center;padding:5px; ">
+                <a href="#" class="easyui-linkbutton" style="width:45%;height:32px">登录</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

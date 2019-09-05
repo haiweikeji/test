@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/demo/demo.css">
+    <link rel="stylesheet" type="text/css" href="zTree/css/zTreeStyle/zTreeStyle.css">
+    <script type="text/javascript" src="easyUi/jquery.min.js"></script>
+    <script type="text/javascript" src="easyUi/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="zTree/js/jquery.ztree.all.js"></script>
+    <script type="text/javascript" src="easyUi/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<body class="easyui-layout">
+<div id="div1" data-options="region:'north'" style="width: 1000px;height: 100px">
+    <div style="height:40px">
+        <h1 style="text-align: center;font-size: 24px;font-family: 微软雅黑">海潍科技智慧管理系统</h1>
+    </div>
+    <div style="height: 40px">
+        <span>用户:</span><span>申泉</span><!--thymeleaf用法-->
+        <a href="login.do">登出</a>
+    </div>
+</div>
+<div title="菜单" data-options="region:'west'"style="width: 240px">
+    <div class="easyui-accordion" data-options="fit:true">
+        <div title="HomePage">
+            <ul id="homePage" class="ztree"></ul>
+        </div>
+        <div title="HR">
+            <ul id="hr" class="ztree"></ul>
+        </div>
+    </div>
+</div>
+<div data-options="region:'center'">
+    <div id="centerId" class="easyui-tabs" data-options="fit:true">
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url:"userRoleMenu.do",
+            type:"post",
+            dataType:"json",
+            success:function (data) {
+                $(function() {
+                    //当页面加载完成后，动态创建ztree菜单
+                    var setting = {
+                        data : {
+                            simpleData : {
+                                enable : true,//启用简单json数据描述节点数据
+                                idKey: "id",
+                                pIdKey: "pId",
+                                rootPId: 0,
+                            }
+                        },
+                        callback: {//绑定事件
+                            onClick: function(a,b,data){
+                                var page = data.page;
+                                if(page != undefined){//需要打开选项卡
+                                    //判断当前选项卡是否已经打开
+                                    var e = $("#centerId").tabs("exists",data.name);
+                                    if(e){
+                                        //已经打开
+                                        $("#centerId").tabs("select",data.name);
+                                    }else{
+                                        $("#centerId")
+                                            .tabs(
+                                                "add",
+                                                {
+                                                    title : data.name,
+                                                    content : '<iframe frameborder="0" width="100%" height="100%" src="'+data.page+'"></iframe>',
+                                                    closable : true,
+                                                    iconCls : 'icon-edit'
+                                                });
+                                    }
+                                }
+                            }
+                        }
+                    };//设置ztree相关的属性
+                    //构造json数据
+                    //创建ztree
+                    $.fn.zTree.init($("#hr"), setting, data);
+                });
+            }
+        })
+    })
+</script>
+</body>
+</html>

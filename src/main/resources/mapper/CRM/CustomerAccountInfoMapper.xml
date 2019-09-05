@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerAccountInfoDao">
+    <insert id="insertCustomerAccountInfo" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerAccountInfo">
+        insert into hwkj_customer_account_info
+        (Customer_Code,Credit_Code,Taxpayer_Number,Registration_Number,Registration_Time,Registered_Capital,Currency,Credit_Level,
+        Credit_Amount,Invoice_Address,Bank,Bank_Account,Bank_Address,Acceptable_Currency,Force_Time,Failure_Time,
+        Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Credit_Code},#{Taxpayer_Number},#{Registration_Number},#{Registration_Time},#{Registered_Capital},#{Currency},#{Credit_Level},
+        #{Credit_Amount},#{Invoice_Address},#{Bank},#{Bank_Account},#{Bank_Address},#{Acceptable_Currency},#{Force_Time},#{Failure_Time},
+        #{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteCustomerAccountInfo" parameterType="java.lang.Integer">
+        delete from hwkj_customer_account_info where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerAccountInfo" parameterType="hwkj.hwkj.entity.CRM.CustomerAccountInfo">
+        update hwkj_customer_account_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Credit_Code!=null">Credit_Code=#{Credit_Code},</if>
+            <if test="Taxpayer_Number!=null">Taxpayer_Number=#{Taxpayer_Number},</if>
+            <if test="Registration_Number!=null">Registration_Number=#{Registration_Number},</if>
+            <if test="Registration_Time!=null">Registration_Time=#{Registration_Time},</if>
+            <if test="Registered_Capital!=null">Registered_Capital=#{Registered_Capital},</if>
+            <if test="Currency!=null">Currency=#{Currency},</if>
+            <if test="Credit_Level!=null">Credit_Level=#{Credit_Level},</if>
+            <if test="Credit_Amount!=null">Credit_Amount=#{Credit_Amount},</if>
+            <if test="Invoice_Address!=null">Invoice_Address=#{Invoice_Address},</if>
+            <if test="Bank!=null">Bank=#{Bank},</if>
+            <if test="Bank_Account!=null">Bank_Account=#{Bank_Account},</if>
+            <if test="Bank_Address!=null">Bank_Address=#{Bank_Address},</if>
+            <if test="Acceptable_Currency!=null">Acceptable_Currency=#{Acceptable_Currency},</if>
+            <if test="Force_Time!=null">Force_Time=#{Force_Time},</if>
+            <if test="Failure_Time!=null">Failure_Time=#{Failure_Time},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerAccountInfoList" resultType="hwkj.hwkj.entity.CRM.CustomerAccountInfo">
+        select a.Id,a.Customer_Code,b.Chinese_Abbreviation,a.Credit_Code,a.Taxpayer_Number,a.Registration_Number,
+        a.Registration_Time,a.Registered_Capital,a.Currency,a.Credit_Level,a.Credit_Amount,a.Invoice_Address,
+        a.Bank,a.Bank_Account,a.Bank_Address,a.Acceptable_Currency,a.Force_Time,a.Failure_Time,
+        a.Creator,a.Create_Date,a.Updated_By,a.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1 and a.Id is not null
+        <if test="customerAccountInfoPageModel.page!=null and customerAccountInfoPageModel.rows!=null"></if>
+        <if test="customerAccountInfo.Chinese_Abbreviation!=null and customerAccountInfo.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerAccountInfo.Chinese_Abbreviation}</if>
+        <if test="customerAccountInfo.Customer_Code!=null and customerAccountInfo.Customer_Code!=''">and a.Customer_Code=#{customerAccountInfo.Customer_Code}</if>
+        <if test="customerAccountInfo.Credit_Level!=null and customerAccountInfo.Credit_Level!=''">and a.Credit_Level=#{customerAccountInfo.Credit_Level}</if>
+        <if test="customerAccountInfo.Creator!=null and customerAccountInfo.Creator!=''">and a.Creator=#{customerAccountInfo.Creator}</if>
+        <if test="customerAccountInfo.DateFrom!=null and customerAccountInfo.DateFrom!=''">and date_format(a.Create_Date,'%Y-%m-%d') &gt;='${customerAccountInfo.DateFrom}'</if>
+        <if test="customerAccountInfo.DateTo!=null and customerAccountInfo.DateTo!=''">and date_format(a.Create_Date,'%Y-%m-%d') &lt;='${customerAccountInfo.DateTo}'</if>
+        order by a.Id desc limit #{customerAccountInfoPageModel.startRow},#{customerAccountInfoPageModel.rows}
+    </select>
+    <select id="queryCustomerAccountInfoCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1 and a.Id is not null
+        <if test="customerAccountInfoPageModel.page!=null and customerAccountInfoPageModel.rows!=null"></if>
+        <if test="customerAccountInfo.Chinese_Abbreviation!=null and customerAccountInfo.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerAccountInfo.Chinese_Abbreviation}</if>
+        <if test="customerAccountInfo.Customer_Code!=null and customerAccountInfo.Customer_Code!=''">and a.Customer_Code=#{customerAccountInfo.Customer_Code}</if>
+        <if test="customerAccountInfo.Credit_Level!=null and customerAccountInfo.Credit_Level!=''">and a.Credit_Level=#{customerAccountInfo.Credit_Level}</if>
+        <if test="customerAccountInfo.Creator!=null and customerAccountInfo.Creator!=''">and a.Creator=#{customerAccountInfo.Creator}</if>
+        <if test="customerAccountInfo.DateFrom!=null and customerAccountInfo.DateFrom!=''">and date_format(a.Create_Date,'%Y-%m-%d') &gt;='${customerAccountInfo.DateFrom}'</if>
+        <if test="customerAccountInfo.DateTo!=null and customerAccountInfo.DateTo!=''">and date_format(a.Create_Date,'%Y-%m-%d') &lt;='${customerAccountInfo.DateTo}'</if>
+    </select>
+    <select id="queryCustomerAccountInfoById" resultType="hwkj.hwkj.entity.CRM.CustomerAccountInfo">
+        select * from hwkj_customer_account_info where Id=#{Id}
+    </select>
+    <select id="queryCustomerAccountInfoForDownLoadAll" resultType="hwkj.hwkj.entity.CRM.CustomerAccountInfo">
+        select a.Id,a.Customer_Code,b.Chinese_Abbreviation,a.Credit_Code,a.Taxpayer_Number,a.Registration_Number,
+        a.Registration_Time,a.Registered_Capital,a.Currency,a.Credit_Level,a.Credit_Amount,a.Invoice_Address,
+        a.Bank,a.Bank_Account,a.Bank_Address,a.Acceptable_Currency,a.Force_Time,a.Failure_Time,
+        a.Creator,a.Create_Date,a.Updated_By,a.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1 and a.Id is not null
+        <if test="customerAccountInfo.Chinese_Abbreviation!=null and customerAccountInfo.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerAccountInfo.Chinese_Abbreviation}</if>
+        <if test="customerAccountInfo.Customer_Code!=null and customerAccountInfo.Customer_Code!=''">and a.Customer_Code=#{customerAccountInfo.Customer_Code}</if>
+        <if test="customerAccountInfo.Credit_Level!=null and customerAccountInfo.Credit_Level!=''">and a.Credit_Level=#{customerAccountInfo.Credit_Level}</if>
+        <if test="customerAccountInfo.Creator!=null and customerAccountInfo.Creator!=''">and a.Creator=#{customerAccountInfo.Creator}</if>
+        <if test="customerAccountInfo.DateFrom!=null and customerAccountInfo.DateFrom!=''">and date_format(a.Create_Date,'%Y-%m-%d') &gt;='${customerAccountInfo.DateFrom}'</if>
+        <if test="customerAccountInfo.DateTo!=null and customerAccountInfo.DateTo!=''">and date_format(a.Create_Date,'%Y-%m-%d') &lt;='${customerAccountInfo.DateTo}'</if>
+        order by a.Id desc
+    </select>
+    <select id="queryCustomerAccountInfoForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerAccountInfo">
+        select a.Id,a.Customer_Code,b.Chinese_Abbreviation,a.Credit_Code,a.Taxpayer_Number,a.Registration_Number,
+        a.Registration_Time,a.Registered_Capital,a.Currency,a.Credit_Level,a.Credit_Amount,a.Invoice_Address,
+        a.Bank,a.Bank_Account,a.Bank_Address,a.Acceptable_Currency,a.Force_Time,a.Failure_Time,
+        a.Creator,a.Create_Date,a.Updated_By,a.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_account_info a on
+        b.Customer_Code=a.Customer_Code where 1=1 and a.Id is not null and a.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+        order by a.Id desc
+    </select>
+    <select id="queryCustomerAccountInfoForExist" resultType="int">
+        select count(*) from hwkj_customer_account_info where 1=1
+        <if test="Customer_Code!=null and Customer_Code!=''">and Customer_Code=#{Customer_Code}</if>
+    </select>
+    <select id="queryCustomerAccountInfoForAllExist" parameterType="hwkj.hwkj.entity.CRM.CustomerAccountInfo" resultType="int">
+        select count(*) from hwkj_customer_account_info where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Credit_Code!=null">and Credit_Code=#{Credit_Code}</if>
+        <if test="Taxpayer_Number!=null">and Taxpayer_Number=#{Taxpayer_Number}</if>
+        <if test="Registration_Number!=null">and Registration_Number=#{Registration_Number}</if>
+        <if test="Registration_Time!=null">and Registration_Time=#{Registration_Time}</if>
+        <if test="Registered_Capital!=null">and Registered_Capital=#{Registered_Capital}</if>
+        <if test="Currency!=null">and Currency=#{Currency}</if>
+        <if test="Credit_Level!=null">and Credit_Level=#{Credit_Level}</if>
+        <if test="Credit_Amount!=null">and Credit_Amount=#{Credit_Amount}</if>
+        <if test="Invoice_Address!=null">and Invoice_Address=#{Invoice_Address}</if>
+        <if test="Bank!=null">and Bank=#{Bank}</if>
+        <if test="Bank_Account!=null">and Bank_Account=#{Bank_Account}</if>
+        <if test="Bank_Address!=null">and Bank_Address=#{Bank_Address}</if>
+        <if test="Acceptable_Currency!=null">and Acceptable_Currency=#{Acceptable_Currency}</if>
+        <if test="Force_Time!=null">and Force_Time=#{Force_Time}</if>
+        <if test="Failure_Time!=null">and Failure_Time=#{Failure_Time}</if>
+    </select>
+</mapper>

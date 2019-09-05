@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">员工姓名:</span>
+        <input id="name" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">考勤开始日期:</span>
+        <input id="attendance_Date_From" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">考勤截止日期:</span>
+        <input id="attendance_Date_To" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">上班打卡结果:</span>
+        <select id="morning_Punch_Result" class="easyui-combobox" style="width: 120px;height: 25px">
+            <option></option>
+            <option>正常</option>
+            <option>外勤</option>
+            <option>迟到</option>
+            <option>请假</option>
+            <option>异常</option>
+        </select>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">员工工号:</span>
+        <input id="job_Number" class="easyui-textbox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">月度开始月份:</span>
+        <input id="month_Summary_From" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">月度截止月份:</span>
+        <input id="month_Summary_To" class="easyui-datebox" style="width: 120px;height: 25px" />&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">下班打卡结果:</span>
+        <select id="afternoon_Punch_Result" class="easyui-combobox" style="width: 120px;height: 25px">
+            <option></option>
+            <option>正常</option>
+            <option>外勤</option>
+            <option>早退</option>
+            <option>请假</option>
+            <option>异常</option>
+        </select>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="Edit()" style="width:90px">设置班次</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:580px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="morning_In_Time" class="easyui-textbox" style="width: 230px" required="true"   label="早上上班时间:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="morning_Out_Time" class="easyui-textbox" style="width: 230px;" required="true" label="中午下班时间:"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="afternoon_In_Time" class="easyui-textbox" style="width: 230px" required="true"  label="下午上班时间:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="afternoon_Out_Time" class="easyui-textbox" style="width: 230px;" required="true" label="晚上下班时间:"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:30px 30px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox" style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryEmployeePunchDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'name',title:'姓名',align:'center',titleAlign: true},
+                        {field:'dept',title:'部门',align:'center',titleAlign: true},
+                        {field:'job_Number',title:'工号',align:'center',titleAlign: true},
+                        {field:'station',title:'职位',align:'center',titleAlign: true},
+                        {field:'attendance_Date',title:'考勤日期',align:'center',titleAlign: true},
+                        {field:'morning_Work_Time',title:'上午上班时间',align:'center',titleAlign: true},
+                        {field:'morning_Punch_Time',title:'上班打卡时间',align:'center',titleAlign: true},
+                        {field:'morning_Punch_Result',title:'上班打卡结果',align:'center',titleAlign: true},
+                        {field:'morning_Punch_Address',title:'上班打卡地址',align:'center',titleAlign: true},
+                        {field:'morning_Punch_Equipment',title:'上班打卡设备',align:'center',titleAlign: true},
+                        {field:'afternoon_Work_Time',title:'下午上班时间',align:'center',titleAlign: true},
+                        {field:'afternoon_Punch_Time',title:'下班打卡时间',align:'center',titleAlign: true},
+                        {field:'afternoon_Punch_Result',title:'下班打卡结果',align:'center',titleAlign: true},
+                        {field:'afternoon_Punch_Address',title:'下班打卡地址',align:'center',titleAlign: true},
+                        {field:'afternoon_Punch_Equipment',title:'下班打卡设备',align:'center',titleAlign: true},
+                        {field:'later_Amount',title:'迟到次数',align:'center',titleAlign: true},
+                        {field:'later_Time',title:'迟到时间',align:'center',titleAlign: true},
+                        {field:'early_Amount',title:'早退次数',align:'center',titleAlign: true},
+                        {field:'early_Time',title:'早退时间',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryEmployeePunchData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Name:$("#name").val(),Attendance_Date_From:$("#attendance_Date_From").val(),Attendance_Date_To:$("#attendance_Date_To").val(),Morning_Punch_Result:$("#morning_Punch_Result").val(),
+                            Job_Number:$("#job_Number").val(),Month_Summary_From:$("#month_Summary_From").val(),Month_Summary_To:$("#month_Summary_To").val(),Afternoon_Punch_Result:$("#afternoon_Punch_Result").val(),},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Name,Attendance_Date_From,Attendance_Date_To,Morning_Punch_Result,Job_Number,Month_Summary_From,Month_Summary_To,Afternoon_Punch_Result){//分页触发
+                 findOption(page, rows,Name,Attendance_Date_From,Attendance_Date_To,Morning_Punch_Result,Job_Number,Month_Summary_From,Month_Summary_To,Afternoon_Punch_Result);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,Name,Attendance_Date_From,Attendance_Date_To,Morning_Punch_Result,Job_Number,Month_Summary_From,Month_Summary_To,Afternoon_Punch_Result)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Name:Name,Attendance_Date_From:Attendance_Date_From,Attendance_Date_To:Attendance_Date_To,Morning_Punch_Result:Morning_Punch_Result,Job_Number:Job_Number,Month_Summary_From:Month_Summary_From,Month_Summary_To:Month_Summary_To,Afternoon_Punch_Result:Afternoon_Punch_Result});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryEmployeePunchData.do",
+            data : {
+                page:page,
+                rows:rows,
+                Name:Name,
+                Attendance_Date_From:Attendance_Date_From,
+                Attendance_Date_To:Attendance_Date_To,
+                Morning_Punch_Result:Morning_Punch_Result,
+                Job_Number:Job_Number,
+                Month_Summary_From:Month_Summary_From,
+                Month_Summary_To:Month_Summary_To,
+                Afternoon_Punch_Result:Afternoon_Punch_Result
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var job_Number=[];
+    function Download() {
+        var Name=$("#name").val();
+        var Attendance_Date_From=$("#attendance_Date_From").val();
+        var Attendance_Date_To=$("#attendance_Date_To").val();
+        var Morning_Punch_Result=$("#morning_Punch_Result").val();
+        var Job_Number=$("#job_Number").val();
+        var Month_Summary_From=$("#month_Summary_From").val();
+        var Month_Summary_To=$("#month_Summary_To").val();
+        var Afternoon_Punch_Result=$("#afternoon_Punch_Result").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            job_Number=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                job_Number.push(item.job_Number);
+            });
+            location.href="employeePunchDataDownLoadExcel.do?Job_Number="+job_Number;
+        }else {
+            location.href="employeePunchDataDownLoadExcelAll.do?Name="+Name+"&Attendance_Date_From="+Attendance_Date_From+
+                "&Attendance_Date_To="+Attendance_Date_To+"&Morning_Punch_Result="+Morning_Punch_Result+"&Job_Number="+Job_Number+
+                "&Month_Summary_From="+Month_Summary_From+"&Month_Summary_To="+Month_Summary_To+"&Afternoon_Punch_Result="+Afternoon_Punch_Result;
+        }
+    };
+    function ExcelUpload(){
+        $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm2').form('clear');
+        url = 'employeePunchDataUpload.do';
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#dlg2').dialog('close');
+                    $('#g').datagrid('reload');
+                }
+                else if (result.message=="error"){
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /*$(function () {
+        $("#upload").upload({
+            name: "file",
+            action: "employeePunchDataUpload.do",
+            enctype: "multipart/form-data",
+            onComplete:function (data) {
+                if(data=="success"){
+                    $('#g').datagrid('reload');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                }else {
+                    $.messager.alert("提示信息","数据上传失败,请查看文件格式是否正确!","warning")
+                }
+            },
+        });
+    });*/
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+
+    })(jQuery);
+    $("#month_Summary_From").datebox({
+        onShowPanel: function () {//显示日趋选择对象后再触发弹出月份层的事件，初始化时没有生成月份层
+            span.trigger('click'); //触发click事件弹出月份层
+            if (!tds)
+                setTimeout(function () { //延时触发获取月份对象，因为上面的事件触发和对象生成有时间间隔
+                    tds = p.find('div.calendar-menu-month-inner td');
+                    tds.click(function (e) {
+                        e.stopPropagation(); //禁止冒泡执行easyui给月份绑定的事件
+                        var year = /\d{4}/.exec(span.html())[0], //得到年份
+                            month = parseInt($(this).attr('abbr'), 10); //月份
+                        $('#month_Summary_From').datebox('hidePanel') //隐藏日期对象
+                            .datebox('setValue', year + '-' + month); //设置日期的值
+                    });
+                }, 0);
+        },
+        parser: function (s) {//配置parser，返回选择的日期
+            if (!s) return new Date();
+            var arr = s.split('-');
+            return new Date(parseInt(arr[0], 10), parseInt(arr[1], 10) - 1, 1);
+        },
+        formatter: function (d) { return d.getFullYear() + '-' + (d.getMonth() + 1); }//配置formatter，只返回年月
+    });
+    var p = $("#month_Summary_From").datebox('panel'), //日期选择对象
+        tds = false, //日期选择对象中月份
+        span = p.find('span.calendar-text'); //显示月份层的触发控件
+    var curr_time = new Date();
+    var date=curr_time.getFullYear() +'-'+(curr_time.getMonth()+1);
+    $("#month_Summary_From").datebox("setValue",date);
+
+    $("#month_Summary_To").datebox({
+        onShowPanel: function () {//显示日趋选择对象后再触发弹出月份层的事件，初始化时没有生成月份层
+            span_to.trigger('click'); //触发click事件弹出月份层
+            if (!tds_to)
+                setTimeout(function () { //延时触发获取月份对象，因为上面的事件触发和对象生成有时间间隔
+                    tds_to = p_to.find('div.calendar-menu-month-inner td');
+                    tds_to.click(function (e) {
+                        e.stopPropagation(); //禁止冒泡执行easyui给月份绑定的事件
+                        var year = /\d{4}/.exec(span_to.html())[0], //得到年份
+                            month = parseInt($(this).attr('abbr'), 10); //月份
+                        $("#month_Summary_To").datebox('hidePanel') //隐藏日期对象
+                            .datebox('setValue', year + '-' + month); //设置日期的值
+                    });
+                }, 0);
+        },
+        parser: function (s) {//配置parser，返回选择的日期
+            if (!s) return new Date();
+            var arr = s.split('-');
+            return new Date(parseInt(arr[0], 10), parseInt(arr[1], 10) - 1, 1);
+        },
+        formatter: function (d) { return d.getFullYear() + '-' + (d.getMonth() + 1); }//配置formatter，只返回年月
+    });
+    var p_to = $("#month_Summary_To").datebox('panel'); //日期选择对象
+    var tds_to = false; //日期选择对象中月份
+    var span_to = p_to.find('span.calendar-text'); //显示月份层的触发控件
+    var curr_time_to = new Date();
+    var date_to=curr_time_to.getFullYear() +'-'+(curr_time_to.getMonth()+1);
+    $("#month_Summary_To").datebox("setValue",date_to);
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.EmployeePersonalDataDao">
+    <insert id="insertEmployeePersonalData" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.HR.EmployeePersonalData" >
+        insert into hwkj_employee_personal_data (Job_Number,China_Name,Education,English_Name,Major,Sex,Age,Birth_Date,Graduated_From,Phone_Number,Graduated_Time,
+        WeChat_Number,Language,Company_Mail,Native_Place,Private_Mail,Nation,Entry_Date,Religious_Belief,Entry_Position,Marital_Status,
+        Id_Card,Member_Family,Id_Card_Address,Relationship,Present_Address,Emergency_Contact_Person,History_Disease,Emergency_Contact_Person_Relationship,
+        Status,Relationship_Phone,Recruitment_Sources,Periods_Number,Blacklist,Referee,Remarks,Photo,Creator,Create_Date)values
+         (#{Job_Number},#{China_Name},#{Education},#{English_Name},#{Major},#{Sex},#{Age},#{Birth_Date},#{Graduated_From},#{Phone_Number},#{Graduated_Time},
+        #{WeChat_Number},#{Language},#{Company_Mail},#{Native_Place},#{Private_Mail},#{Nation},#{Entry_Date},#{Religious_Belief},#{Entry_Position},#{Marital_Status},
+        #{Id_Card},#{Member_Family},#{Id_Card_Address},#{Relationship},#{Present_Address},#{Emergency_Contact_Person},#{History_Disease},#{Emergency_Contact_Person_Relationship},
+        #{Status},#{Relationship_Phone},#{Recruitment_Sources},#{Periods_Number},#{Blacklist},#{Referee},#{Remarks},#{Photo},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteEmployeePersonalData" parameterType="java.lang.Integer">
+        delete from hwkj_employee_personal_data where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateEmployeePersonalData" parameterType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        update hwkj_employee_personal_data
+        <trim prefix="set" suffixOverrides=",">
+            <if test="China_Name!=null">China_Name=#{China_Name},</if>
+            <if test="Education!=null">Education=#{Education},</if>
+            <if test="English_Name!=null">English_Name=#{English_Name},</if>
+            <if test="Major!=null">Major=#{Major},</if>
+            <if test="Sex!=null">Sex=#{Sex},</if>
+            <if test="Age!=null">Age=#{Age},</if>
+            <if test="Birth_Date!=null">Birth_Date=#{Birth_Date},</if>
+            <if test="Graduated_From!=null">Graduated_From=#{Graduated_From},</if>
+            <if test="Phone_Number!=null">Phone_Number=#{Phone_Number},</if>
+            <if test="Graduated_Time!=null">Graduated_Time=#{Graduated_Time},</if>
+            <if test="WeChat_Number!=null">WeChat_Number=#{WeChat_Number},</if>
+            <if test="Language!=null">Language=#{Language},</if>
+            <if test="Company_Mail!=null">Company_Mail=#{Company_Mail},</if>
+            <if test="Native_Place!=null">Native_Place=#{Native_Place},</if>
+            <if test="Private_Mail!=null">Private_Mail=#{Private_Mail},</if>
+            <if test="Nation!=null">Nation=#{Nation},</if>
+            <if test="Entry_Date!=null">Entry_Date=#{Entry_Date},</if>
+            <if test="Religious_Belief!=null">Religious_Belief=#{Religious_Belief},</if>
+            <if test="Entry_Position!=null">Entry_Position=#{Entry_Position},</if>
+            <if test="Marital_Status!=null">Marital_Status=#{Marital_Status},</if>
+            <if test="Id_Card!=null">Id_Card=#{Id_Card},</if>
+            <if test="Member_Family!=null">Member_Family=#{Member_Family},</if>
+            <if test="Id_Card_Address!=null">Id_Card_Address=#{Id_Card_Address},</if>
+            <if test="Relationship!=null">Relationship=#{Relationship},</if>
+            <if test="Present_Address!=null">Present_Address=#{Present_Address},</if>
+            <if test="Emergency_Contact_Person!=null">Emergency_Contact_Person=#{Emergency_Contact_Person},</if>
+            <if test="History_Disease!=null">History_Disease=#{History_Disease},</if>
+            <if test="Emergency_Contact_Person_Relationship!=null">Emergency_Contact_Person_Relationship=#{Emergency_Contact_Person_Relationship},</if>
+            <if test="Status!=null">Status=#{Status},</if>
+            <if test="Relationship_Phone!=null">Relationship_Phone=#{Relationship_Phone},</if>
+            <if test="Recruitment_Sources!=null">Recruitment_Sources=#{Recruitment_Sources},</if>
+            <if test="Periods_Number!=null">Periods_Number=#{Periods_Number},</if>
+            <if test="Blacklist!=null">Blacklist=#{Blacklist},</if>
+            <if test="Referee!=null">Referee=#{Referee},</if>
+            <if test="Remarks!=null">Remarks=#{Remarks},</if>
+            <if test="Leave_Date!=null">Leave_Date=#{Leave_Date},</if>
+            <if test="Photo!=null">Photo=#{Photo},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryEmployeePersonalDataList" resultType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        select * from hwkj_employee_personal_data where 1=1
+        <if test="employeePersonalDataPageModel.page != null and  employeePersonalDataPageModel.rows != null"></if>
+        <if test="employeePersonalData.Status!=null and employeePersonalData.Status!=''">and Status=#{employeePersonalData.Status}</if>
+        <if test="employeePersonalData.Job_Number!=null and employeePersonalData.Job_Number!=''">and Job_Number=#{employeePersonalData.Job_Number}</if>
+        <if test="employeePersonalData.China_Name!=null and employeePersonalData.China_Name!=''">and China_Name=#{employeePersonalData.China_Name}</if>
+        <if test="employeePersonalData.Sex!=null and employeePersonalData.Sex!=''">and Sex=#{employeePersonalData.Sex}</if>
+        <if test="employeePersonalData.DateFrom!=null and employeePersonalData.DateFrom!=''">and date_format(Entry_Date,'%Y-%m-%d') &gt;='${employeePersonalData.DateFrom}'</if>
+        <if test="employeePersonalData.DateTo!=null and employeePersonalData.DateTo!=''">and date_format(Entry_Date,'%Y-%m-%d') &lt;='${employeePersonalData.DateTo}'</if>
+        order by Id desc limit #{employeePersonalDataPageModel.startRow},#{employeePersonalDataPageModel.rows}
+    </select>
+    <select id="queryEmployeePersonalDataCount" resultType="int">
+        select count(*) from hwkj_employee_personal_data where 1=1
+        <if test="employeePersonalDataPageModel.page != null and  employeePersonalDataPageModel.rows != null"></if>
+        <if test="employeePersonalData.Status!=null and employeePersonalData.Status!=''">and Status=#{employeePersonalData.Status}</if>
+        <if test="employeePersonalData.Job_Number!=null and employeePersonalData.job_Number!=''">and Job_Number=#{employeePersonalData.Job_Number}</if>
+        <if test="employeePersonalData.China_Name!=null and employeePersonalData.China_Name!=''">and China_Name=#{employeePersonalData.China_Name}</if>
+        <if test="employeePersonalData.Sex!=null and employeePersonalData.Sex!=''">and Sex=#{employeePersonalData.Sex}</if>
+        <if test="employeePersonalData.DateFrom!=null and employeePersonalData.DateFrom!=''">and date_format(Entry_Date,'%Y-%m-%d') &gt;='${employeePersonalData.DateFrom}'</if>
+        <if test="employeePersonalData.DateTo!=null and employeePersonalData.DateTo!=''">and date_format(Entry_Date,'%Y-%m-%d') &lt;='${employeePersonalData.DateTo}'</if>
+    </select>
+    <select id="queryEmployeePersonalDataForExist" resultType="int">
+        select count(*) from hwkj_employee_personal_data where 1=1
+        <if test="Id_Card!=null and Id_Card!=''">and Id_Card=#{Id_Card}</if>
+    </select>
+    <select id="queryEmployeePersonalDataForDownLoadAll" resultType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        select * from hwkj_employee_personal_data where 1=1
+        <if test="employeePersonalData.Status!=null and employeePersonalData.Status!=''">and Status=#{employeePersonalData.Status}</if>
+        <if test="employeePersonalData.Job_Number!=null and employeePersonalData.Job_Number!=''">and Job_Number=#{employeePersonalData.Job_Number}</if>
+        <if test="employeePersonalData.China_Name!=null and employeePersonalData.China_Name!=''">and China_Name=#{employeePersonalData.China_Name}</if>
+        <if test="employeePersonalData.Sex!=null and employeePersonalData.Sex!=''">and Sex=#{employeePersonalData.Sex}</if>
+        <if test="employeePersonalData.DateFrom!=null and employeePersonalData.DateFrom!=''">and date_format(Entry_Date,'%Y-%m-%d') &gt;='${employeePersonalData.DateFrom}'</if>
+        <if test="employeePersonalData.DateTo!=null and employeePersonalData.DateTo!=''">and date_format(Entry_Date,'%Y-%m-%d') &lt;='${employeePersonalData.DateTo}'</if>
+        order by Id desc
+    </select>
+    <select id="queryEmployeePersonalDataForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        select * from hwkj_employee_personal_data where 1=1 and Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+    </select>
+    <select id="queryEmployeePersonalDataLastData" resultType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        select Job_Number from hwkj.hwkj_employee_personal_data order by Id desc limit 1
+    </select>
+    <select id="queryEmployeePersonalDataNotExistJobNumberForEmployeeDepartmentData" resultType="hwkj.hwkj.entity.HR.EmployeePersonalData">
+        select p.Job_Number,p.China_Name from hwkj_employee_personal_data p left join hwkj_employee_department_data d on
+        p.Job_Number=d.Job_Number where 1=1 and d.Job_Number is null
+        <if test="Status!=null and Status!=''">and p.Status=#{Status}</if>
+        order by p.Id desc
+    </select>
+    <select id="queryEmployeePersonalDataForUploadJobNumber" resultType="int">
+        select count(*) from hwkj_employee_personal_data where 1=1
+        <if test="Job_Number!=null and Job_Number!=''">and Job_Number=#{Job_Number}</if>
+        <if test="Status!=null and Status!=''">and Status=#{Status}</if>
+    </select>
+</mapper>

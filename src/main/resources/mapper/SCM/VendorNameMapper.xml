@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.SCM.VendorNameDao">
+    <insert id="insertVendorName" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.SCM.VendorName">
+        insert into hwkj_vendor_name
+        (Standard_Chinese_Full,Standard_Chinese_Abbreviation,Standard_English_Full,
+        Standard_English_Abbreviation,Actual_Chinese_Full,Actual_English_Full,
+        Status,Creator,Create_Date)
+        values
+        (#{Standard_Chinese_Full},#{Standard_Chinese_Abbreviation},#{Standard_English_Full},
+        #{Standard_English_Abbreviation},#{Actual_Chinese_Full},#{Actual_English_Full},
+        #{Status},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteVendorName">
+        delete from hwkj_vendor_name where Id=#{Id}
+    </delete>
+    <update id="updateVendorName" parameterType="hwkj.hwkj.entity.SCM.VendorName">
+        update hwkj_vendor_name
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Standard_Chinese_Full!=null and Standard_Chinese_Full!=''">Standard_Chinese_Full=#{Standard_Chinese_Full},</if>
+            <if test="Standard_Chinese_Abbreviation!=null and Standard_Chinese_Abbreviation!=''">Standard_Chinese_Abbreviation=#{Standard_Chinese_Abbreviation},</if>
+            <if test="Standard_English_Full!=null and Standard_English_Full!=''">Standard_English_Full=#{Standard_English_Full},</if>
+            <if test="Standard_English_Abbreviation!=null and Standard_English_Abbreviation!=''">Standard_English_Abbreviation=#{Standard_English_Abbreviation},</if>
+            <if test="Actual_Chinese_Full!=null and Actual_Chinese_Full!=''">Actual_Chinese_Full=#{Actual_Chinese_Full},</if>
+            <if test="Actual_English_Full!=null and Actual_English_Full!=''">Actual_English_Full=#{Actual_English_Full},</if>
+            <if test="Status!=null and Status!=''">Status=#{Status},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryVendorNameList" resultType="hwkj.hwkj.entity.SCM.VendorName">
+        select * from hwkj_vendor_name where 1=1
+        <if test="vendorNamePageModel.page!=null and vendorNamePageModel.rows!=null"></if>
+        <if test="vendorName.Standard_Chinese_Full!=null and vendorName.Standard_Chinese_Full!=''">and Standard_Chinese_Full=#{vendorName.Standard_Chinese_Full}</if>
+        <if test="vendorName.Standard_Chinese_Abbreviation!=null and vendorName.Standard_Chinese_Abbreviation!=''">and Standard_Chinese_Abbreviation=#{vendorName.Standard_Chinese_Abbreviation}</if>
+        <if test="vendorName.Actual_Chinese_Full!=null and vendorName.Actual_Chinese_Full!=''">and Actual_Chinese_Full=#{vendorName.Actual_Chinese_Full}</if>
+        <if test="vendorName.Actual_English_Full!=null and vendorName.Actual_English_Full!=''">and Actual_English_Full=#{vendorName.Actual_English_Full}</if>
+        order by Id limit #{vendorNamePageModel.startRow},#{vendorNamePageModel.rows}
+    </select>
+    <select id="queryVendorNameCount" resultType="int">
+        select count(*) from hwkj_vendor_name where 1=1
+        <if test="vendorNamePageModel.page!=null and vendorNamePageModel.rows!=null"></if>
+        <if test="vendorName.Standard_Chinese_Full!=null and vendorName.Standard_Chinese_Full!=''">and Standard_Chinese_Full=#{vendorName.Standard_Chinese_Full}</if>
+        <if test="vendorName.Standard_Chinese_Abbreviation!=null and vendorName.Standard_Chinese_Abbreviation!=''">and Standard_Chinese_Abbreviation=#{vendorName.Standard_Chinese_Abbreviation}</if>
+        <if test="vendorName.Actual_Chinese_Full!=null and vendorName.Actual_Chinese_Full!=''">and Actual_Chinese_Full=#{vendorName.Actual_Chinese_Full}</if>
+        <if test="vendorName.Actual_English_Full!=null and vendorName.Actual_English_Full!=''">and Actual_English_Full=#{vendorName.Actual_English_Full}</if>
+    </select>
+    <select id="queryVendorNameById" resultType="hwkj.hwkj.entity.SCM.VendorName">
+        select * from hwkj_vendor_name where Id=#{Id}
+    </select>
+    <select id="queryVendorNameForDownLoadAll" resultType="hwkj.hwkj.entity.SCM.VendorName">
+        select * from hwkj_vendor_name where 1=1
+        <if test="vendorName.Standard_Chinese_Full!=null and vendorName.Standard_Chinese_Full!=''">and Standard_Chinese_Full=#{vendorName.Standard_Chinese_Full}</if>
+        <if test="vendorName.Standard_Chinese_Abbreviation!=null and vendorName.Standard_Chinese_Abbreviation!=''">and Standard_Chinese_Abbreviation=#{vendorName.Standard_Chinese_Abbreviation}</if>
+        <if test="vendorName.Actual_Chinese_Full!=null and vendorName.Actual_Chinese_Full!=''">and Actual_Chinese_Full=#{vendorName.Actual_Chinese_Full}</if>
+        <if test="vendorName.Actual_English_Full!=null and vendorName.Actual_English_Full!=''">and Actual_English_Full=#{vendorName.Actual_English_Full}</if>
+    </select>
+    <select id="queryVendorNameForDownLoad" resultType="hwkj.hwkj.entity.SCM.VendorName">
+        select * from hwkj_vendor_name where Id=#{Id}
+    </select>
+    <select id="queryVendorNameForExist" parameterType="hwkj.hwkj.entity.SCM.VendorName" resultType="int">
+        select count(*) from hwkj_vendor_name where 1=1
+        <if test="Actual_Chinese_Full!=null and Actual_Chinese_Full!=''">and Actual_Chinese_Full=#{Actual_Chinese_Full}</if>
+    </select>
+    <insert id="uploadVendorName" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="java.util.List">
+        insert into hwkj_vendor_name
+        (Standard_Chinese_Full,Standard_Chinese_Abbreviation,Standard_English_Full,
+        Standard_English_Abbreviation,Actual_Chinese_Full,Actual_English_Full,
+        Status,Creator,Create_Date)
+        values
+        <foreach collection="list" item="vendorNameList" separator=",">
+            (#{vendorNameList.Standard_Chinese_Full},#{vendorNameList.Standard_Chinese_Abbreviation},#{vendorNameList.Standard_English_Full},
+            #{vendorNameList.Standard_English_Abbreviation},#{vendorNameList.Actual_Chinese_Full},#{vendorNameList.Actual_English_Full},
+            #{vendorNameList.Status},#{vendorNameList.Creator},#{vendorNameList.Create_Date})
+        </foreach>
+    </insert>
+    <select id="queryVendorNameForOption" resultType="hwkj.hwkj.entity.SCM.VendorName">
+        select * from hwkj_vendor_name where 1=1
+        <if test="Vendor_Chinese_Full!=null and Vendor_Chinese_Full!=''">and Standard_Chinese_Full=#{Vendor_Chinese_Full}</if>
+        group by Standard_Chinese_Full order by Id
+    </select>
+    <select id="queryVendorNameForBrandOption" resultType="hwkj.hwkj.entity.SCM.VendorName">
+        select Brand from hwkj_vendor_name where 1=1
+        <if test="Brand!=null and Brand!=''">and Brand=#{Brand}</if>
+    </select>
+</mapper>

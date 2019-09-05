@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">事业群:</span>
+        <input id="bg" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">事业处:</span>
+        <input id="bu" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">部门名称:</span>
+        <input id="dept" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">课&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <input id="ke" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">组&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <input id="zu" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">在职状态:</span>
+        <select id="status" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">工&nbsp;&nbsp;&nbsp;号:</span>
+        <input type="text" id="job_Number" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">姓&nbsp;&nbsp;&nbsp;名:</span>
+        <input type="text" id="name" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <select id="sex" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>男</option>
+            <option>女</option>
+        </select>&nbsp;&nbsp;
+        <span style="font-size: 10px">入职时间:</span>
+        <input id="dateFrom" name="dateFrom" class="easyui-datebox" style="width: 120px;height: 25px">
+        <span style="font-size: 10px">To</span>
+        <input id="dateTo" name="dateTo" class="easyui-datebox" style="width: 120px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">职&nbsp;&nbsp;&nbsp;&nbsp系:</span>
+        <select id="job_Family" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>专案</option>
+            <option>供应链</option>
+            <option>工程</option>
+            <option>IE</option>
+            <option>会计</option>
+            <option>经营管理</option>
+            <option>IT</option>
+        </select>&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">管理职:</span>
+        <input type="text" id="management" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">资&nbsp;&nbsp;&nbsp;位:</span>
+        <input type="text" id="entry_Position" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">岗&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位:</span>
+        <input type="text" id="station" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newEmployeeDepartmentData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="move" href="javascript:void(0)" class="easyui-linkbutton" onclick="Move()" style="width:90px"><span style="align-content: center">Move</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 30px">
+            <div style="margin-bottom:10px">
+                <input id="job_Number_Add" name="job_Number" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'job_Number',textField:'job_Number'" label="工号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="org_Code_Add" name="org_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'org_Code',textField:'org_Code'" label="组织代码:" />
+                <input id="show_Add" class="easyui-textbox" style="width: 120px" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="management_Add" name="management" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'management',textField:'management'" label="管理职:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="job_Type" class="easyui-combobox" style="width: 230px" required="true" label="任职类型:">
+                    <option>全职</option>
+                    <option>兼职</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="start_Service" class="easyui-datebox" style="width: 230px;" required="true" label="任职开始时期:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="end_Service" class="easyui-datebox" style="width: 230px;" required="true" label="任职结束时期:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="entry_Position" class="easyui-textbox" style="width: 230px" required="true" label="资位:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="job_Family" class="easyui-combobox" style="width: 230px" required="true" label="职系:">
+                    <option>专案</option>
+                    <option>供应链</option>
+                    <option>工程</option>
+                    <option>IE</option>
+                    <option>会计</option>
+                    <option>经营管理</option>
+                    <option>IT</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select name="station" class="easyui-combobox" style="width: 230px"required="true" label="岗位:">
+                    <option>实习生</option>
+                    <option>技术员</option>
+                    <option>助理</option>
+                    <option>助理工程师</option>
+                    <option>工程师</option>
+                    <option>管理</option>
+                </select>
+            </div>
+            <!--<div style="margin-bottom: 10px">
+                <input name="" class="easyui-textbox" style="width: 230px" label="人资主管审核:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="" class="easyui-textbox" style="width: 230px" label="营运总监审核:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="" class="easyui-textbox" style="width: 230px" label="总经理核准:"/>
+            </div>-->
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:700px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:20px 30px">
+            <div style="margin-bottom:10px">
+                <input id="job_Number_Update" name="job_Number" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'job_Number',textField:'job_Number'" label="工号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="org_Code_Update" name="org_Code" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'org_Code',textField:'org_Code'" label="组织代码:" />
+                <input id="show_Update" class="easyui-textbox" style="width: 120px" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="management_Update" name="management" class="easyui-combobox" style="width: 230px" required="true" data-options="valueField:'management',textField:'management'" label="管理职:" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="job_Type_Update" name="job_Type" class="easyui-combobox" style="width: 230px" required="true" label="任职类型:">
+                    <option>全职</option>
+                    <option>兼职</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="start_Service_Update" name="start_Service" class="easyui-datebox" style="width: 230px;" required="true" label="任职开始时期:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="end_Service_Update" name="end_Service" class="easyui-datebox" style="width: 230px;" required="true" label="任职结束时期:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input id="entry_Position_Update" name="entry_Position" class="easyui-textbox" style="width: 230px" required="true" label="资位:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select id="job_Family_Update" name="job_Family" class="easyui-combobox" style="width: 230px" required="true" label="职系:">
+                    <option>专案</option>
+                    <option>供应链</option>
+                    <option>工程</option>
+                    <option>IE</option>
+                    <option>会计</option>
+                    <option>经营管理</option>
+                    <option>IT</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <select id="station_Update" name="station" class="easyui-combobox" style="width: 230px"required="true" label="岗位:">
+                    <option>实习生</option>
+                    <option>技术员</option>
+                    <option>助理</option>
+                    <option>助理工程师</option>
+                    <option>工程师</option>
+                    <option>管理</option>
+                </select>
+            </div>
+            <!--<div style="margin-bottom: 10px">
+                <input class="easyui-textbox" style="width: 230px" label="人资主管审核:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input class="easyui-textbox" style="width: 230px" label="营运总监审核:"/>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input class="easyui-textbox" style="width: 230px" label="总经理核准:"/>
+            </div>-->
+            <div style="margin-bottom:10px">
+                <input id="id_Update" name="id" type="hidden" class="easyui-textbox"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:730px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="job_Number" class="easyui-textbox" style="width: 200px" readonly="readonly" required="true" label="工号:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="org_Code" class="easyui-textbox" style="width: 200px" required="true" readonly="readonly" label="组织代码:" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="org_Code_Move" name="org_Code_Move" class="easyui-combobox" style="width: 200px" required="true" data-options="valueField:'org_Code',textField:'org_Code'" label="To:" />
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="china_Name" class="easyui-textbox" style="width: 200px;" readonly="readonly" required="true" label="姓名:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="job_Type" class="easyui-textbox" style="width: 200px;" readonly="readonly" required="true" label="任职类型:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="job_Type_Move" class="easyui-combobox" style="width: 200px;" required="true" label="To:" >
+                    <option>全职</option>
+                    <option>兼职</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="start_Service"  class="easyui-datebox" style="width: 200px;" readonly="readonly" required="true" label="任职开始时期:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="job_Family" class="easyui-textbox" style="width: 200px" readonly="readonly" required="true" label="职系:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="job_Family_Move" class="easyui-combobox" style="width: 200px" required="true" label="To:" >
+                    <option>专案</option>
+                    <option>供应链</option>
+                    <option>工程</option>
+                    <option>IE</option>
+                    <option>会计</option>
+                    <option>经营管理</option>
+                    <option>IT</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 10px">
+                <input name="end_Service"  class="easyui-datebox" style="width: 200px;" readonly="readonly" required="true" label="任职结束时期:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="station" class="easyui-textbox" style="width: 200px" readonly="readonly" required="true" label="岗位:"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="station_Move" class="easyui-combobox" style="width: 200px" required="true" label="To:" >
+                    <option>实习生</option>
+                    <option>技术员</option>
+                    <option>助理</option>
+                    <option>助理工程师</option>
+                    <option>工程师</option>
+                    <option>管理</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <span>调动原因:</span><BR>
+                <div style="height: 10px;"></div>
+                <div style="margin-bottom: 10px">
+                    <input name="move_Reason" class="easyui-textbox" required="required" data-options="multiline:true" style="height: 150px;width: 670px" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg4" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons4'">
+        <form id="fm4" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons4">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser4()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg4').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg5" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons5'">
+        <form id="fm5" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 20px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons5">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser5()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg5').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryEmployeeDepartmentDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                    if(data.move!="Y"){
+                        $("#move").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $(function () {
+        $("#org_Code_Add").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Org_Code=$("#org_Code_Add").combobox('getText');
+                $.ajax({
+                    url:"queryEmployeeDepartmentDataOptionOrgCode.do",
+                    type:"post",
+                    data:{Org_Code:Org_Code},
+                    //contentType:"application/json",
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.listOrgData;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#show_Add").textbox('setValue',data[0].bg+data[0].bu+data[0].dept+data[0].ke+data[0].zu);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#org_Code_Update").combobox({
+            onChange:function () {//option选中哪个就是哪个option 的value值
+                var Org_Code=$("#org_Code_Update").combobox('getText');
+                $.ajax({
+                    url:"queryEmployeeDepartmentDataOptionOrgCode.do",
+                    type:"post",
+                    data:{Org_Code:Org_Code},
+                    //contentType:"application/json",
+                    dataType:"json",
+                    success:function (data) {
+                        data=data.listOrgData;
+                        //取值语法：$(“#id”).textbox('getValue');
+                        $("#show_Update").textbox('setValue',data[0].bg+data[0].bu+data[0].dept+data[0].ke+data[0].zu);
+                    }
+                });
+            }
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'job_Number',title:'工号',align:'center',titleAlign: true},
+                        {field:'china_Name',title:'中文名字',align:'center',titleAlign: true},
+                        {field:'english_Name',title:'英文名字',align:'center',titleAlign: true},
+                        {field:'sex',title:'性别',align:'center',titleAlign: true},
+                        {field:'age',title:'年龄',align:'center',titleAlign: true},
+                        {field:'management',title:'管理职',align:'center',titleAlign: true},
+                        {field:'entry_Position',title:'资位',align:'center',titleAlign: true},
+                        {field:'job_Family',title:'职系',align:'center',titleAlign: true},
+                        {field:'station',title:'岗位',align:'center',titleAlign: true},
+                        {field:'phone_Number',title:'手机号码',align:'center',titleAlign: true},
+                        {field:'weChat_Number',title:'微信号码',align:'center',titleAlign: true},
+                        {field:'company_Mail',title:'公司邮箱',align:'center',titleAlign: true},
+                        {field:'entry_Date',title:'入职时间',align:'center',titleAlign: true},
+                        {field:'legal_Name',title:'公司名称',align:'center',titleAlign: true},
+                        {field:'bG',title:'事业群名称',align:'center',titleAlign: true},
+                        {field:'bU',title:'事业处',align:'center',titleAlign: true},
+                        {field:'region',title:'区域',align:'center',titleAlign: true},
+                        {field:'dept',title:'部门名称',align:'center',titleAlign: true},
+                        {field:'ke',title:'课别',align:'center',titleAlign: true},
+                        {field:'zu',title:'组别',align:'center',titleAlign: true},
+                        {field:'org_Code',title:'组织代码',align:'center',titleAlign: true},
+                        {field:'job_Type',title:'任职类型',align:'center',titleAlign: true},
+                        {field:'start_Service',title:'任职开始时间',align:'center',titleAlign: true},
+                        {field:'end_Service',title:'任职结束时间',align:'center',titleAlign: true},
+                        {field:'mobilizing_Reason',title:'调动原因',align:'center',titleAlign: true},
+                        {field:'effective_Position',title:'职位有效状态',align:'center',titleAlign: true},
+                        {field:'status',title:'在职状态',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "selectEmployeeDepartmentData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{BG:$("#bg").val(),BU:$("#bu").val(),Dept:$("#dept").val(),Zu:$("#zu").val(),Ke:$("#ke").val(),Status:$("#status").val(),
+                    Job_Number:$("#job_Number").val(),Name:$("#name").val(),Sex:$("#sex").val(),DateFrom:$("#dateFrom").val(),DateTo:$("#dateTo").val(),
+                    Job_Family:$("#job_Family").val(),Management:$("#management").val(),Entry_Position:$("#entry_Position").val(),Station:$("#station").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,BG,BU,Dept,Zu,Ke,Status,Job_Number,Name,Sex,DateFrom,DateTo,Job_Family,Management,Entry_Position,Station){//分页触发
+                 findOption(page, rows,BG,BU,Dept,Zu,Ke,Status,Job_Number,Name,Sex,DateFrom,DateTo,Job_Family,Management,Entry_Position,Station);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,BG,BU,Dept,Zu,Ke,Status,Job_Number,Name,Sex,DateFrom,DateTo,Job_Family,Management,Entry_Position,Station)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,BG:BG,BU:BU,Dept:Dept,Zu:Zu,Ke:Ke,Status:Status,Job_Number:Job_Number,Name:Name,Sex:Sex,DateFrom:DateFrom,DateTo:DateTo,Job_Family:Job_Family,Management:Management,Entry_Position:Entry_Position,Station:Station});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "selectEmployeeDepartmentData.do",
+            data : {
+                page : page,
+                rows : rows,
+                BG:BG,
+                BU:BU,
+                Dept:Dept,
+                Zu:Zu,
+                Ke:Ke,
+                Status:Status,
+                Job_Number:Job_Number,
+                Name:Name,
+                Sex:Sex,
+                DateFrom:DateFrom,
+                DateTo:DateTo,
+                Job_Family:Job_Family,
+                Management:Management,
+                Entry_Position:Entry_Position,
+                Station:Station
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    var Effective_Position=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+                return;
+            }
+            url = 'employeeDepartmentDataUpdate.do';
+            $.ajax({
+                url:"queryEmployeeDepartmentDataForOption.do",
+                type:"post",
+                data:{Org_Code:""},
+                dataType:"json",
+                success:function (data) {
+                    $("#job_Number_Update").combobox("loadData",data.listPersonalData);
+                    $("#management_Update").combobox("loadData",data.listTitleData);
+                    $("#org_Code_Update").combobox("loadData",data.listOrgData);
+                    $("#show_Update").textbox('setValue',"");
+                }
+            })
+        }
+    };
+    function newEmployeeDepartmentData(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'employeeDepartmentDataAdd.do';
+        $.ajax({
+            url:"queryEmployeeDepartmentDataForOption.do",
+            type:"post",
+            data:{Org_Code:""},
+            //contentType:"application/json",
+            dataType:"json",
+            success:function (data) {
+                $("#job_Number_Add").combobox("loadData",data.listPersonalData);
+                $("#org_Code_Add").combobox("loadData",data.listOrgData);
+                $("#management_Add").combobox("loadData",data.listTitleData);
+                $("#show_Add").textbox('setValue',"");
+            }
+        });
+    };
+    function Move(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Move');
+            $('#fm3').form('load',row);
+            id=[];
+            Effective_Position=[];
+            $("#org_Code_Move").textbox('setValue',"");
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+                Effective_Position.push(item.effective_Position);
+            });
+            if(id.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行调动!","info");
+                $('#dlg3').dialog('close');
+                return;
+            }
+            if("N"==Effective_Position[0]){
+                $.messager.alert("提示信息","请确认选中信息中职位有效状态是否为N或联系管理员!","info");
+                $('#dlg3').dialog('close');
+                return;
+            }
+            url = 'employeeDepartmentDataUpdate.do';
+            $.ajax({
+                url:"queryEmployeeDepartmentDataForOption.do",
+                type:"post",
+                data:{Org_Code:""},
+                dataType:"json",
+                success:function (data) {
+                    $("#org_Code_Move").combobox("loadData",data.listOrgData);
+                }
+            })
+        }
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","新增数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增数据是否已存在或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增信息失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            data:{
+                Id:$("#id_Update").val(),
+                Job_Number:$("#job_Number_Update").val(),
+                Org_Code:$("#org_Code_Update").val(),
+                Management:$("#management_Update").val(),
+                Job_Type:$("#job_Type_Update").val(),
+                Start_Service:$("#start_Service_Update").val(),
+                End_Service:$("#end_Service_Update").val(),
+                Entry_Position:$("#entry_Position_Update").val(),
+                Job_Family:$("#job_Family_Update").val(),
+                Station:$("#station_Update").val(),
+                Old_Job_Number:checked[0].job_Number
+            },
+            success: function(result){
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","更新数据成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="NoUpdate"){
+                    $.messager.alert("提示信息","请选择更新内容或联系管理员!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新数据是否已存在或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新信息失败,请稍后尝试或者联系管理员!","error");
+            }
+        })
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            $('#dlg4').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm4').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'employeeDepartmentDataRemove.do';
+        }
+    }
+    function saveUser4() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg4').dialog('close');
+                    $.messager.alert("提示信息","成功删除数据!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败，请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function Download() {
+        var BG=$("#bg").val();
+        var BU=$("#bu").val();
+        var Dept=$("#dept").val();
+        var Zu=$("#zu").val();
+        var Ke=$("#ke").val();
+        var Status=$("#status").val();
+        var Job_Number=$("#job_Number").val();
+        var Name=$("#name").val();
+        var Sex=$("#sex").val();
+        var DateFrom=$("#dateFrom").val();
+        var DateTo=$("#dateTo").val();
+        var Job_Family=$("#job_Family").val();
+        var Management=$("#management").val();
+        var Entry_Position=$("#entry_Position").val();
+        var Station=$("#station").val()
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="employeeDepartmentDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href="employeeDepartmentDataDownLoadExcelAll.do?BG="+BG+"&BU="+BU+"&Dept="+Dept+"&Zu="+Zu+"&Ke="+Ke+"&Status="+Status+"&Job_Number="+Job_Number+
+                "&Name="+Name+"&Sex="+Sex+"&DateFrom="+DateFrom+"&DateTo="+DateTo+"&Job_Family="+Job_Family+"&Management="+Management+"&Entry_Position="+Entry_Position+"&Station="+Station;
+        }
+    };
+    function DownloadModel(){
+        location.href="employeeDepartmentDataDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg5').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm5').form('clear');
+        url = 'employeeDepartmentDataUpload.do';
+    };
+    function saveUser5(){
+        $('#fm5').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg5').dialog('close');
+                    $.messager.alert("提示信息","数据上传成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列工号是否已存在或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(6)+"列必填项有为空的或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,10)=="job_Number"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(11)+"列工号是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,8)=="org_Code"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(9)+"列组织代码是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,10)=="management"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(11)+"列管理职是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,13)=="start_Service"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(14)+"列任职开始期间日期格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message.substring(0,11)=="end_Service"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+result.message.substring(12)+"列任职结束期间日期格式是否填写正确或者联系管理员!","error");
+                }
+                else if(result.message=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }
+                else if (result.message.substring(0,5)=="error"){
+                    $.messager.alert("提示信息","Excel文件中的第"+result.message.substring(6)+"列数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error");
+            }
+        });
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+
+    })(jQuery);
+</script>
+</body>
+</html>

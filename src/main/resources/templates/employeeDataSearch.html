@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">事业群:</span>
+        <input id="bg" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">事业处:</span>
+        <input id="bu" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">部门名称:</span>
+        <input id="dept" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">课&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <input id="ke" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">组&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <input id="zu" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="font-size: 10px">在职状态:</span>
+        <select id="status" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <span style="font-size: 10px">工&nbsp;&nbsp;&nbsp;号:</span>
+        <input type="text" id="job_Number" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">姓&nbsp;&nbsp;&nbsp;名:</span>
+        <input type="text" id="name" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <select id="sex" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>男</option>
+            <option>女</option>
+        </select>&nbsp;&nbsp;
+        <span style="font-size: 10px">入职时间:</span>
+        <input id="dateFrom" name="dateFrom" class="easyui-datebox" style="width: 120px;height: 25px">
+        <span style="font-size: 10px">To</span>
+        <input id="dateTo" name="dateTo" class="easyui-datebox" style="width: 120px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">籍&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;贯:</span>
+        <input type="text" id="native_Place" name="native_Place" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div style="height: 10px"></div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryEmployeeDataSearchFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'job_Number',title:'工号',align:'center',titleAlign: true},
+                        {field:'china_Name',title:'中文名字',align:'center',titleAlign: true},
+                        {field:'english_Name',title:'英文名字',align:'center',titleAlign: true},
+                        {field:'sex',title:'性别',align:'center',titleAlign: true},
+                        {field:'age',title:'年龄',align:'center',titleAlign: true},
+                        {field:'management',title:'管理职',align:'center',titleAlign: true},
+                        {field:'entry_Position',title:'资位',align:'center',titleAlign: true},
+                        {field:'phone_Number',title:'手机号码',align:'center',titleAlign: true},
+                        {field:'weChat_Number',title:'微信号码',align:'center',titleAlign: true},
+                        {field:'company_Mail',title:'公司邮箱',align:'center',titleAlign: true},
+                        {field:'private_Mail',title:'私人邮箱',align:'center',titleAlign: true},
+                        {field:'legal_Name',title:'公司名称',align:'center',titleAlign: true},
+                        {field:'bG',title:'事业群名称',align:'center',titleAlign: true},
+                        {field:'bU',title:'事业处',align:'center',titleAlign: true},
+                        {field:'region',title:'区域',align:'center',titleAlign: true},
+                        {field:'dept',title:'部门名称',align:'center',titleAlign: true},
+                        {field:'ke',title:'课别',align:'center',titleAlign: true},
+                        {field:'zu',title:'组别',align:'center',titleAlign: true},
+                        {field:'entry_Date',title:'入职日期',align:'center',titleAlign: true},
+                        {field:'birth_Date',title:'出生日期',align:'center',titleAlign: true},
+                        {field:'id_Card',title:'身份证号码',align:'center',titleAlign: true},
+                        {field:'id_Card_Address',title:'身份证住址',align:'center',titleAlign: true},
+                        {field:'present_Address',title:'现住址',align:'center',titleAlign: true},
+                        {field:'education',title:'最高学历',align:'center',titleAlign: true},
+                        {field:'major',title:'专业',align:'center',titleAlign: true},
+                        {field:'graduated_From',title:'毕业院校',align:'center',titleAlign: true},
+                        {field:'graduated_Time',title:'毕业时间',align:'center',titleAlign: true},
+                        {field:'language',title:'语言',align:'center',titleAlign: true},
+                        {field:'native_Place',title:'籍贯',align:'center',titleAlign: true},
+                        {field:'nation',title:'民族',align:'center',titleAlign: true},
+                        {field:'religious_Belief',title:'宗教信仰',align:'center',titleAlign: true},
+                        {field:'marital_Status',title:'婚姻状况',align:'center',titleAlign: true},
+                        {field:'history_Disease',title:'疾病史',align:'center',titleAlign: true},
+                        {field:'emergency_Contact_Person',title:'紧急联络人',align:'center',titleAlign: true},
+                        {field:'emergency_Contact_Person_Relationship',title:'与紧急联络人关系',align:'center',titleAlign: true},
+                        {field:'relationship_Phone',title:'联络人电话',align:'center',titleAlign: true},
+                        {field:'status',title:'在职状态',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "selectEmployeeDataSearch.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{BG:$("#bg").val(),BU:$("#bu").val(),Dept:$("#dept").val(),Zu:$("#zu").val(),Ke:$("#ke").val(),Status:$("#status").val(),
+                    Job_Number:$("#job_Number").val(),Name:$("#name").val(),Sex:$("#sex").val(),DateFrom:$("#dateFrom").val(),DateTo:$("#dateTo").val(),Native_Place:$("#native_Place").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,BG,BU,Dept,Zu,Ke,Status,Job_Number,Name,Sex,DateFrom,DateTo,Native_Place) {//分页触发
+                 findOption(page, rows,BG,BU,Dept,Zu,Ke,Status,Job_Number,Name,Sex,DateFrom,DateTo,Native_Place);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page, rows,BG,BU,Dept,Zu,Ke,Status,Job_Number,Name,Sex,DateFrom,DateTo,Native_Place)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,BG:BG,BU:BU,Dept:Dept,Zu:Zu,Ke:Ke,Status:Status,Job_Number:Job_Number,Name:Name,Sex:Sex,DateFrom:DateFrom,DateTo:DateTo,Native_Place:Native_Place});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "selectEmployeeDataSearch.do",
+            data : {
+                page : page,
+                rows : rows,
+                BG:BG,
+                BU:BU,
+                Dept:Dept,
+                Zu:Zu,
+                Ke:Ke,
+                Status:Status,
+                Job_Number:Job_Number,
+                Name:Name,
+                Sex:Sex,
+                DateFrom:DateFrom,
+                DateTo:DateTo,
+                Native_Place:Native_Place
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var checked;
+    var id=[];
+    function Download(){
+        var BG=$("#bg").val();
+        var BU=$("#bu").val();
+        var Dept=$("#dept").val();
+        var Zu=$("#zu").val();
+        var Ke=$("#ke").val();
+        var Status=$("#status").val();
+        var Job_Number=$("#job_Number").val();
+        var Name=$("#name").val();
+        var Sex=$("#sex").val();
+        var DateFrom=$("#dateFrom").val();
+        var DateTo=$("#dateTo").val();
+        var Native_Place=$("#native_Place").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="employeeDataSearchDownLoadExcel.do?id="+id;
+        }else {
+            location.href="employeeDataSearchDownLoadExcelAll.do?BG="+BG+"&BU="+BU+"&Dept="+Dept+"&Zu="+Zu+"&Ke="+Ke+"&Status="+Status+
+                "&Job_Number="+Job_Number+"&Name="+Name+"&Sex="+Sex+"&DateFrom="+DateFrom+"&DateTo="+DateTo+"&Native_Place="+Native_Place;
+        }
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+
+    })(jQuery);
+</script>
+</body>
+</html>

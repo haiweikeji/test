@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HR.FileManagementDao">
+    <insert id="insertFileManagement" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.HR.FileManagement">
+        insert into hwkj_file_management
+        (File_Number,File_Name,File_Type,File_Url,Creator,Create_Date)
+        values
+        (#{File_Number},#{File_Name},#{File_Type},#{File_Url},#{Creator},#{Create_Date});
+    </insert>
+    <delete id="deleteFileManagement" parameterType="java.lang.Integer">
+        delete from hwkj_file_management where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <select id="queryFileManagementList" resultType="hwkj.hwkj.entity.HR.FileManagement">
+        select * from hwkj_file_management where 1=1
+        <if test="fileManagementPageModel.page!=null and fileManagementPageModel.rows!=null"></if>
+        <if test="fileManagement.File_Number!=null and fileManagement.File_Number!=''">and File_Number=#{fileManagement.File_Number}</if>
+        <if test="fileManagement.File_Name!=null and fileManagement.File_Name!=''">and File_Name=#{fileManagement.File_Name}</if>
+        <if test="fileManagement.File_Type!=null and fileManagement.File_Type!=''">and File_Type=#{fileManagement.File_Type}</if>
+        order by Id desc limit #{fileManagementPageModel.startRow},#{fileManagementPageModel.rows}
+    </select>
+    <select id="queryFileManagementCount" resultType="int">
+        select count(*) from hwkj_file_management where 1=1
+        <if test="fileManagementPageModel.page!=null and fileManagementPageModel.rows!=null"></if>
+        <if test="fileManagement.File_Number!=null and fileManagement.File_Number!=''">and File_Number=#{fileManagement.File_Number}</if>
+        <if test="fileManagement.File_Name!=null and fileManagement.File_Name!=''">and File_Name=#{fileManagement.File_Name}</if>
+        <if test="fileManagement.File_Type!=null and fileManagement.File_Type!=''">and File_Type=#{fileManagement.File_Type}</if>
+    </select>
+    <select id="queryFileManagementForExist" parameterType="hwkj.hwkj.entity.HR.FileManagement" resultType="int">
+        select count(*) from hwkj_file_management where 1=1
+        <if test="File_Number!=null and File_Number!=''">and File_Number=#{File_Number}</if>
+        <if test="File_Name!=null and File_Name!=''">and File_Name=#{File_Name}</if>
+        <if test="File_Type!=null and File_Type!=''">and File_Type=#{File_Type}</if>
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.HwkjCustomerVisitPlanMapper">
+  <resultMap id="BaseResultMap" type="hwkj.hwkj.entity.HwkjCustomerVisitPlan">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="Id" jdbcType="INTEGER" property="id" />
+    <result column="Visit_Id" jdbcType="VARCHAR" property="visitId" />
+    <result column="Customer_Code" jdbcType="VARCHAR" property="customerCode" />
+    <result column="Plan_Date_From" jdbcType="TIMESTAMP" property="planDateFrom" />
+    <result column="Plan_Date_To" jdbcType="TIMESTAMP" property="planDateTo" />
+    <result column="Actual_Start_Time" jdbcType="TIMESTAMP" property="actualStartTime" />
+    <result column="Actual_End_Time" jdbcType="TIMESTAMP" property="actualEndTime" />
+    <result column="Contact_Chinese_Name" jdbcType="VARCHAR" property="contactChineseName" />
+    <result column="Contact_English_Name" jdbcType="VARCHAR" property="contactEnglishName" />
+    <result column="Title" jdbcType="VARCHAR" property="title" />
+    <result column="Dept" jdbcType="VARCHAR" property="dept" />
+    <result column="Visit_Item" jdbcType="VARCHAR" property="visitItem" />
+    <result column="Visit_Purpose" jdbcType="VARCHAR" property="visitPurpose" />
+    <result column="Visit_Result" jdbcType="VARCHAR" property="visitResult" />
+    <result column="Status" jdbcType="VARCHAR" property="status" />
+    <result column="BPM" jdbcType="VARCHAR" property="bpm" />
+    <result column="Creator" jdbcType="VARCHAR" property="creator" />
+    <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="Approved_By" jdbcType="VARCHAR" property="approvedBy" />
+    <result column="Approved_Date" jdbcType="TIMESTAMP" property="approvedDate" />
+  </resultMap>
+</mapper>

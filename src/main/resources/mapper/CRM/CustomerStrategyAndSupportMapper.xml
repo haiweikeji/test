@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.CRM.CustomerStrategyAndSupportDao">
+    <insert id="insertCustomerStrategyAndSupport" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport">
+        insert into hwkj_customer_strategy_and_support
+        (Customer_Code,Date_From,Date_To,Top_Three_Customer,Top_Three_Product,
+        Annual_Output,Annual_Revenue,Business_Strategy,Support_Need,Creator,Create_Date)
+        values
+        (#{Customer_Code},#{Date_From},#{Date_To},#{Top_Three_Customer},#{Top_Three_Product},
+        #{Annual_Output},#{Annual_Revenue},#{Business_Strategy},#{Support_Need},#{Creator},
+        #{Create_Date})
+    </insert>
+    <delete id="deleteCustomerStrategyAndSupport" parameterType="java.lang.Integer">
+        delete from hwkj_customer_strategy_and_support where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateCustomerStrategyAndSupport" parameterType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport">
+        update hwkj_customer_strategy_and_support
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Customer_Code!=null">Customer_Code=#{Customer_Code},</if>
+            <if test="Date_From!=null">Date_From=#{Date_From},</if>
+            <if test="Date_To!=null">Date_To=#{Date_To},</if>
+            <if test="Top_Three_Customer!=null">Top_Three_Customer=#{Top_Three_Customer},</if>
+            <if test="Top_Three_Product!=null">Top_Three_Product=#{Top_Three_Product},</if>
+            <if test="Annual_Output!=null">Annual_Output=#{Annual_Output},</if>
+            <if test="Annual_Revenue!=null">Annual_Revenue=#{Annual_Revenue},</if>
+            <if test="Business_Strategy!=null">Business_Strategy=#{Business_Strategy},</if>
+            <if test="Support_Need!=null">Support_Need=#{Support_Need},</if>
+            <if test="Updated_By!=null">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryCustomerStrategyAndSupportList" resultType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport">
+        select s.Id,s.Customer_Code,b.Chinese_Abbreviation,b.English_Abbreviation,s.Date_From,s.Date_To,
+        s.Top_Three_Customer,s.Top_Three_Product,s.Annual_Output,s.Annual_Revenue,s.Business_Strategy,
+        s.Support_Need,s.Creator,s.Create_Date,s.Updated_By,s.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_strategy_and_support s on
+        b.Customer_Code=s.Customer_Code where 1=1 and s.Id is not null
+        <if test="customerStrategyAndSupportPageModel.page!=null and customerStrategyAndSupportPageModel.rows!=null"></if>
+        <if test="customerStrategyAndSupport.Chinese_Abbreviation!=null and customerStrategyAndSupport.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerStrategyAndSupport.Chinese_Abbreviation}</if>
+        <if test="customerStrategyAndSupport.Customer_Code!=null and customerStrategyAndSupport.Customer_Code!=''">and s.Customer_Code=#{customerStrategyAndSupport.Customer_Code}</if>
+        <if test="customerStrategyAndSupport.Date_From!=null and customerStrategyAndSupport.Date_From!=''">and date_format(s.Date_From,'%Y-%m-%d')&gt;='${customerStrategyAndSupport.Date_From}'</if>
+        <if test="customerStrategyAndSupport.Date_To!=null and customerStrategyAndSupport.Date_To!=''">and date_format(s.Date_To,'%Y-%m-%d')&lt;='${customerStrategyAndSupport.Date_To}'</if>
+        order by (s.Id) desc limit #{customerStrategyAndSupportPageModel.startRow},#{customerStrategyAndSupportPageModel.rows}
+    </select>
+    <select id="queryCustomerStrategyAndSupportCount" resultType="int">
+        select count(*)
+        from hwkj_customer_base_data b left join hwkj_customer_strategy_and_support s on
+        b.Customer_Code=s.Customer_Code where 1=1 and s.Id is not null
+        <if test="customerStrategyAndSupportPageModel.page!=null and customerStrategyAndSupportPageModel.rows!=null"></if>
+        <if test="customerStrategyAndSupport.Chinese_Abbreviation!=null and customerStrategyAndSupport.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerStrategyAndSupport.Chinese_Abbreviation}</if>
+        <if test="customerStrategyAndSupport.Customer_Code!=null and customerStrategyAndSupport.Customer_Code!=''">and s.Customer_Code=#{customerStrategyAndSupport.Customer_Code}</if>
+        <if test="customerStrategyAndSupport.Date_From!=null and customerStrategyAndSupport.Date_From!=''">and date_format(s.Date_From,'%Y-%m-%d')&gt;='${customerStrategyAndSupport.Date_From}'</if>
+        <if test="customerStrategyAndSupport.Date_To!=null and customerStrategyAndSupport.Date_To!=''">and date_format(s.Date_To,'%Y-%m-%d')&lt;='${customerStrategyAndSupport.Date_To}'</if>
+    </select>
+    <select id="queryCustomerStrategyAndSupportById" resultType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport">
+        select * from hwkj_customer_strategy_and_support where Id=#{Id}
+    </select>
+    <select id="queryCustomerStrategyAndSupportForDownLoadAll" resultType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport">
+        select s.Id,s.Customer_Code,b.Chinese_Abbreviation,b.English_Abbreviation,s.Date_From,s.Date_To,
+        s.Top_Three_Customer,s.Top_Three_Product,s.Annual_Output,s.Annual_Revenue,s.Business_Strategy,
+        s.Support_Need,s.Creator,s.Create_Date,s.Updated_By,s.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_strategy_and_support s on
+        b.Customer_Code=s.Customer_Code where 1=1 and s.Id is not null
+        <if test="customerStrategyAndSupport.Chinese_Abbreviation!=null and customerStrategyAndSupport.Chinese_Abbreviation!=''">and b.Chinese_Abbreviation=#{customerStrategyAndSupport.Chinese_Abbreviation}</if>
+        <if test="customerStrategyAndSupport.Customer_Code!=null and customerStrategyAndSupport.Customer_Code!=''">and s.Customer_Code=#{customerStrategyAndSupport.Customer_Code}</if>
+        <if test="customerStrategyAndSupport.Date_From!=null and customerStrategyAndSupport.Date_From!=''">and date_format(s.Date_From,'%Y-%m-%d')&gt;='${customerStrategyAndSupport.Date_From}'</if>
+        <if test="customerStrategyAndSupport.Date_To!=null and customerStrategyAndSupport.Date_To!=''">and date_format(s.Date_To,'%Y-%m-%d')&lt;='${customerStrategyAndSupport.Date_To}'</if>
+        order by (s.Id) desc
+    </select>
+    <select id="queryCustomerStrategyAndSupportForDownLoad" parameterType="java.lang.Integer" resultType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport">
+        select s.Id,s.Customer_Code,b.Chinese_Abbreviation,b.English_Abbreviation,s.Date_From,s.Date_To,
+        s.Top_Three_Customer,s.Top_Three_Product,s.Annual_Output,s.Annual_Revenue,s.Business_Strategy,
+        s.Support_Need,s.Creator,s.Create_Date,s.Updated_By,s.Update_Date
+        from hwkj_customer_base_data b left join hwkj_customer_strategy_and_support s on
+        b.Customer_Code=s.Customer_Code where 1=1 and s.Id is not null and s.Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            <if test="Id!=null and Id!=''">#{Id}</if>
+        </foreach>
+    </select>
+    <select id="queryCustomerStrategyAndSupportForAllExist" parameterType="hwkj.hwkj.entity.CRM.CustomerStrategyAndSupport" resultType="int">
+        select count(*) from hwkj_customer_strategy_and_support where 1=1
+        <if test="Customer_Code!=null">and Customer_Code=#{Customer_Code}</if>
+        <if test="Date_From!=null">and Date_From=#{Date_From}</if>
+        <if test="Date_To!=null">and Date_To=#{Date_To}</if>
+        <if test="Top_Three_Customer!=null">and Top_Three_Customer=#{Top_Three_Customer}</if>
+        <if test="Top_Three_Product!=null">and Top_Three_Product=#{Top_Three_Product}</if>
+        <if test="Annual_Output!=null">and Annual_Output=#{Annual_Output}</if>
+        <if test="Annual_Revenue!=null">and Annual_Revenue=#{Annual_Revenue}</if>
+        <if test="Business_Strategy!=null">and Business_Strategy=#{Business_Strategy}</if>
+        <if test="Support_Need!=null">and Support_Need=#{Support_Need}</if>
+    </select>
+</mapper>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{zTree/css/zTreeStyle/zTreeStyle.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{zTree/js/jquery.ztree.all.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'north'" style="width: 1000px;height: 150px">
+    <div style="margin:0;padding:20px 20px">
+        <input type="text" id="role_Name" class="easyui-textbox" style="width: 240px;height: 25px" label="角色名称:">
+    </div>
+    <div style="margin:0;padding:20px 20px">
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newRole()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px"><span style="align-content: center">删除</span></a>&nbsp;&nbsp;&nbsp;
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="AddMenu()" style="width:90px"><span style="align-content: center">添加菜单</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+</div>
+<div data-options="region:'west'" style="width: 720px">
+    <div style="margin:0;padding:0px 1px;width: 718px">
+        <form>
+            <table id="g" class="easyui-datagrid" width="718px" height="570px">
+            </table>
+        </form>
+    </div>
+</div>
+<div title="菜单" data-options="region:'center'" style="width: 280px">
+    <div class="easyui-accordion">
+        <ul id="hr" class="ztree"></ul>
+    </div>
+    <script type="text/javascript">
+        var setting = {
+            view : {
+                dblClickExpand : true,//双击鼠标展开节点
+                selectedMulti:true,//设置为 true时，按下 Ctrl 或 Cmd 键可以选中多个节点
+                addHoverDom: addHoverDom,        //添加按钮
+                removeHoverDom: removeHoverDom,
+                showIcon:true,
+                showLine:true,
+                showTitle:true,
+            },
+            edit: {
+                enable: true,                       //编辑节点必须设置该字段，并且编辑状态包括修改和删除，所以如果设置true
+                editNameSelectAll : true,           //删除按钮和修改按钮都会出现，添加按钮需要自己额外添加
+                showRenameBtn : true,               // 默认值就是true,可以不写的
+                showRemoveBtn: showRemoveBtn,       //选做，可以删除这一行
+                //高级用法就是为showRemoveBtn 设置函数，函数体内判断节点来为某一些节点禁用删除按钮,比如这里禁止删除跟节点。\
+                removeTitle: "删除菜单",
+                renameTitle: "编辑菜单名称",
+
+            },
+            data : {
+                simpleData : {
+                    enable : true,//启用简单json数据描述节点数据
+                    idKey: "id",
+                    pIdKey: "pId",
+                    rootPId: 0,
+                }
+            },
+            check:{
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType : {"Y": "ps", "N": "ps"},
+            },
+            callback : {
+                beforeRemove : beforeRemove,   //删除前的回调函数
+                beforeRename : beforeRename,  //修改前的回调函数
+                onAsyncSuccess: zTreeOnAsyncSuccess  //异步加载完毕的回调函数
+            },
+        };
+        function showRemoveBtn(treeId,treeNode){
+            return !treeNode.level==0;             //跟节点返回false,所以跟节点不显示删除按钮。
+        }
+
+        function beforeRemove(treeId, treeNode){
+            if(treeNode.pId==0){                //如果删除的是根节点，也提示无法删除
+                alert("根节点无法删除！")
+                return false;                    //返回false 就会使前端的节点还保持存在，
+                //	如果是true,则会在前端界面删除，但数据库中还会有，刷新一下即可再次出现
+            }
+            if(confirm("是否删除？")){  // 询问是否删除，若删除，则利用Ajax 技术异步删除，同是返回json格式数据，告知前台是否删除成功！
+                $.post('${path}/DeleteCityServlet?id='+treeNode.id,function(data){ // 从数据库中删除
+                    if(data.success){                   // data  为 json 格式数据
+                        zTree.removeNode(treeNode);     // z-Tree 的api ，从视角上 删除
+                        alert(data.msg);                // 要在后台删除成功后再进行视角上删除，这样就真正意义实现了删除。
+                    }else{
+                        alert(data.msg);
+                        return false;
+                    }
+                });
+            }
+            return ;
+        }
+
+        function beforeRename(treeId, treeNode, newName, isCancel){
+            var oldName = treeNode.nodeName;    //首先取原始的节点值
+            if(newName==""){                  // 新名称为空的情况
+                var node = treeNode.getParentNode();  //获取父节点
+                zTree.reAsyncChildNodes(node, "refresh");  //重新访问数据库更新父节点，即可回到旧名称
+                alert("名称不能为空！");
+            }
+            else if(newName!=treeNode.nodeName){     // 如果新名称与就名称一致，什么也不做
+                $.ajax({
+                    url:"updateMenu.do",     //更改请求
+                    data : {id:treeNode.id,name:newName,pId:treeNode.pId},
+                    dataType : 'JSON',
+                    type:'post',
+                    success: function(data){
+                        if(data.success){
+                            alert(data.msg);   //提示更改成功!
+                        }else{                    //修改失败，即同一父类型下不能名称相同（我自己加的限制条件，你可以根据需要修改）
+                            var node = treeNode.getParentNode();
+                            zTree.reAsyncChildNodes(node, "refresh");  //回到旧名称
+                            alert(data.msg);
+                        }
+                    }
+                });
+            }
+        }
+
+        function addHoverDom(treeId, treeNode) {
+            var sObj = $("#" + treeNode.tId + "_span"); //获取删除修改span
+            if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+            var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
+                + "' title='添加菜单' onfocus='this.blur();'></span>";  //添加add  span
+            sObj.after(addStr);          // 把删除修改 span 放到 add 后面
+            var btn = $("#addBtn_"+treeNode.tId);
+            if (btn) btn.bind("click", function(){
+                var nodes = zTree.addNodes(treeNode, {pId:treeNode.id, nodeName:"新建文件夹" + getNowFormatDate()});//前端添加成功
+                $.ajax({    //后端添加！！！！   必须有，要不数据库还是没添加，否则刷新页面后节点就会消失！
+                    url:"${path}/AddCityServlet",
+                    data : {parentId:nodes[0].pId,city:nodes[0].nodeName},  //传给后台当前节点的父Id和名称
+                    //cache : false,
+                    dataType : 'JSON',
+                    type:'post',
+                    success: function(data){
+                        if(data.success){
+                            alert(data.msg);
+                        }else{
+                            zTree.updateNode(nodes[0]);   //如果失败，则返回原始状态！
+                            alert(data.msg);
+                        }
+                    }
+                });
+                return false;
+            });
+        };
+
+        function removeHoverDom(treeId, treeNode) {   // 去除
+            $("#addBtn_"+treeNode.tId).unbind().remove();
+        };
+
+        function getNowFormatDate() {   //获取当前时间
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+                + " " + date.getHours() + seperator2 + date.getMinutes()
+                + seperator2 + date.getSeconds();
+            return currentdate;
+        }
+
+        function zTreeOnAsyncSuccess(event, treeId, treeNode, msg){  // 这个函数仅仅是为了 初始化时展开 1级菜单
+            if(!load){
+                var nodes = zTree.getNodesByParam("pId", 0, null);
+                $.each( nodes, function(i, n){
+                    zTree.expandNode(n, true, false, true);
+                });
+                load = true;
+            }
+        }
+        var treeNodes=[];
+        $(function(){
+            $.ajax({
+                //async : false,
+                type: 'POST',
+                dataType : "json",
+                url: "roleZTree.do",//请求的action路径
+                error: function () {//请求失败处理函数
+                    alert('请求失败');
+                },
+                success:function(data){ //请求成功后处理函数。
+                    treeNodes=data;
+                    $.fn.zTree.init($("#hr"), setting, treeNodes);
+                }
+            });
+        });
+    </script>
+</div>
+    <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="role_Name" class="easyui-textbox" style="width: 280px;height: 25px" required="true" label="角色名称:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="role_Described" class="easyui-textbox" style="width: 280px;height: 60px" data-options="multiline:true" required="true" label="角色描述:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input id="role_Name_Update" name="role_Name" class="easyui-textbox" style="width: 280px;height: 25px" required="true" label="角色名称:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="role_Described_Update" name="role_Described" class="easyui-textbox" style="width: 280px;height: 60px" data-options="multiline:true" required="true" label="角色描述:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="id_Update" name="id" type="hidden" class="easyui-textbox"/>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryCustomerBaseDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    /*if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }*/
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'role_Name',title:'角色名称',width:'30%',align:'center',titleAlign: true},
+                        {field:'role_Described',title:'角色描述',width:'70%',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryRole.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Role_Id:$("#role_Id").val(),Role_Name:$("#role_Name").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page,rows,Role_Id,Role_Name) {//分页触发
+                 findOption(page,rows,Role_Id,Role_Name);
+                }
+            })
+        })
+    });
+    function findOption(page,rows,Role_Id,Role_Name)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Role_Id:Role_Id,Role_Name:Role_Name});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryRole.do",
+            data : {
+                page : page,
+                rows : rows,
+                Role_Id:Role_Id,
+                Role_Name:Role_Name,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("提示信息", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            if(checked.length>=2){
+                $.messager.alert("提示信息","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            url = 'roleUpdate.do';
+        }
+    };
+    function newRole(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'roleAdd.do';
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if(result.message=="success"){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","角色添加成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认新增的角色是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","新增角色失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","新增角色失败,请稍后尝试或联系管理员!","error");
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","新增角色失败,请稍后尝试或联系管理员!","error");
+            }
+        });
+    };
+    function saveUser2(){
+        $.ajax({
+            url:url,
+            type:"post",
+            dataType:"json",
+            data:{
+                Id:$("#id_Update").val(),
+                Role_Name:$("#role_Name_Update").val(),
+                Role_Described:$("#role_Described_Update").val(),
+                Old_Role_Name:checked[0].role_Name,
+                Old_Role_Described:checked[0].role_Described
+            },
+            success: function(result){
+                if(result.message=="success"){
+                    $('#dlg2').dialog('close');        // close the dialog
+                    $.messager.alert("提示信息","数据更新成功!","info");
+                    $('#g').datagrid('reload');    // reload the user data
+                }
+                else if(result.message=="NoUpdate"){
+                    $.messager.alert("提示信息","请选择更新的内容或联系管理员!","warning");
+                }
+                else if(result.message=="exist"){
+                    $.messager.alert("提示信息","请确认更新的角色是否已存在或联系管理员!","error");
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");                }
+                else {
+                    $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","更新数据失败,请稍后尝试或联系管理员!","error");            }
+        })
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'roleRemove.do';
+        }
+    }
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (result) {
+                if(result.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("提示信息","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(result.message=="error"){
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                }
+                else {
+                    $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+                };
+            },
+            error:function () {
+                $.messager.alert("提示信息","删除数据失败,请稍后尝试或联系管理员!","error");
+            }
+        })
+    };
+    function AddMenu() {
+        
+    }
+</script>
+</body>
+</html>

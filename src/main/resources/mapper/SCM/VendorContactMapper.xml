@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hwkj.hwkj.dao.SCM.VendorContactDao">
+    <insert id="insertVendorContact" useGeneratedKeys="true" keyProperty="Id" keyColumn="Id" parameterType="hwkj.hwkj.entity.SCM.VendorContact">
+        insert into hwkj_vendor_contact
+        (Vendor_Code,Contact_Chinese_Name,
+        Contact_English_Name,Sex,Title,Dept,Authority,
+        Language,Company_Telephone,Phone_Number,Company_Mail,Private_Mail,
+        WeChat_Number,Status,Purchase,Creator,Create_Date)
+        values
+        (#{Vendor_Code},#{Contact_Chinese_Name},
+        #{Contact_English_Name},#{Sex},#{Title},#{Dept},#{Authority},
+        #{Language},#{Company_Telephone},#{Phone_Number},#{Company_Mail},#{Private_Mail},
+        #{WeChat_Number},#{Status},#{Purchase},#{Creator},#{Create_Date})
+    </insert>
+    <delete id="deleteVendorContact" parameterType="java.lang.Integer">
+        delete from hwkj_vendor_contact where Id in
+        <foreach collection="array" item="Id" open="(" separator="," close=")">
+            #{Id}
+        </foreach>
+    </delete>
+    <update id="updateVendorContact" parameterType="hwkj.hwkj.entity.SCM.VendorContact">
+        update hwkj_vendor_contact
+        <trim prefix="set" suffixOverrides=",">
+            <if test="Vendor_Code!=null and Vendor_Code!=''">Vendor_Code=#{Vendor_Code},</if>
+            <if test="Contact_Chinese_Name!=null and Contact_Chinese_Name!=''">Contact_Chinese_Name=#{Contact_Chinese_Name},</if>
+            <if test="Contact_English_Name!=null and Contact_English_Name!=''">Contact_English_Name=#{Contact_English_Name},</if>
+            <if test="Sex!=null and Sex!=''">Sex=#{Sex},</if>
+            <if test="Title!=null and Title!=''">Title=#{Title},</if>
+            <if test="Dept!=null and Dept!=''">Dept=#{Dept},</if>
+            <if test="Authority!=null and Authority!=''">Authority=#{Authority},</if>
+            <if test="Language!=null and Language!=''">Language=#{Language},</if>
+            <if test="Company_Telephone!=null and Company_Telephone!=''">Company_Telephone=#{Company_Telephone},</if>
+            <if test="Phone_Number!=null and Phone_Number!=''">Phone_Number=#{Phone_Number},</if>
+            <if test="Company_Mail!=null and Company_Mail!=''">Company_Mail=#{Company_Mail},</if>
+            <if test="Private_Mail!=null and Private_Mail!=''">Private_Mail=#{Private_Mail},</if>
+            <if test="WeChat_Number!=null and WeChat_Number!=''">WeChat_Number=#{WeChat_Number},</if>
+            <if test="Status!=null and Status!=''">Status=#{Status},</if>
+            <if test="Purchase!=null and Purchase!=''">Purchase=#{Purchase},</if>
+            <if test="Updated_By!=null and Updated_By!=''">Updated_By=#{Updated_By},</if>
+            <if test="Update_Date!=null and Update_Date!=''">Update_Date=#{Update_Date},</if>
+        </trim>
+        where Id=#{Id}
+    </update>
+    <select id="queryVendorContactList" resultType="hwkj.hwkj.entity.SCM.VendorContact">
+        select ct.Id,ct.Vendor_Code,cd.Vendor_Chinese_Abbreviation,cd.Country_Area,cd.City,
+        ct.Contact_Chinese_Name,ct.Contact_English_Name,ct.Sex,ct.Title,
+        ct.Dept,ct.Authority,ct.Language,ct.Company_Telephone,
+        ct.Phone_Number,ct.Company_Mail,ct.Private_Mail,ct.WeChat_Number,
+        ct.Status,ct.Purchase,ct.Creator,ct.Create_Date,
+        ct.Updated_By,ct.Update_Date
+        from hwkj_vendor_contact ct left join hwkj_vendor_code cd on
+        ct.Vendor_Code=cd.Vendor_Code where 1=1
+        <if test="vendorContactPageModel.page!=null and vendorContactPageModel.rows!=null"></if>
+        <if test="vendorContact.Vendor_Chinese_Abbreviation!=null and vendorContact.Vendor_Chinese_Abbreviation!=''">and cd.Vendor_Chinese_Abbreviation=#{vendorContact.Vendor_Chinese_Abbreviation}</if>
+        <if test="vendorContact.Vendor_Code!=null and vendorContact.Vendor_Code!=''">and ct.Vendor_Code=#{vendorContact.Vendor_Code}</if>
+        <if test="vendorContact.Contact_Chinese_Name!=null and vendorContact.Contact_Chinese_Name!=''">and ct.Contact_Chinese_Name=#{vendorContact.Contact_Chinese_Name}</if>
+        <if test="vendorContact.Purchase!=null and vendorContact.Purchase!=''">and ct.Purchase=#{vendorContact.Purchase}</if>
+        <if test="vendorContact.Status!=null and vendorContact.Status!=''">and ct.Status=#{vendorContact.Status}</if>
+        order by ct.Vendor_Code limit #{vendorContactPageModel.startRow},#{vendorContactPageModel.rows}
+    </select>
+    <select id="queryVendorContactCount" resultType="int">
+        select count(*)
+        from hwkj_vendor_contact ct left join hwkj_vendor_code cd on
+        ct.Vendor_Code=cd.Vendor_Code where 1=1
+        <if test="vendorContactPageModel.page!=null and vendorContactPageModel.rows!=null"></if>
+        <if test="vendorContact.Vendor_Chinese_Abbreviation!=null and vendorContact.Vendor_Chinese_Abbreviation!=''">and cd.Vendor_Chinese_Abbreviation=#{vendorContact.Vendor_Chinese_Abbreviation}</if>
+        <if test="vendorContact.Vendor_Code!=null and vendorContact.Vendor_Code!=''">and ct.Vendor_Code=#{vendorContact.Vendor_Code}</if>
+        <if test="vendorContact.Contact_Chinese_Name!=null and vendorContact.Contact_Chinese_Name!=''">and ct.Contact_Chinese_Name=#{vendorContact.Contact_Chinese_Name}</if>
+        <if test="vendorContact.Purchase!=null and vendorContact.Purchase!=''">and ct.Purchase=#{vendorContact.Purchase}</if>
+        <if test="vendorContact.Status!=null and vendorContact.Status!=''">and ct.Status=#{vendorContact.Status}</if>
+    </select>
+    <select id="queryVendorContactById" resultType="hwkj.hwkj.entity.SCM.VendorContact">
+        select * from hwkj_vendor_contact where Id=#{Id}
+    </select>
+    <select id="queryVendorContactForDownLoadAll" resultType="hwkj.hwkj.entity.SCM.VendorContact">
+        select ct.Id,ct.Vendor_Code,cd.Vendor_Chinese_Abbreviation,cd.Country_Area,cd.City,
+        ct.Contact_Chinese_Name,ct.Contact_English_Name,ct.Sex,ct.Title,
+        ct.Dept,ct.Authority,ct.Language,ct.Company_Telephone,
+        ct.Phone_Number,ct.Company_Mail,ct.Private_Mail,ct.WeChat_Number,
+        ct.Status,ct.Purchase,ct.Creator,ct.Create_Date,
+        ct.Updated_By,ct.Update_Date
+        from hwkj_vendor_contact ct left join hwkj_vendor_code cd on
+        ct.Vendor_Code=cd.Vendor_Code where 1=1
+        <if test="vendorContact.Vendor_Chinese_Abbreviation!=null and vendorContact.Vendor_Chinese_Abbreviation!=''">and cd.Vendor_Chinese_Abbreviation=#{vendorContact.Vendor_Chinese_Abbreviation}</if>
+        <if test="vendorContact.Vendor_Code!=null and vendorContact.Vendor_Code!=''">and ct.Vendor_Code=#{vendorContact.Vendor_Code}</if>
+        <if test="vendorContact.Contact_Chinese_Name!=null and vendorContact.Contact_Chinese_Name!=''">and ct.Contact_Chinese_Name=#{vendorContact.Contact_Chinese_Name}</if>
+        <if test="vendorContact.Purchase!=null and vendorContact.Purchase!=''">and ct.Purchase=#{vendorContact.Purchase}</if>
+        <if test="vendorContact.Status!=null and vendorContact.Status!=''">and ct.Status=#{vendorContact.Status}</if>
+        order by ct.Vendor_Code
+    </select>
+    <select id="queryVendorContactForDownLoad" resultType="hwkj.hwkj.entity.SCM.VendorContact">
+        select ct.Id,ct.Vendor_Code,cd.Vendor_Chinese_Abbreviation,cd.Country_Area,cd.City,
+        ct.Contact_Chinese_Name,ct.Contact_English_Name,ct.Sex,ct.Title,
+        ct.Dept,ct.Authority,ct.Language,ct.Company_Telephone,
+        ct.Phone_Number,ct.Company_Mail,ct.Private_Mail,ct.WeChat_Number,
+        ct.Status,ct.Purchase,ct.Creator,ct.Create_Date,
+        ct.Updated_By,ct.Update_Date
+        from hwkj_vendor_contact ct left join hwkj_vendor_code cd on
+        ct.Vendor_Code=cd.Vendor_Code where 1=1 and ct.Id=#{Id}
+    </select>
+    <select id="queryVendorContactForExist" resultType="int">
+        select count(*) from hwkj_vendor_contact where Vendor_Code=#{Vendor_Code}
+    </select>
+    <insert id="uploadVendorContact" parameterType="java.util.List">
+        insert into hwkj_vendor_contact
+        (Vendor_Code,Contact_Chinese_Name,
+        Contact_English_Name,Sex,Title,Dept,Authority,
+        Language,Company_Telephone,Phone_Number,Company_Mail,Private_Mail,
+        WeChat_Number,Status,Purchase,Creator,Create_Date)
+        values
+        <foreach collection="list" item="vendorContactList" separator=",">
+            (#{vendorContactList.Vendor_Code},#{vendorContactList.Contact_Chinese_Name},
+            #{vendorContactList.Contact_English_Name},#{vendorContactList.Sex},#{vendorContactList.Title},#{vendorContactList.Dept},#{vendorContactList.Authority},
+            #{vendorContactList.Language},#{vendorContactList.Company_Telephone},#{vendorContactList.Phone_Number},#{vendorContactList.Company_Mail},#{vendorContactList.Private_Mail},
+            #{vendorContactList.WeChat_Number},#{vendorContactList.Status},#{vendorContactList.Purchase},#{vendorContactList.Creator},#{vendorContactList.Create_Date})
+        </foreach>
+    </insert>
+</mapper>

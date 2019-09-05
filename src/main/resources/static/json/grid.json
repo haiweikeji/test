@@ -1,0 +1,10 @@
+
+{
+	"total":2,
+	"rows":[{"id":"001","Company_Code":"李大","BG":"13912345678","BU":"1","Region":"0","Dept":"10-20公斤","Section":"杭州分部","Group":"sdfsf",
+"Cost_Code":"sdfsf","Org_Code":"sdfsf","Upper_Name":"sdfsf","Status":"sdfsf","Creator":"sdfsf",
+"Create_Date":"sdfsf","Updated_By":"sdfsf","Update_Date":"dfdgfsdg"},
+{"id":"002","Company_Code":"李大","BG":"13912345678","BU":"1","Region":"0","Dept":"10-20公斤","Section":"杭州分部","Group":"sdfsf",
+"Cost_Code":"sdfsf","Org_Code":"sdfsf","Upper_Name":"sdfsf","Status":"sdfsf","Creator":"sdfsf",
+"Create_Date":"sdfsf","Updated_By":"sdfsf","Update_Date":"dfdgfsdg"}]
+}

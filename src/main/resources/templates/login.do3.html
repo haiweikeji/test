@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="easyUi/demo/demo.css">
+    <script type="text/javascript" src="easyUi/jquery.min.js"></script>
+    <script type="text/javascript" src="easyUi/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="easyUi/locale/easyui-lang-zh_CN.js"></script>
+    <title>系统首页</title>
+    <style type="text/css">
+        a{
+            text-decoration:none;
+        }
+        .bg{
+            height: 100%;
+            width: 100%;
+            background-image: url("/hwkj/image/hwkj.png");
+        }
+        #header{
+            width:100%;
+            height:30px;
+            background-color:#E0EFFF;
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }
+        #header .logo{
+            margin-left: 50px;
+            font-size: 24px;
+            font-family: 微软雅黑;
+        }
+        #picture{
+            width: 100%;
+            height:750px;
+        }
+        .panel-title {
+            text-align: center;
+            font-size: 16px;
+        }
+        #bootom{
+            padding-top:50px;
+            width:100%;
+            height:100px;
+            background: #eaf2ff;
+        }
+        #bootom_content{
+            margin-left:100px;
+            width:80%;
+            text-align: center;
+            font-size:0.8em;
+        }
+        p{
+            line-height:20px;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+    console.info("==================")
+    $('#p').panel('move',{
+        left:100,
+        top:100
+    });
+</script>
+<body class="bg">
+<div >
+    <div data-options=" region:'west',split:true,style:{position:'absolute',right:50,top:150}"
+         class="easyui-panel " title="用户登录" style="width:300px;text-align: center;">
+        <div style="padding:10px 60px 20px 60px">
+            <form id="ff" class="easyui-form" method="post" data-options="novalidate:true">
+                <table cellpadding="5">
+                    <tr>
+                        <td><input class="easyui-textbox" data-options="prompt:'账号',validType:'name'" iconCls="icon-man" iconAlign=left style="width:100%;height:32px"/></td>
+                    </tr>
+                    <tr>
+                        <td><input class="easyui-textbox" data-options="prompt:'密码',validType:'password'" iconCls="icon-lock" iconAlign=left style="width:100%;height:32px"></input></td>
+                    </tr>
+                    <tr>
+                        <td><input class="easyui-textbox" data-options="prompt:'验证码',validType:'validate'" iconCls="icon-filter" iconAlign=left style="width:55%;height:32px" />
+                            <img src="" alt="" width="56" height="32" align='absMiddle' /> </td>
+                    </tr>
+                </table>
+            </form>
+            <div style="text-align:center;padding:5px; ">
+                <a href="#" class="easyui-linkbutton" style="width:45%;height:32px">登录</a>
+                <a href="#" class="easyui-linkbutton" style="width:45%;height:32px">注册</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="bootom">
+    <div id="bootom_content">
+        <p><strong>关于我们      法律声明      服务条款     联系我们</strong></p>
+        <p>
+            地址：江西省南昌市经济开发区天祥大道    邮箱：330000
+            Copyright © 2017 - 2018    hacker_pangdaxing@qq.com 版权所有
+        </p>
+        <p>
+            建议使用IE8以上版本浏览器    E-mail：hacker_pandaxing@qq.com
+        </p>
+    </div>
+</div>
+</body>
+<script>
+    function submitForm(){
+        $('#ff').form('submit',{
+            onSubmit:function(){
+                return $(this).form('enableValidation').form('validate');
+            }
+        });
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+    }
+</script>
+</html>

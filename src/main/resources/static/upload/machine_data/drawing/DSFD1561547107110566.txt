@@ -1,0 +1,378 @@
+CREATE TABLE `hwkj`.`hwkj_employee_personal_data` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Job_Number` VARCHAR(45) NULL,
+  `Photo` VARCHAR(45) NULL,
+  `Chain_Name` VARCHAR(45) NOT NULL,
+  `English_Name` VARCHAR(45) NULL,
+  `Sex` VARCHAR(45) NOT NULL,
+  `Age` INT NOT NULL,
+  `Phone_Number` VARCHAR(45) NOT NULL,
+  `WeChat_Number` VARCHAR(45) NULL,
+  `Company_Mail` VARCHAR(45) NULL,
+  `Private_Mail` VARCHAR(45) NULL,
+  `Entry_Date` VARCHAR(45) NOT NULL,
+  `Status` VARCHAR(2) NOT NULL,
+  `Entry_Position` VARCHAR(45) NULL,
+  `Leave_Date` VARCHAR(45) NULL,
+  `Birth_Date` VARCHAR(45) NOT NULL,
+  `Id_Card` VARCHAR(45) NOT NULL,
+  `Id_Card_Address` VARCHAR(45) NOT NULL,
+  `Present_Address` VARCHAR(45) NOT NULL,
+  `Education` VARCHAR(45) NOT NULL,
+  `Major` VARCHAR(45) NOT NULL,
+  `Graduated_From` VARCHAR(45) NOT NULL,
+  `Graduated_Time` DATETIME NOT NULL,
+  `Language` VARCHAR(45) NULL,
+  `Native_Place` VARCHAR(45) NOT NULL,
+  `Nation` VARCHAR(45) NOT NULL,
+  `Religious_Belief` VARCHAR(45) NULL,
+  `Marital_Status` VARCHAR(45) NULL,
+  `History_Disease` VARCHAR(45) NOT NULL,
+  `Member_Family` VARCHAR(45) NULL,
+  `Relationship` VARCHAR(45) NULL,
+  `Emergency_Contact_Person` VARCHAR(45) NOT NULL,
+  `Emergency_Contact_Person_Relationship` VARCHAR(45) NULL,
+  `Relationship_Phone` VARCHAR(45) NOT NULL,
+  `Recruitment_Sources` VARCHAR(45) NOT NULL,
+  `Periods_Number` VARCHAR(45) NULL,
+  `Referee` VARCHAR(45) NULL,
+  `Blacklist` VARCHAR(2) NULL,
+  `Remarks` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE INDEX `Id_Card_UNIQUE` (`Id_Card` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+
+CREATE TABLE `hwkj`.`hwkj_employee_department_data` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Job_Number` VARCHAR(45) NOT NULL,
+  `Management` VARCHAR(45) NOT NULL,
+  `Org_Code` VARCHAR(45) NULL,
+  `Job_Type` VARCHAR(45) NOT NULL,
+  `Start_Service` DATETIME NOT NULL,
+  `End_Service` DATETIME NOT NULL,
+  `Entry_Position` VARCHAR(45) NULL,
+  `Job_Family` VARCHAR(45) NULL,
+  `Station` VARCHAR(45) NOT NULL,
+  `Creator` VARCHAR(45) NOT NULL,
+  `Create_Date` DATETIME NOT NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  `Reviewed_By` VARCHAR(45) NULL,
+  `Reviewed_Date` DATETIME NULL,
+  `Approved_By` VARCHAR(45) NULL,
+  `Approved_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE INDEX `Job_Number_UNIQUE` (`Job_Number` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+CREATE TABLE `hwkj`.`hwkj_org_data` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Group_Name` VARCHAR(45) NOT NULL,
+  `Group_Code` VARCHAR(45) NOT NULL,
+  `Legal_Name` VARCHAR(45) NULL,
+  `Company_Code` VARCHAR(45) NOT NULL,
+  `BG` VARCHAR(45) NOT NULL,
+  `BU` VARCHAR(45) NULL,
+  `Region` VARCHAR(45) NULL,
+  `Dept` VARCHAR(45) NULL,
+  `Ke` VARCHAR(45) NULL,
+  `Zu` VARCHAR(45) NULL,
+  `Cost_Code` VARCHAR(45) NULL,
+  `Org_Code` VARCHAR(45) NULL,
+  `Upper_Name` VARCHAR(45) NULL,
+  `Upper_ID` VARCHAR(45) NULL,
+  `Status` VARCHAR(2) NULL,
+  `Creator` VARCHAR(45) NOT NULL,
+  `Create_Date` DATETIME NOT NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` VARCHAR(45) NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+CREATE TABLE `hwkj`.`hwkj_customer_base_data` (
+  `Customer_Code` VARCHAR(45) NULL,
+  `Four_Initials` VARCHAR(45) NULL,
+  `Chinese_Full_Name` VARCHAR(45) NULL,
+  `Chinese_Abbreviation` VARCHAR(45) NULL,
+  `English_Full_Name` VARCHAR(45) NULL,
+  `English_Abbreviation` VARCHAR(45) NULL,
+  `Foxconn_Group` VARCHAR(2) NULL,
+  `Country` VARCHAR(45) NULL,
+  `City` VARCHAR(45) NULL,
+  `Industry` VARCHAR(45) NULL,
+  `Company_Owner` VARCHAR(45) NULL,
+  `Registered_Capital` VARCHAR(45) NULL,
+  `Annual_Revenue` VARCHAR(45) NULL,
+  `Industry_Rank` VARCHAR(45) NULL,
+  `Enterprise_Nature` VARCHAR(45) NULL,
+  `Employee_Qty` INT NULL,
+  `Customer_Level` VARCHAR(45) NULL,
+  `Office_Address` VARCHAR(100) NULL,
+  `Registered_Address` VARCHAR(100) NULL,
+  `Status` VARCHAR(45) NULL,
+  `Development_Date` DATETIME NULL,
+  `BPM` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+CREATE TABLE `hwkj`.`hwkj_quote_term` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Condition_Type` VARCHAR(45) NULL,
+  `Condition_Code` VARCHAR(45) NULL,
+  `Clause` VARCHAR(45) NULL,
+  `Describe` VARCHAR(100) NULL,
+  `Days` INT NULL,
+  `Percent` VARCHAR(45) NULL,
+  `Status` VARCHAR(45) NULL,
+  `Remark` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+CREATE TABLE `hwkj`.`hwkj_customer_account_info` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Taxpayer_Number` VARCHAR(45) NULL,
+  `Registration_Number` VARCHAR(45) NULL,
+  `Registration_Time` VARCHAR(45) NULL,
+  `Registered_Capital` DOUBLE NULL,
+  `Currency` VARCHAR(45) NULL,
+  `Credit_Level` VARCHAR(45) NULL,
+  `Credit_Amount` DOUBLE NULL,
+  `Invoice_Address` VARCHAR(45) NULL,
+  `Bank` VARCHAR(45) NULL,
+  `Bank_Account` VARCHAR(45) NULL,
+  `Bank_Address` VARCHAR(45) NULL,
+  `Acceptable_Currency` VARCHAR(45) NULL,
+  `Force_time` DATETIME NULL,
+  `Failure_Time` DATETIME NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `hwkj`.`hwkj_customer_contact` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Contact_Chinese_Name` VARCHAR(45) NULL,
+  `Contact_English_Name` VARCHAR(45) NULL,
+  `Sex` VARCHAR(45) NULL,
+  `Title` VARCHAR(45) NULL,
+  `Dept` VARCHAR(45) NULL,
+  `Authority` VARCHAR(45) NULL,
+  `Language` VARCHAR(45) NULL,
+  `Company_Telephone` VARCHAR(45) NULL,
+  `Phone_Number` VARCHAR(45) NULL,
+  `Company_Mail` VARCHAR(45) NULL,
+  `Private_Mail` VARCHAR(45) NULL,
+  `WeChat_Number` VARCHAR(45) NULL,
+  `Id_Card` VARCHAR(45) NULL,
+  `Passport_Number` VARCHAR(45) NULL,
+  `Birth_Date` VARCHAR(45) NULL,
+  `Bank` VARCHAR(45) NULL,
+  `Bank_Account` VARCHAR(45) NULL,
+  `Native_Place` VARCHAR(45) NULL,
+  `Nation` VARCHAR(45) NULL,
+  `Religious_Belief` VARCHAR(45) NULL,
+  `Diet_Taboo` VARCHAR(45) NULL,
+  `Interests` VARCHAR(45) NULL,
+  `Habit` VARCHAR(45) NULL,
+  `Member_Family` VARCHAR(45) NULL,
+  `Status` VARCHAR(2) NULL,
+  `BPM` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+CREATE TABLE `hwkj`.`hwkj_customer_equipment_data` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Factory_Address` VARCHAR(45) NULL,
+  `Equipment_Name` VARCHAR(45) NULL,
+  `Brand` VARCHAR(45) NULL,
+  `Production_Date` VARCHAR(45) NULL,
+  `SN` VARCHAR(45) NULL,
+  `Quantity` INT NULL,
+  `Products` VARCHAR(45) NULL,
+  `Operation_Rate` VARCHAR(45) NULL,
+  `Maintenance_Record` VARCHAR(45) NULL,
+  `Repair_Recode` VARCHAR(45) NULL,
+  `BPM` VARCHAR(45) NULL,
+  `Engineer` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `hwkj`.`hwkj_customer_factory_address` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Factory_Address` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+ALTER TABLE `hwkj`.`hwkj_employee_punch_data` 
+DROP COLUMN `Punch_Equipment`,
+DROP COLUMN `Punch_Address`,
+DROP COLUMN `Punch_Result`,
+DROP COLUMN `Punch_Time`,
+DROP COLUMN `Attendance_Time`,
+ADD COLUMN `Morning_Work_Time` VARCHAR(45) NULL AFTER `Attendance_Date`,
+ADD COLUMN `Morning_Punch_Time` VARCHAR(45) NULL AFTER `Morning_Work_Time`,
+ADD COLUMN `Morning_Punch_Result` VARCHAR(45) NULL AFTER `Morning_Punch_Time`,
+ADD COLUMN `Morning_Punch_Address` VARCHAR(45) NULL AFTER `Morning_Punch_Result`,
+ADD COLUMN `Morning_Punch_Equipment` VARCHAR(45) NULL AFTER `Morning_Punch_Address`,
+ADD COLUMN `Afternoon_Work_Time` VARCHAR(45) NULL AFTER `Morning_Punch_Equipment`,
+ADD COLUMN `Afternoon_Punch_Time` VARCHAR(45) NULL AFTER `Afternoon_Work_Time`,
+ADD COLUMN `Afternoon_Punch_Result` VARCHAR(45) NULL AFTER `Afternoon_Punch_Time`,
+ADD COLUMN `Afternoon_Punch_Address` VARCHAR(45) NULL AFTER `Afternoon_Punch_Result`,
+ADD COLUMN `Afternoon_Punch_Equipment` VARCHAR(45) NULL AFTER `Afternoon_Punch_Address`,
+ADD COLUMN `Later_Amount` VARCHAR(45) NULL AFTER `Afternoon_Punch_Equipment`,
+ADD COLUMN `Later_Time` VARCHAR(45) NULL AFTER `Later_Amount`,
+ADD COLUMN `Early_Amount` VARCHAR(45) NULL AFTER `Later_Time`,
+ADD COLUMN `Early_Time` VARCHAR(45) NULL AFTER `Early_Amount`;
+
+CREATE TABLE `hwkj`.`hwkj_customer_strategy_and_support` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Date_From` DATETIME NULL,
+  `Date_To` DATETIME NULL,
+  `Top_Three_Customer` VARCHAR(45) NULL,
+  `Top_Three_Product` VARCHAR(45) NULL,
+  `Annual_Output` INT NULL,
+  `Annual_Revenue` VARCHAR(45) NULL,
+  `Business_Strategy` VARCHAR(45) NULL,
+  `Support_Need` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE `hwkj`.`hwkj_customer_management` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Year` VARCHAR(45) NULL,
+  `Quarter` VARCHAR(45) NULL,
+  `Revenue` DOUBLE NULL,
+  `Overdue_Amount` DOUBLE NULL,
+  `Score` VARCHAR(45) NULL,
+  `Important_Item` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+
+CREATE TABLE `hwkj`.`hwkj_customer_visit_plan` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Visit_Id` VARCHAR(45) NULL,
+  `Customer_Code` VARCHAR(45) NULL,
+  `Plan_Date_From` DATETIME NULL,
+  `Plan_Date_To` DATETIME NULL,
+  `Actual_Start_Time` DATETIME NULL,
+  `Actual_End_Time` DATETIME NULL,
+  `Visit_Item` VARCHAR(200) NULL,
+  `Visit_Purpose` VARCHAR(400) NULL,
+  `Visit_Result` VARCHAR(800) NULL,
+  `Status` VARCHAR(2) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  `Approved_By` VARCHAR(45) NULL,
+  `Approved_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`));
+
+CREATE TABLE `hwkj`.`hwkj_commodity` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Product_Name` VARCHAR(45) NULL,
+  `Category` VARCHAR(45) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` VARCHAR(45) NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` VARCHAR(45) NULL,
+  PRIMARY KEY (`Id`));
+
+
+
+CREATE TABLE `hwkj`.`hwkj_material_engineering_data` (
+  `Id` INT NOT NULL AUTO_INCREMENT,
+  `Material_Number` VARCHAR(45) NULL,
+  `Version` VARCHAR(45) NULL,
+  `Product_Name` VARCHAR(45) NULL,
+  `Material_Type` VARCHAR(45) NULL,
+  `Size` VARCHAR(45) NULL,
+  `Texture_Material` VARCHAR(45) NULL,
+  `Model_Number` VARCHAR(45) NULL,
+  `Describe` VARCHAR(45) NULL,
+  `Brand` VARCHAR(45) NULL,
+  `Manufacturer_Abbreviation` VARCHAR(45) NULL,
+  `Manufacturer_Material_Numbe` VARCHAR(45) NULL,
+  `Country_Origin` VARCHAR(45) NULL,
+  `Drawing` VARCHAR(45) NULL,
+  `Specification` VARCHAR(45) NULL,
+  `Photo` VARCHAR(45) NULL,
+  `Quantity_Unit` INT NULL,
+  `Net_Weight` DOUBLE NULL,
+  `Gross_Weight` DOUBLE NULL,
+  `Weight_Unit` VARCHAR(45) NULL,
+  `Volume` DOUBLE NULL,
+  `Packaging` VARCHAR(45) NULL,
+  `Minimum_Packing_Capacity` DOUBLE NULL,
+  `Standard_Packing_Method` VARCHAR(45) NULL,
+  `Life_Cycle_State` VARCHAR(45) NULL,
+  `Force_Time` VARCHAR(45) NULL,
+  `Failure_Time` VARCHAR(45) NULL,
+  `Remark` VARCHAR(200) NULL,
+  `Creator` VARCHAR(45) NULL,
+  `Create_Date` DATETIME NULL,
+  `Updated_By` VARCHAR(45) NULL,
+  `Update_Date` DATETIME NULL,
+  PRIMARY KEY (`Id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;

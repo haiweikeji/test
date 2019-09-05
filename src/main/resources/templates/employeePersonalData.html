@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/default/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/easyUi/demo/demo.css}">
+    <script type="text/javascript" th:src="@{/easyUi/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/easyUi/locale/easyui-lang-zh_CN.js}"></script>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <div>
+        <span style="font-size: 10px">工&nbsp;&nbsp;&nbsp;号:</span>
+        <input type="text" id="job_Number" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">姓&nbsp;&nbsp;&nbsp;名:</span>
+        <input type="text" id="name" class="easyui-textbox" style="width: 80px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别:</span>
+        <select id="sex" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>男</option>
+            <option>女</option>
+        </select>&nbsp;&nbsp;
+        <span style="font-size: 10px">入职时间:</span>
+        <input id="dateFrom" name="dateFrom" class="easyui-datebox" style="width: 120px;height: 25px">
+        <span style="font-size: 10px">To</span>
+        <input id="dateTo" name="dateTo" class="easyui-datebox" style="width: 120px;height: 25px">&nbsp;&nbsp;
+        <span style="font-size: 10px">在职状态:</span>
+        <select id="status" class="easyui-combobox" style="width: 80px;height: 25px">
+            <option></option>
+            <option>Y</option>
+            <option>N</option>
+        </select>&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <a id="search" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-search" style="width:90px">查询</a>&nbsp;&nbsp;&nbsp;
+        <a id="insert" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="newEmployeePersonalData()" style="width:90px">新增</a>&nbsp;&nbsp;&nbsp;
+        <a id="update" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-edit" onclick="Update()" style="width:90px">更新</a>&nbsp;&nbsp;&nbsp;
+        <a id="remove" href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-remove" onclick="Remove()" style="width:90px">删除</a>&nbsp;&nbsp;&nbsp;
+        <a id="download" href="javascript:void(0)" class="easyui-linkbutton" onclick="Download()" style="width:90px"><span style="align-content: center">下载</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="model" href="javascript:void(0)" class="easyui-linkbutton" onclick="DownloadModel()" style="width:90px"><span style="align-content: center">模板</span></a>&nbsp;&nbsp;&nbsp;
+        <a id="upload" href="javascript:void(0)" class="easyui-linkbutton" onclick="ExcelUpload()" style="width:90px"><span style="align-content: center">文件上传</span></a>&nbsp;&nbsp;&nbsp;
+    </div>
+    <div style="height: 10px"></div>
+    <div>
+        <form>
+            <table id="g" class="easyui-datagrid" width="98%">
+            </table>
+        </form>
+    </div>
+    <div style="height: 10px"></div>
+    <div id="dlg" class="easyui-dialog" style="width:570px;height: 600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:10px 20px">
+            <div style="margin-bottom:10px">
+                <input name="china_Name" class="easyui-textbox" style="width: 240px" required="true" label="中文名字:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="education" class="easyui-textbox" style="width: 240px" required="true" label="最高学历:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="english_Name" class="easyui-textbox" style="width: 240px" label="英文名字:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="major" class="easyui-textbox" style="width: 240px" required="true" label="专业:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="sex" class="easyui-combobox" style="width: 240px" required="true" label="性别:">
+                    <option></option>
+                    <option>男</option>
+                    <option>女</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="graduated_From" class="easyui-textbox" style="width: 240px" required="true" label="毕业院校:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="phone_Number_Add" name="phone_Number" class="easyui-textbox" style="width: 240px" required="true" data-options="validType:'length[11,11]'" label="手机号码:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="graduated_Time" class="easyui-datebox" style="width: 240px" required="true" label="毕业时间:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="weChat_Number" class="easyui-textbox" style="width: 240px"  label="微信号码:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="language" class="easyui-textbox" style="width: 240px" label="语言:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="company_Mail" class="easyui-textbox" style="width: 240px"  validType='email' label="公司邮箱:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="native_Place" class="easyui-textbox" style="width: 240px" required="true" label="籍贯:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="private_Mail" class="easyui-textbox" style="width: 240px" validType='email' label="个人邮箱:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="nation" class="easyui-textbox"  style="width: 240px" required="true" label="民族:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="entry_Date" class="easyui-datebox" style="width: 240px"  required="true" label="入职日期:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="religious_Belief" class="easyui-textbox" style="width: 240px" label="宗教信仰:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="entry_Position" class="easyui-textbox" style="width: 240px" required="true" label="入职资位:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="marital_Status" class="easyui-textbox" style="width: 240px"  label="婚姻状况:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="id_Card" class="easyui-textbox" style="width: 240px" required="true" data-options="validType:'length[18,18]'" label="身份证号码:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="member_Family" class="easyui-textbox" style="width: 240px" label="家庭成员姓名:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="id_Card_Address" class="easyui-textbox" style="width: 240px" required="true" label="身份证住址:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="relationship" class="easyui-textbox" style="width: 240px" label="关系:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="present_Address" class="easyui-textbox" style="width: 240px" required="true" label="现住址:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="emergency_Contact_Person" class="easyui-textbox" style="width: 240px" required="true" label="紧急联络人:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="history_Disease" class="easyui-textbox" style="width: 240px" required="true" label="疾病史:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="emergency_Contact_Person_Relationship" class="easyui-textbox" style="width: 240px"  label="与紧急联络人关系:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="recruitment_Sources" class="easyui-textbox" style="width: 240px" required="true" label="招聘来源:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="relationship_Phone_Add" name="relationship_Phone" class="easyui-textbox" style="width: 240px" required="true" data-options="validType:'length[11,11]'" label="联络人电话:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="referee" class="easyui-textbox"  style="width: 240px" label="推荐人:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="blacklist" class="easyui-combobox" style="width: 240px" label="列入黑名单:">
+                    <option>N</option>
+                    <option>Y</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="periods_Number" class="easyui-textbox"  style="width: 240px" label="期数:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="remarks" class="easyui-textbox"  style="width: 240px"label="备注:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 240px"label="照片:" >&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg2" class="easyui-dialog" style="width:570px;height: 600px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons2'">
+        <form id="fm2" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:10px 20px">
+            <div style="margin-bottom:10px">
+                <input type="hidden" name="id" class="easyui-textbox" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="china_Name" class="easyui-textbox" style="width: 240px" required="true" label="中文名字:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="education" class="easyui-textbox"  style="width: 240px" required="true" label="最高学历:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="english_Name" class="easyui-textbox" style="width: 240px" label="英文名字:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="major" class="easyui-textbox" style="width: 240px" required="true" label="专业:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <select name="sex" class="easyui-combobox" style="width: 240px" required="true" label="性别:">
+                    <option></option>
+                    <option>男</option>
+                    <option>女</option>
+                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="graduated_From" class="easyui-textbox" style="width: 240px" required="true" label="毕业院校:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input id="phone_Number_Update" name="phone_Number" class="easyui-textbox"  style="width: 240px" required="true" data-options="validType:'length[11,11]'" label="手机号码:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="graduated_Time" class="easyui-datebox"  style="width: 240px"  required="true" label="毕业时间:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="weChat_Number" class="easyui-textbox" style="width: 240px" label="微信号码:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="language" class="easyui-textbox" style="width: 240px" label="语言:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="company_Mail" class="easyui-textbox" style="width: 240px"  validType='email' label="公司邮箱:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="native_Place" class="easyui-textbox" style="width: 240px" required="true" label="籍贯:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="private_Mail" class="easyui-textbox" style="width: 240px" validType='email' label="个人邮箱:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="nation" class="easyui-textbox" style="width: 240px" required="true" label="民族:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="entry_Date" class="easyui-datebox" style="width: 240px" required="true"  label="入职日期:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="religious_Belief" class="easyui-textbox" style="width: 240px"  label="宗教信仰:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="entry_Position" class="easyui-textbox" style="width: 240px" required="true" label="入职资位:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="marital_Status" class="easyui-textbox" style="width: 240px" label="婚姻状况:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="id_Card" class="easyui-textbox" style="width: 240px" required="true" disabled="disabled" label="身份证号码:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="member_Family" class="easyui-textbox"  style="width: 240px" label="家庭成员姓名:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="id_Card_Address" class="easyui-textbox" style="width: 240px" required="true" label="身份证住址:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="relationship" class="easyui-textbox"  style="width: 240px" label="关系:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="present_Address" class="easyui-textbox" style="width: 240px" required="true" label="现住址:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="emergency_Contact_Person" class="easyui-textbox" style="width: 240px" required="true" label="紧急联络人:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="history_Disease" class="easyui-textbox" style="width: 240px" required="true" label="疾病史:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="emergency_Contact_Person_Relationship" class="easyui-textbox" style="width: 240px" label="与紧急联络人关系:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="recruitment_Sources" class="easyui-textbox" style="width: 240px" required="true" label="招聘来源:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <input id="relationship_Phone_Update" name="relationship_Phone" class="easyui-textbox" style="width: 240px" required="true" data-options="validType:'length[11,11]'" label="联络人电话:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="referee" class="easyui-textbox" style="width: 240px" label="推荐人:" >&nbsp;&nbsp;&nbsp;&nbsp;
+                <select name="blacklist" class="easyui-combobox" style="width: 240px"  label="列入黑名单:">
+                    <option>N</option>
+                    <option>Y</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="periods_Number" class="easyui-textbox"  style="width: 240px" label="期数:" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="remarks" class="easyui-textbox" style="width: 240px" label="备注:" >
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="leave_Date" class="easyui-datebox" style="width: 240px"  label="离职日期:" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <input name="multipartFile" class="easyui-filebox" style="width: 240px" label="照片:" />
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons2">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser2()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg2').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg3" class="easyui-dialog" style="width:400px;height: 200px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons3'">
+        <form id="fm3" method="post" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="id" type="hidden" class="easyui-textbox"/>
+            </div>
+            <div style="margin-bottom:10px">
+                <h1 style="text-align: center;font-size: 20px">是否删除该笔数据!</h1>
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons3">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser3()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg3').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div id="dlg4" class="easyui-dialog" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons4'">
+        <form id="fm4" method="post" enctype="multipart/form-data" novalidate style="margin:0;padding:20px 50px">
+            <div style="margin-bottom:10px">
+                <input name="multipartFile" class="easyui-filebox"  style="width: 230px"  label="Excel:" >
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons4">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser4()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg4').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <div style="display: none">
+        <div id="photo" class="datagrid-toolbar" style="padding:5px;">
+            <img id="img" src="" alt="">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        var url=window.location.href;
+        url = url.substring(url.lastIndexOf("/") + 1);
+        $.ajax({
+            url:"queryEmployeePersonalDataFunction.do",
+            type:"post",
+            dataType:"json",
+            data:{Url_Page:url},
+            success:function (data) {
+                data=data.list;
+                if(data=="timeOut"){
+                    $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning");
+                }else {
+                    if(data.newly_Added!="Y"){
+                        $("#insert").css("display","none");
+                    }
+                    if(data.modify!="Y"){
+                        $("#update").css("display","none");
+                    }
+                    if(data.remove!="Y"){
+                        $("#remove").css("display","none");
+                    }
+                    if(data.download!="Y"){
+                        $("#download").css("display","none");
+                    }
+                    if(data.model!="Y"){
+                        $("#model").css("display","none");
+                    }
+                    if(data.upload!="Y"){
+                        $("#upload").css("display","none");
+                    }
+                }
+            },
+            error:function () {
+                $.messager.alert("提示信息","请尝试重新登入或联系管理员!","error");
+            }
+        })
+    });
+    /**
+     * 手机号码
+     */
+    $(function () {
+        $("#phone_Number_Add").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#phone_Number_Update").numberbox({
+            min: 0,
+        });
+    });
+    /**
+     * 联系人手机号码
+     */
+    $(function () {
+        $("#relationship_Phone_Add").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#relationship_Phone_Update").numberbox({
+            min: 0,
+        });
+    });
+    $(function () {
+        $("#search").click(function () {
+            $("#g").datagrid({
+                columns: [
+                    [//定义标题行所有的列
+                        {field:'id',title:'编号',checkbox:true,align:'center',titleAlign: true},
+                        {field:'job_Number',title:'工号',align:'center',titleAlign: true},
+                        {field:'photo',title:'照片',align:'center',titleAlign: true,formatter:showPhoto},
+                        {field:'china_Name',title:'中文名字',align:'center',titleAlign: true},
+                        {field:'english_Name',title:'英文名字',align:'center',titleAlign: true},
+                        {field:'sex',title:'性别',align:'center',titleAlign: true},
+                        {field:'age',title:'年龄',align:'center',titleAlign: true},
+                        {field:'phone_Number',title:'手机号码',align:'center',titleAlign: true},
+                        {field:'weChat_Number',title:'微信号码',align:'center',titleAlign: true},
+                        {field:'company_Mail',title:'公司邮箱',align:'center',titleAlign: true},
+                        {field:'private_Mail',title:'私人邮箱',align:'center',titleAlign: true},
+                        {field:'entry_Date',title:'入职日期',align:'center',titleAlign: true},
+                        {field:'status',title:'在职状态',align:'center',titleAlign: true},
+                        {field:'entry_Position',title:'资位',align:'center',titleAlign: true},
+                        {field:'leave_Date',title:'离职日期',align:'center',titleAlign: true},
+                        {field:'birth_Date',title:'出生日期',align:'center',titleAlign: true},
+                        {field:'id_Card',title:'身份证号码',align:'center',titleAlign: true},
+                        {field:'id_Card_Address',title:'身份证住址',align:'center',titleAlign: true},
+                        {field:'present_Address',title:'现住址',align:'center',titleAlign: true},
+                        {field:'education',title:'最高学历',align:'center',titleAlign: true},
+                        {field:'major',title:'专业',align:'center',titleAlign: true},
+                        {field:'graduated_From',title:'毕业院校',align:'center',titleAlign: true},
+                        {field:'graduated_Time',title:'毕业时间',align:'center',titleAlign: true},
+                        {field:'language',title:'语言',align:'center',titleAlign: true},
+                        {field:'native_Place',title:'籍贯',align:'center',titleAlign: true},
+                        {field:'nation',title:'民族',align:'center',titleAlign: true},
+                        {field:'religious_Belief',title:'宗教信仰',align:'center',titleAlign: true},
+                        {field:'marital_Status',title:'婚姻状况',align:'center',titleAlign: true},
+                        {field:'history_Disease',title:'疾病史',align:'center',titleAlign: true},
+                        {field:'member_Family',title:'家庭成员姓名',align:'center',titleAlign: true},
+                        {field:'relationship',title:'关系',align:'center',titleAlign: true},
+                        {field:'emergency_Contact_Person',title:'紧急联络人',align:'center',titleAlign: true},
+                        {field:'emergency_Contact_Person_Relationship',title:'与紧急联络人关系',align:'center',titleAlign: true},
+                        {field:'relationship_Phone',title:'联络人电话',align:'center',titleAlign: true},
+                        {field:'recruitment_Sources',title:'招聘来源',align:'center',titleAlign: true},
+                        {field:'periods_Number',title:'期数',align:'center',titleAlign: true},
+                        {field:'referee',title:'推荐人',align:'center',titleAlign: true},
+                        {field:'blacklist',title:'列入黑名单',align:'center',titleAlign: true},
+                        {field:'remarks',title:'备注',align:'center',titleAlign: true},
+                        {field:'creator',title:'建立人',align:'center',titleAlign: true},
+                        {field:'create_Date',title:'建立日期',align:'center',titleAlign: true},
+                        {field:'updated_By',title:'修改人',align:'center',titleAlign: true},
+                        {field:'update_Date',title:'修改日期',align:'center',titleAlign: true},
+                    ]
+                ],
+                url: "queryEmployeePersonalData.do",//指定URL地址，控件自动发送ajax请求获取数据
+                queryParams:{Status:$("#status").val(),Job_Number:$("#job_Number").val(),Name:$("#name").val(),Sex:$("#sex").val(),DateFrom:$("#dateFrom").val(),DateTo:$("#dateTo").val()},//查询参数
+                loadMsg: "正在加载数据...",
+                fitColumns: true,//列的宽度填满表格，防止下方出现滚动条
+                singleSelect: false,//是否可以单选
+                pagination: true,//分页条
+                pageSize: 20,
+                pageList: [15, 20, 30, 40, 50],//分页条中的下拉框选项.
+                onSelectPage: function (page, rows,Status,Job_Number,Name,Sex,DateFrom,DateTo) {//分页触发
+                 findOption(page, rows,Status,Job_Number,Name,Sex,DateFrom,DateTo);
+                },
+                onLoadSuccess:function(data){
+                    if(data){
+                        $.each(data.rows, function(index,item){
+                            if(item.checked){
+                                $('#g').datagrid('checkRow',index);
+                            }
+                        });
+                    }
+                },
+            })
+        })
+    });
+    function findOption(page,rows,Status,Job_Number,Name,Sex,DateFrom,DateTo)
+    {
+        $("#g").datagrid("getPager").pagination({page:page,rows:rows,Status:Status,Job_Number:Job_Number,Name:Name,Sex:Sex,DateFrom:DateFrom,DateTo:DateTo});//重置
+        $("#g").datagrid("loading"); //加屏蔽
+        $.ajax({
+            type : "POST",
+            dataType : "json",
+            url : "queryEmployeePersonalData.do",
+            data : {
+                page : page,
+                rows : rows,
+                Status:Status,
+                Job_Number:Job_Number,
+                Name:Name,
+                Sex:Sex,
+                DateFrom:DateFrom,
+                DateTo:DateTo,
+            },
+            success : function(data) {
+                $("#g").datagrid("loadData",data);
+                $("#g").datagrid("loaded"); //移除屏蔽
+            },
+            error : function(err) {
+                $.messager.alert("操作提示", "获取信息失败...请联系管理员!", "error");
+                $("#g").datagrid("loaded"); //移除屏蔽
+            }
+        });
+    };
+    var url;
+    var checked;
+    var Job_Number = [];
+    var id=[];
+    function Update(){
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            $('#dlg2').dialog('open').dialog('center').dialog('setTitle','Edit');
+            $('#fm2').form('load',row);
+            Job_Number=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                Job_Number.push(item.job_Number);
+            });
+            if(Job_Number.length>=2){
+                $.messager.alert("操作提示","请选择一条数据进行更新!","info");
+                $('#dlg2').dialog('close');
+            }
+            url = 'employeePersonalDataUpdate.do';
+        }
+    };
+    function newEmployeePersonalData(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New');
+        $('#fm').form('clear');
+        url = 'employeePersonalDataAdd.do';
+    };
+    function saveUser(){
+        $('#fm').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    if(result.message=="success"){
+                        $('#dlg').dialog('close');        // close the dialog
+                        $.messager.alert("操作提示","新增数据成功!","info");
+                        $('#g').datagrid('reload');    // reload the user data
+                    }
+                    else if(result.message=="exist"){
+                        $.messager.alert("提示信息","请确认身份证号是否已存在或者联系管理员!","error")
+                    }
+                    else if(result.message=="timeOut"){
+                        $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning")
+                    }
+                    else {
+                        $.messager.alert("提示信息","新增数据失败,请稍后尝试或者联系管理员!","error")
+                    }
+                }
+            }
+        });
+    };
+    function saveUser2(){
+        $('#fm2').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(result){
+                var result = eval('('+result+')');
+                if (result.errorMsg){
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    if(result.message=="success"){
+                        $('#dlg2').dialog('close');        // close the dialog
+                        $.messager.alert("操作提示","更新数据成功!","info");
+                        $('#g').datagrid('reload');    // reload the user data
+                    }
+                    else if(result.message=="timeOut"){
+                        $.messager.alert("提示信息","网页超时,请重新刷新页面!","warning")
+                    }
+                    else {
+                        $.messager.alert("提示信息","更新数据失败,请稍后尝试或者联系管理员!","error")
+                    }
+                }
+            }
+        });
+    };
+    function DownloadModel(){
+        location.href = "employeePersonalDataDownLoadModel.do";
+    };
+    function ExcelUpload(){
+        $('#dlg4').dialog('open').dialog('center').dialog('setTitle','Upload');
+        $('#fm4').form('clear');
+        url = 'employeePersonalDataUpload.do';
+    };
+    function saveUser4(){
+        $('#fm4').form('submit',{
+            url: url,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(data){
+                var data = eval('('+data+')');
+                if(data.message=="success"){
+                    $.messager.alert("提示信息","数据上传成功!","info")
+                    $('#dlg4').dialog('close');
+                    $('#g').datagrid('reload');
+                }
+                else if(data.message.substring(0,5)=="exist"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+data.message.substring(6)+"列是否已存在或者联系管理员!","error")
+                }
+                else if(data.message.substring(0,5)=="blank"){
+                    $.messager.alert("提示信息","请确认上传Excel文件中的第"+data.message.substring(6)+"列必填项有为空的或者联系管理员!","error")
+                }
+                else if(data.message=="timeOut"){
+                    $.messager.alert("操作提示","网页超时,请重新刷新页面!","warning");
+                }
+                else if (data.message=="error"){
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error")
+                }
+                else {
+                    $.messager.alert("提示信息","数据上传失败,请稍后尝试或者联系管理员!","error")
+                }
+            }
+        });
+    };
+    function Remove() {
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            $('#dlg3').dialog('open').dialog('center').dialog('setTitle','Remove');
+            $('#fm3').form('load',row);
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            url = 'employeePersonalDataRemove.do';
+        }
+    }
+    function saveUser3() {
+        $.ajax({
+            url:url,
+            type:"post",
+            data:{id:id},
+            cache : false,
+            dataType:"json",
+            success:function (data) {
+                if(data.message=="success"){
+                    $('#dlg3').dialog('close');
+                    $.messager.alert("操作提示","删除数据成功!","info");
+                    $('#g').datagrid('reload');
+                }
+                else if(data.message=="error"){
+                    $.messager.alert("操作提示","删除数据失败,请稍后尝试或者联系管理员!","error")
+                }
+                else {
+                    $.messager.alert("操作提示","删除数据失败,请稍后尝试或者联系管理员!","error")
+                }
+            },
+            error:function (err) {
+                $.messager.alert("操作提示","删除数据失败,请稍后尝试或者联系管理员!","error");
+            }
+        })
+    };
+    function Download(){
+        var Status=$("#status").val();
+        var Job_Number=$("#job_Number").val();
+        var Name=$("#name").val();
+        var Sex=$("#sex").val();
+        var DateFrom=$("#dateFrom").val();
+        var DateTo=$("#dateTo").val();
+        var row = $('#g').datagrid('getSelected');
+        if (row){
+            id=[];
+            checked=$('#g').datagrid('getChecked');
+            $.each(checked, function(index, item){
+                id.push(item.id);
+            });
+            location.href="employeePersonalDataDownLoadExcel.do?id="+id;
+        }else {
+            location.href = "employeePersonalDataDownLoadExcelAll.do?Status="+Status+"&Job_Number="+Job_Number+
+                "&Name="+Name+"&Sex="+Sex+"&DateFrom="+DateFrom+"&DateTo="+DateTo;
+        }
+    };
+    /**
+     * 给时间框控件扩展一个清除的按钮
+     */
+    $.fn.datebox.defaults.cleanText = '清空';
+    (function ($) {
+        var buttons = $.extend([], $.fn.datebox.defaults.buttons);
+        buttons.splice(1, 0, {
+            text: function (target) {
+                return $(target).datebox("options").cleanText
+            },
+            handler: function (target) {
+                $(target).datebox("setValue", "");
+                $(target).datebox("hidePanel");
+            }
+        });
+        $.extend($.fn.datebox.defaults, {
+            buttons: buttons
+        });
+
+    })(jQuery);
+    function showPhoto(value,row,index) {
+        if(""!=value && value!=null){
+            return "<img onclick='clickPhoto(\"" +value+ "\")' style='max-width:66px; max-height:40px;margin-left:3px;' src='" + row.photo + "' title='点击查看图片' />";
+        }
+        //if(row.photo){
+        //return "<img style='width:240px;height:240px;' border='1' src='"+row.photo+"' />";
+        //}else {
+        // return null;
+        //}
+    };
+    function clickPhoto(value) {
+        $('#photo').dialog({
+            title: '预览',
+            width:  400,
+            height: 400,
+            resizable: true,
+            closed: false,
+            cache: false,
+            modal: true,
+
+        });
+        $("#photo").window("center");
+        $("#img").attr("src", value);
+    };
+</script>
+</body>
+</html>
