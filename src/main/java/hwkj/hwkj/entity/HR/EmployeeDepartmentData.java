@@ -114,12 +114,27 @@ public class EmployeeDepartmentData {
      */
     @Column(name = "Entry_Position")
     private String entryPosition;
-
     /**
      * 职系
      */
     @Column(name = "Job_Family")
     private String jobFamily;
+    /**
+     * 部门
+     */
+    @Column(name = "Dept")
+    private String Dept;
+
+    @Column(name = "Ke")
+    private String ke;
+
+    @Column(name = "Zu")
+    private String zu;
+    /**
+     * 状态
+     */
+    @Column(name = "Status")
+    private String Status;
 
     /**
      * 岗位
@@ -185,5 +200,11 @@ public class EmployeeDepartmentData {
      */
     @Column(name = "Effective_Position")
     private String EffectivePosition;
+    /**
+     * 区域
+     */
+    @Column(name = "Region")
+    private String Region;
 
-    }
+
+}

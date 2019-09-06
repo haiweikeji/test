@@ -1,5 +1,6 @@
 package hwkj.hwkj.service.SCM;
 
+import hwkj.hwkj.entity.SCM.VendorContact;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +37,7 @@ public interface VendorContactService {
      * @param vendorContact
      * @return
      */
-    public void queryVendorContactPage(PageModel<VendorContact> vendorContactPageModel,VendorContact vendorContact);
+    public void queryVendorContactPage(PageModel<VendorContact> vendorContactPageModel, VendorContact vendorContact);
 
     /**
      * by id 查询

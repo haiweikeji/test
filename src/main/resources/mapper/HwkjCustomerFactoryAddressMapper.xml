@@ -13,5 +13,9 @@
     <result column="Create_Date" jdbcType="TIMESTAMP" property="createDate" />
     <result column="Updated_By" jdbcType="VARCHAR" property="updatedBy" />
     <result column="Update_Date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="Chinese_Abbreviation" jdbcType="VARCHAR" property="chineseAbbreviation" />
+    <result column="English_Abbreviation" jdbcType="VARCHAR" property="englishAbbreviation" />
+    <result column="Country" jdbcType="VARCHAR" property="country" />
+    <result column="City" jdbcType="VARCHAR" property="city" />
   </resultMap>
 </mapper>

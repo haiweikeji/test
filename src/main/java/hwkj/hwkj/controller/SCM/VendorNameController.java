@@ -1,6 +1,8 @@
 package hwkj.hwkj.controller.SCM;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HUser.User;
+import hwkj.hwkj.entity.SCM.VendorName;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.SCM.VendorCodeService;
@@ -38,7 +40,7 @@ public class VendorNameController {
 
     @RequestMapping(value = "/queryVendorName.do",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryVendorName(PageModel<VendorName> vendorNamePageModel,VendorName vendorName){
+    public JSONObject queryVendorName(PageModel<VendorName> vendorNamePageModel, VendorName vendorName){
         Map<String,Object> map=new HashMap<>();
         vendorNameService.queryVendorNamePage(vendorNamePageModel, vendorName);
         map.put("rows",vendorNamePageModel.getList());
@@ -54,7 +56,7 @@ public class VendorNameController {
         }
         vendorName.setStatus("Y");
         vendorName.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        vendorName.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        vendorName.setCreateDate(new Date());
         if(!vendorNameService.insertVendorName(vendorName)){
             throw new GlobalException("error");
         }
@@ -67,8 +69,8 @@ public class VendorNameController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        vendorName.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        vendorName.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        vendorName.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        vendorName.setUpdateDate(new Date());
         if(!vendorNameService.updateVendorName(vendorName,Old_Actual_Chinese_Full[0])){
             throw new GlobalException("error");
         }
@@ -117,29 +119,29 @@ public class VendorNameController {
             List<VendorName> list=vendorNameService.queryVendorNameForDownLoadAll(vendorName);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                if(list.get(j-1).getStandard_Chinese_Full()!=null){
-                    row.createCell(0).setCellValue(list.get(j-1).getStandard_Chinese_Full());
+                if(list.get(j-1).getStandardChineseFull()!=null){
+                    row.createCell(0).setCellValue(list.get(j-1).getStandardChineseFull());
                 }
-                if(list.get(j-1).getStandard_Chinese_Abbreviation()!=null){
-                    row.createCell(1).setCellValue(list.get(j-1).getStandard_Chinese_Abbreviation());
+                if(list.get(j-1).getStandardChineseAbbreviation()!=null){
+                    row.createCell(1).setCellValue(list.get(j-1).getStandardChineseAbbreviation());
                 }
-                if(list.get(j-1).getStandard_English_Full()!=null){
-                    row.createCell(2).setCellValue(list.get(j-1).getStandard_English_Full());
+                if(list.get(j-1).getStandardEnglishFull()!=null){
+                    row.createCell(2).setCellValue(list.get(j-1).getStandardEnglishFull());
                 }
-                if(list.get(j-1).getStandard_English_Abbreviation()!=null){
-                    row.createCell(3).setCellValue(list.get(j-1).getStandard_English_Abbreviation());
+                if(list.get(j-1).getStandardEnglishAbbreviation()!=null){
+                    row.createCell(3).setCellValue(list.get(j-1).getStandardEnglishAbbreviation());
                 }
-                if(list.get(j-1).getActual_Chinese_Full()!=null){
-                    row.createCell(4).setCellValue(list.get(j-1).getActual_Chinese_Full());
+                if(list.get(j-1).getActualChineseFull()!=null){
+                    row.createCell(4).setCellValue(list.get(j-1).getActualChineseFull());
                 }
-                if(list.get(j-1).getActual_English_Full()!=null){
-                    row.createCell(5).setCellValue(list.get(j-1).getActual_English_Full());
+                if(list.get(j-1).getActualEnglishFull()!=null){
+                    row.createCell(5).setCellValue(list.get(j-1).getActualEnglishFull());
                 }
                 row.createCell(6).setCellValue(list.get(j-1).getStatus());
                 row.createCell(7).setCellValue(list.get(j-1).getCreator());
-                row.createCell(8).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(9).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(10).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(8).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(9).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(10).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -193,29 +195,29 @@ public class VendorNameController {
             }
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                if(list.get(j-1).getStandard_Chinese_Full()!=null){
-                    row.createCell(0).setCellValue(list.get(j-1).getStandard_Chinese_Full());
+                if(list.get(j-1).getStandardChineseFull()!=null){
+                    row.createCell(0).setCellValue(list.get(j-1).getStandardChineseFull());
                 }
-                if(list.get(j-1).getStandard_Chinese_Abbreviation()!=null){
-                    row.createCell(1).setCellValue(list.get(j-1).getStandard_Chinese_Abbreviation());
+                if(list.get(j-1).getStandardChineseAbbreviation()!=null){
+                    row.createCell(1).setCellValue(list.get(j-1).getStandardChineseAbbreviation());
                 }
-                if(list.get(j-1).getStandard_English_Full()!=null){
-                    row.createCell(2).setCellValue(list.get(j-1).getStandard_English_Full());
+                if(list.get(j-1).getStandardEnglishFull()!=null){
+                    row.createCell(2).setCellValue(list.get(j-1).getStandardEnglishFull());
                 }
-                if(list.get(j-1).getStandard_English_Abbreviation()!=null){
-                    row.createCell(3).setCellValue(list.get(j-1).getStandard_English_Abbreviation());
+                if(list.get(j-1).getStandardEnglishAbbreviation()!=null){
+                    row.createCell(3).setCellValue(list.get(j-1).getStandardEnglishAbbreviation());
                 }
-                if(list.get(j-1).getActual_Chinese_Full()!=null){
-                    row.createCell(4).setCellValue(list.get(j-1).getActual_Chinese_Full());
+                if(list.get(j-1).getActualChineseFull()!=null){
+                    row.createCell(4).setCellValue(list.get(j-1).getActualChineseFull());
                 }
-                if(list.get(j-1).getActual_English_Full()!=null){
-                    row.createCell(5).setCellValue(list.get(j-1).getActual_English_Full());
+                if(list.get(j-1).getActualEnglishFull()!=null){
+                    row.createCell(5).setCellValue(list.get(j-1).getActualEnglishFull());
                 }
                 row.createCell(6).setCellValue(list.get(j-1).getStatus());
                 row.createCell(7).setCellValue(list.get(j-1).getCreator());
-                row.createCell(8).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(9).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(10).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(8).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(9).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(10).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -294,7 +296,7 @@ public class VendorNameController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

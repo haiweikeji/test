@@ -82,27 +82,27 @@ public class OrgDataController {
                     continue;
                 }
                 orgData=new OrgData();
-                orgData.setGroup_Name(row.getCell(0).getStringCellValue());
-                orgData.setGroup_Code("HW0000000");
-                orgData.setLegal_Name(row.getCell(1).getStringCellValue());
-                if(legalDataService.selectLegalDataByLegalName(row.getCell(1).getStringCellValue()).getCompany_Code()==null){
+                orgData.setGroupName(row.getCell(0).getStringCellValue());
+                orgData.setGroupCode("HW0000000");
+                orgData.setLegalName(row.getCell(1).getStringCellValue());
+                if(legalDataService.selectLegalDataByLegalName(row.getCell(1).getStringCellValue()).getCompanyCode()==null){
                     flag="2";
                     return flag;
                 }
-                orgData.setCompany_Code(legalDataService.selectLegalDataByLegalName(row.getCell(1).getStringCellValue()).getCompany_Code());
-                orgData.setBG(row.getCell(2).getStringCellValue());
+                orgData.setCompanyCode(legalDataService.selectLegalDataByLegalName(row.getCell(1).getStringCellValue()).getCompanyCode());
+                orgData.setBg(row.getCell(2).getStringCellValue());
                 if(row.getCell(3)!=null){
-                    orgData.setBU(row.getCell(3).getStringCellValue());
+                    orgData.setBu(row.getCell(3).getStringCellValue());
                 }
                 orgData.setRegion(row.getCell(4).getStringCellValue());
                 orgData.setDept(row.getCell(5).getStringCellValue());
                 orgData.setKe(row.getCell(6).getStringCellValue());
                 orgData.setZu(row.getCell(7).getStringCellValue());
-                orgData.setCost_Code(orgDataService.calculateOrgCode(orgData).substring(0,7)+"00");
-                orgData.setOrg_Code(orgDataService.calculateOrgCode(orgData));
+                orgData.setCostCode(orgDataService.calculateOrgCode(orgData).substring(0,7)+"00");
+                orgData.setOrgCode(orgDataService.calculateOrgCode(orgData));
                 orgData.setStatus("Y");
                 orgData.setCreator(((User)request.getSession().getAttribute("user")).getName());
-                orgData.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                orgData.setCreateDate(new Date());
                 orgDataService.insertOrgData(orgData);
                 //orgDataList.add(orgData);
             }
@@ -136,10 +136,10 @@ public class OrgDataController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        orgData.setGroup_Name("HW");
-        orgData.setGroup_Code("HW0000000");
+        orgData.setGroupName("HW");
+        orgData.setGroupCode("HW0000000");
         orgData.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        orgData.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        orgData.setCreateDate(new Date());
         if(!orgDataService.insertOrgData(orgData)){
             throw new GlobalException("error");
         }
@@ -161,8 +161,8 @@ public class OrgDataController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        orgData.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        orgData.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//DATE-->string
+        orgData.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        orgData.setUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));//DATE-->string
         if(!orgDataService.updateOrgData(orgData)){
             throw new GlobalException("error");
         }
@@ -224,23 +224,23 @@ public class OrgDataController {
             List<OrgData> list=orgDataService.queryOrgDataForDownLoad(id);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getGroup_Name());
-                row.createCell(1).setCellValue(list.get(j-1).getGroup_Code());
-                row.createCell(2).setCellValue(list.get(j-1).getLegal_Name());
-                row.createCell(3).setCellValue(list.get(j-1).getCompany_Code());
+                row.createCell(0).setCellValue(list.get(j-1).getGroupName());
+                row.createCell(1).setCellValue(list.get(j-1).getGroupCode());
+                row.createCell(2).setCellValue(list.get(j-1).getLegalName());
+                row.createCell(3).setCellValue(list.get(j-1).getCompanyCode());
                 row.createCell(4).setCellValue(list.get(j-1).getBg());
-                row.createCell(5).setCellValue(list.get(j-1).getBU());
+                row.createCell(5).setCellValue(list.get(j-1).getBu());
                 row.createCell(6).setCellValue(list.get(j-1).getRegion());
                 row.createCell(7).setCellValue(list.get(j-1).getDept());
                 row.createCell(8).setCellValue(list.get(j-1).getKe());
                 row.createCell(9).setCellValue(list.get(j-1).getZu());
-                row.createCell(10).setCellValue(list.get(j-1).getCost_Code());
-                row.createCell(11).setCellValue(list.get(j-1).getOrg_Code());
+                row.createCell(10).setCellValue(list.get(j-1).getCostCode());
+                row.createCell(11).setCellValue(list.get(j-1).getOrgCode());
                 row.createCell(12).setCellValue(list.get(j-1).getStatus());
                 row.createCell(13).setCellValue(list.get(j-1).getCreator());
-                row.createCell(14).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(15).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(16).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(14).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(15).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(16).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -290,23 +290,23 @@ public class OrgDataController {
             List<OrgData> list=orgDataService.queryOrgDataForDownLoadAll(orgData);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getGroup_Name());
-                row.createCell(1).setCellValue(list.get(j-1).getGroup_Code());
-                row.createCell(2).setCellValue(list.get(j-1).getLegal_Name());
-                row.createCell(3).setCellValue(list.get(j-1).getCompany_Code());
-                row.createCell(4).setCellValue(list.get(j-1).getBG());
-                row.createCell(5).setCellValue(list.get(j-1).getBU());
+                row.createCell(0).setCellValue(list.get(j-1).getGroupName());
+                row.createCell(1).setCellValue(list.get(j-1).getGroupCode());
+                row.createCell(2).setCellValue(list.get(j-1).getLegalName());
+                row.createCell(3).setCellValue(list.get(j-1).getCompanyCode());
+                row.createCell(4).setCellValue(list.get(j-1).getBg());
+                row.createCell(5).setCellValue(list.get(j-1).getBu());
                 row.createCell(6).setCellValue(list.get(j-1).getRegion());
                 row.createCell(7).setCellValue(list.get(j-1).getDept());
                 row.createCell(8).setCellValue(list.get(j-1).getKe());
                 row.createCell(9).setCellValue(list.get(j-1).getZu());
-                row.createCell(10).setCellValue(list.get(j-1).getCost_Code());
-                row.createCell(11).setCellValue(list.get(j-1).getOrg_Code());
+                row.createCell(10).setCellValue(list.get(j-1).getCostCode());
+                row.createCell(11).setCellValue(list.get(j-1).getOrgCode());
                 row.createCell(12).setCellValue(list.get(j-1).getStatus());
                 row.createCell(13).setCellValue(list.get(j-1).getCreator());
-                row.createCell(14).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(15).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(16).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(14).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(15).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(16).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -341,7 +341,7 @@ public class OrgDataController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

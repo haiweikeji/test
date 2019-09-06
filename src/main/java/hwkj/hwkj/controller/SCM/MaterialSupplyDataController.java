@@ -1,6 +1,8 @@
 package hwkj.hwkj.controller.SCM;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HUser.User;
+import hwkj.hwkj.entity.SCM.MaterialSupplyData;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.Engineering.MaterialEngineeringDataService;
@@ -16,7 +18,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +68,7 @@ public class MaterialSupplyDataController {
             throw new GlobalException("timeOut");
         }
         materialSupplyData.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        materialSupplyData.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        materialSupplyData.setCreateDate(new Date());
         if(!materialSupplyDataService.insertMaterialSupplyData(materialSupplyData)){
             throw new GlobalException("error");
         }
@@ -76,8 +81,8 @@ public class MaterialSupplyDataController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        materialSupplyData.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        materialSupplyData.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        materialSupplyData.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        materialSupplyData.setUpdateDate(new Date());
         if(!materialSupplyDataService.updateMaterialSupplyData(materialSupplyData)){
             throw new GlobalException("error");
         }
@@ -188,7 +193,7 @@ public class MaterialSupplyDataController {
             }
             List<MaterialSupplyData> list=materialSupplyDataService.queryMaterialSupplyDataForDownLoadAll(materialSupplyData);
             for(int i=0,length=list.size();i<length;i++){
-                if(UploadEmployeePunchData.materialEngineeringDataCompareTime(list.get(i).getFailure_Time(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()))){
+                if(UploadEmployeePunchData.materialEngineeringDataCompareTime(list.get(i).getFailureTime(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()))){
                     list.get(i).setStatus("Y");
                 }else {
                     list.get(i).setStatus("N");
@@ -196,70 +201,70 @@ public class MaterialSupplyDataController {
             }
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getMaterial_Number());
+                row.createCell(0).setCellValue(list.get(j-1).getMaterialNumber());
                 if(list.get(j-1).getVersion()!=null){
                     row.createCell(1).setCellValue(list.get(j-1).getVersion());
                 }
-                if(list.get(j-1).getProduct_Name()!=null){
-                    row.createCell(2).setCellValue(list.get(j-1).getProduct_Name());
+                if(list.get(j-1).getProductName()!=null){
+                    row.createCell(2).setCellValue(list.get(j-1).getProductName());
                 }
                 if(list.get(j-1).getBrand()!=null){
                     row.createCell(3).setCellValue(list.get(j-1).getBrand());
                 }
-                if(list.get(j-1).getModel_Number()!=null){
-                    row.createCell(4).setCellValue(list.get(j-1).getModel_Number());
+                if(list.get(j-1).getModelNumber()!=null){
+                    row.createCell(4).setCellValue(list.get(j-1).getModelNumber());
                 }
                 if(list.get(j-1).getSize()!=null){
                     row.createCell(5).setCellValue(list.get(j-1).getSize());
                 }
-                if(list.get(j-1).getManufacturer_Abbreviation()!=null){
-                    row.createCell(6).setCellValue(list.get(j-1).getManufacturer_Abbreviation());
+                if(list.get(j-1).getManufacturerAbbreviation()!=null){
+                    row.createCell(6).setCellValue(list.get(j-1).getManufacturerAbbreviation());
                 }
-                if(list.get(j-1).getManufacturer_Material_Number()!=null){
-                    row.createCell(7).setCellValue(list.get(j-1).getManufacturer_Material_Number());
+                if(list.get(j-1).getManufacturerMaterialNumber()!=null){
+                    row.createCell(7).setCellValue(list.get(j-1).getManufacturerMaterialNumber());
                 }
-                row.createCell(8).setCellValue(list.get(j-1).getVendor_Chinese_Abbreviation());
-                if(list.get(j-1).getVendor_Code()!=null){
-                    row.createCell(9).setCellValue(list.get(j-1).getVendor_Code());
+                row.createCell(8).setCellValue(list.get(j-1).getVendorChineseAbbreviation());
+                if(list.get(j-1).getVendorCode()!=null){
+                    row.createCell(9).setCellValue(list.get(j-1).getVendorCode());
                 }
-                if(list.get(j-1).getMaterial_Type()!=null){
-                    row.createCell(10).setCellValue(list.get(j-1).getMaterial_Type());
+                if(list.get(j-1).getMaterialType()!=null){
+                    row.createCell(10).setCellValue(list.get(j-1).getMaterialType());
                 }
                 if(list.get(j-1).getCategory()!=null){
                     row.createCell(11).setCellValue(list.get(j-1).getCategory());
                 }
-                if(list.get(j-1).getCountry_Origin()!=null){
-                    row.createCell(12).setCellValue(list.get(j-1).getCountry_Origin());
+                if(list.get(j-1).getCountryOrigin()!=null){
+                    row.createCell(12).setCellValue(list.get(j-1).getCountryOrigin());
                 }
-                if(list.get(j-1).getQuantity_Unit()!=null){
-                    row.createCell(13).setCellValue(list.get(j-1).getQuantity_Unit());
+                if(list.get(j-1).getQuantityUnit()!=null){
+                    row.createCell(13).setCellValue(list.get(j-1).getQuantityUnit());
                 }
-                if(list.get(j-1).getMinimum_Lower_Unit_Quantity()!=null){
-                    row.createCell(14).setCellValue(list.get(j-1).getMinimum_Lower_Unit_Quantity());
+                if(list.get(j-1).getMinimumLowerUnitQuantity()!=null){
+                    row.createCell(14).setCellValue(list.get(j-1).getMinimumLowerUnitQuantity());
                 }
-                if(list.get(j-1).getMinimum_Packing_Capacity()!=null){
-                    row.createCell(15).setCellValue(list.get(j-1).getMinimum_Packing_Capacity());
+                if(list.get(j-1).getMinimumPackingCapacity()!=null){
+                    row.createCell(15).setCellValue(list.get(j-1).getMinimumPackingCapacity());
                 }
-                if(list.get(j-1).getPurchasing_Lead_Days()!=null){
-                    row.createCell(16).setCellValue(list.get(j-1).getPurchasing_Lead_Days());
+                if(list.get(j-1).getPurchasingLeadDays()!=null){
+                    row.createCell(16).setCellValue(list.get(j-1).getPurchasingLeadDays());
                 }
-                if(list.get(j-1).getDeliver_Term()!=null){
-                    row.createCell(17).setCellValue(list.get(j-1).getDeliver_Term());
+                if(list.get(j-1).getDeliverTerm()!=null){
+                    row.createCell(17).setCellValue(list.get(j-1).getDeliverTerm());
                 }
-                if(list.get(j-1).getPayment_Term()!=null){
-                    row.createCell(18).setCellValue(list.get(j-1).getPayment_Term());
+                if(list.get(j-1).getPaymentTerm()!=null){
+                    row.createCell(18).setCellValue(list.get(j-1).getPaymentTerm());
                 }
-                if(list.get(j-1).getReceive_Term()!=null){
-                    row.createCell(19).setCellValue(list.get(j-1).getReceive_Term());
+                if(list.get(j-1).getReceiveTerm()!=null){
+                    row.createCell(19).setCellValue(list.get(j-1).getReceiveTerm());
                 }
-                if(list.get(j-1).getSupplier_Warranty_Period_Month()!=null){
-                    row.createCell(20).setCellValue(list.get(j-1).getSupplier_Warranty_Period_Month());
+                if(list.get(j-1).getSupplierWarrantyPeriodMonth()!=null){
+                    row.createCell(20).setCellValue(list.get(j-1).getSupplierWarrantyPeriodMonth());
                 }
-                if(list.get(j-1).getForce_Time()!=null){
-                    row.createCell(21).setCellValue(list.get(j-1).getForce_Time());
+                if(list.get(j-1).getForceTime()!=null){
+                    row.createCell(21).setCellValue(list.get(j-1).getForceTime());
                 }
-                if(list.get(j-1).getFailure_Time()!=null){
-                    row.createCell(22).setCellValue(list.get(j-1).getFailure_Time());
+                if(list.get(j-1).getFailureTime()!=null){
+                    row.createCell(22).setCellValue(list.get(j-1).getFailureTime());
                 }
                 if(list.get(j-1).getPurchase()!=null){
                     row.createCell(23).setCellValue(list.get(j-1).getPurchase());
@@ -272,9 +277,9 @@ public class MaterialSupplyDataController {
                 }
                 //row.createCell(32).setCellValue(list.get(j-1).getStatus());
                 row.createCell(26).setCellValue(list.get(j-1).getCreator());
-                row.createCell(27).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(28).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(29).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(27).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(28).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(29).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -326,7 +331,7 @@ public class MaterialSupplyDataController {
             }
             List<MaterialSupplyData> list=materialSupplyDataService.queryMaterialSupplyDataForDownLoad(id);
             for(int i=0,length=list.size();i<length;i++){
-                if(UploadEmployeePunchData.materialEngineeringDataCompareTime(list.get(i).getFailure_Time(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()))){
+                if(UploadEmployeePunchData.materialEngineeringDataCompareTime(list.get(i).getFailureTime(),new SimpleDateFormat("yyyy-MM-dd").format(new Date()))){
                     list.get(i).setStatus("Y");
                 }else {
                     list.get(i).setStatus("N");
@@ -334,70 +339,70 @@ public class MaterialSupplyDataController {
             }
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getMaterial_Number());
+                row.createCell(0).setCellValue(list.get(j-1).getMaterialNumber());
                 if(list.get(j-1).getVersion()!=null){
                     row.createCell(1).setCellValue(list.get(j-1).getVersion());
                 }
-                if(list.get(j-1).getProduct_Name()!=null){
-                    row.createCell(2).setCellValue(list.get(j-1).getProduct_Name());
+                if(list.get(j-1).getProductName()!=null){
+                    row.createCell(2).setCellValue(list.get(j-1).getProductName());
                 }
                 if(list.get(j-1).getBrand()!=null){
                     row.createCell(3).setCellValue(list.get(j-1).getBrand());
                 }
-                if(list.get(j-1).getModel_Number()!=null){
-                    row.createCell(4).setCellValue(list.get(j-1).getModel_Number());
+                if(list.get(j-1).getModelNumber()!=null){
+                    row.createCell(4).setCellValue(list.get(j-1).getModelNumber());
                 }
                 if(list.get(j-1).getSize()!=null){
                     row.createCell(5).setCellValue(list.get(j-1).getSize());
                 }
-                if(list.get(j-1).getManufacturer_Abbreviation()!=null){
-                    row.createCell(6).setCellValue(list.get(j-1).getManufacturer_Abbreviation());
+                if(list.get(j-1).getManufacturerAbbreviation()!=null){
+                    row.createCell(6).setCellValue(list.get(j-1).getManufacturerAbbreviation());
                 }
-                if(list.get(j-1).getManufacturer_Material_Number()!=null){
-                    row.createCell(7).setCellValue(list.get(j-1).getManufacturer_Material_Number());
+                if(list.get(j-1).getManufacturerMaterialNumber()!=null){
+                    row.createCell(7).setCellValue(list.get(j-1).getManufacturerMaterialNumber());
                 }
-                row.createCell(8).setCellValue(list.get(j-1).getVendor_Chinese_Abbreviation());
-                if(list.get(j-1).getVendor_Code()!=null){
-                    row.createCell(9).setCellValue(list.get(j-1).getVendor_Code());
+                row.createCell(8).setCellValue(list.get(j-1).getVendorChineseAbbreviation());
+                if(list.get(j-1).getVendorCode()!=null){
+                    row.createCell(9).setCellValue(list.get(j-1).getVendorCode());
                 }
-                if(list.get(j-1).getMaterial_Type()!=null){
-                    row.createCell(10).setCellValue(list.get(j-1).getMaterial_Type());
+                if(list.get(j-1).getMaterialType()!=null){
+                    row.createCell(10).setCellValue(list.get(j-1).getMaterialType());
                 }
                 if(list.get(j-1).getCategory()!=null){
                     row.createCell(11).setCellValue(list.get(j-1).getCategory());
                 }
-                if(list.get(j-1).getCountry_Origin()!=null){
-                    row.createCell(12).setCellValue(list.get(j-1).getCountry_Origin());
+                if(list.get(j-1).getCountryOrigin()!=null){
+                    row.createCell(12).setCellValue(list.get(j-1).getCountryOrigin());
                 }
-                if(list.get(j-1).getQuantity_Unit()!=null){
-                    row.createCell(13).setCellValue(list.get(j-1).getQuantity_Unit());
+                if(list.get(j-1).getQuantityUnit()!=null){
+                    row.createCell(13).setCellValue(list.get(j-1).getQuantityUnit());
                 }
-                if(list.get(j-1).getMinimum_Lower_Unit_Quantity()!=null){
-                    row.createCell(14).setCellValue(list.get(j-1).getMinimum_Lower_Unit_Quantity());
+                if(list.get(j-1).getMinimumLowerUnitQuantity()!=null){
+                    row.createCell(14).setCellValue(list.get(j-1).getMinimumLowerUnitQuantity());
                 }
-                if(list.get(j-1).getMinimum_Packing_Capacity()!=null){
-                    row.createCell(15).setCellValue(list.get(j-1).getMinimum_Packing_Capacity());
+                if(list.get(j-1).getMinimumPackingCapacity()!=null){
+                    row.createCell(15).setCellValue(list.get(j-1).getMinimumPackingCapacity());
                 }
-                if(list.get(j-1).getPurchasing_Lead_Days()!=null){
-                    row.createCell(16).setCellValue(list.get(j-1).getPurchasing_Lead_Days());
+                if(list.get(j-1).getPurchasingLeadDays()!=null){
+                    row.createCell(16).setCellValue(list.get(j-1).getPurchasingLeadDays());
                 }
-                if(list.get(j-1).getDeliver_Term()!=null){
-                    row.createCell(17).setCellValue(list.get(j-1).getDeliver_Term());
+                if(list.get(j-1).getDeliverTerm()!=null){
+                    row.createCell(17).setCellValue(list.get(j-1).getDeliverTerm());
                 }
-                if(list.get(j-1).getPayment_Term()!=null){
-                    row.createCell(18).setCellValue(list.get(j-1).getPayment_Term());
+                if(list.get(j-1).getPaymentTerm()!=null){
+                    row.createCell(18).setCellValue(list.get(j-1).getPaymentTerm());
                 }
-                if(list.get(j-1).getReceive_Term()!=null){
-                    row.createCell(19).setCellValue(list.get(j-1).getReceive_Term());
+                if(list.get(j-1).getReceiveTerm()!=null){
+                    row.createCell(19).setCellValue(list.get(j-1).getReceiveTerm());
                 }
-                if(list.get(j-1).getSupplier_Warranty_Period_Month()!=null){
-                    row.createCell(20).setCellValue(list.get(j-1).getSupplier_Warranty_Period_Month());
+                if(list.get(j-1).getSupplierWarrantyPeriodMonth()!=null){
+                    row.createCell(20).setCellValue(list.get(j-1).getSupplierWarrantyPeriodMonth());
                 }
-                if(list.get(j-1).getForce_Time()!=null){
-                    row.createCell(21).setCellValue(list.get(j-1).getForce_Time());
+                if(list.get(j-1).getForceTime()!=null){
+                    row.createCell(21).setCellValue(list.get(j-1).getForceTime());
                 }
-                if(list.get(j-1).getFailure_Time()!=null){
-                    row.createCell(22).setCellValue(list.get(j-1).getFailure_Time());
+                if(list.get(j-1).getFailureTime()!=null){
+                    row.createCell(22).setCellValue(list.get(j-1).getFailureTime());
                 }
                 if(list.get(j-1).getPurchase()!=null){
                     row.createCell(23).setCellValue(list.get(j-1).getPurchase());
@@ -410,9 +415,9 @@ public class MaterialSupplyDataController {
                 }
                 //row.createCell(32).setCellValue(list.get(j-1).getStatus());
                 row.createCell(26).setCellValue(list.get(j-1).getCreator());
-                row.createCell(27).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(28).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(29).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(27).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(28).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(29).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -460,7 +465,7 @@ public class MaterialSupplyDataController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

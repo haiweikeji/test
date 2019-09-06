@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,9 +75,9 @@ public class FileManagementController {
                 }
             }
             String File_Url="/hwkj/upload/file_management/"+File_Name;
-            fileManagement.setFile_Url(File_Url);
+            fileManagement.setFileUrl(File_Url);
             fileManagement.setCreator(((User)request.getSession().getAttribute("user")).getName());
-            fileManagement.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            fileManagement.setCreateDate(new Date());
             if(!fileManagementService.insertFileManagement(fileManagement)){
                 throw new GlobalException("error");
             }
@@ -103,7 +102,7 @@ public class FileManagementController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

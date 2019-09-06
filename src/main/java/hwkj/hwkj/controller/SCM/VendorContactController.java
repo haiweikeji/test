@@ -1,6 +1,8 @@
 package hwkj.hwkj.controller.SCM;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HUser.User;
+import hwkj.hwkj.entity.SCM.VendorContact;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.SCM.VendorCodeService;
@@ -44,7 +46,7 @@ public class VendorContactController {
 
     @RequestMapping(value = "/queryVendorContact.do",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryVendorContact(PageModel<VendorContact> vendorContactPageModel,VendorContact vendorContact){
+    public JSONObject queryVendorContact(PageModel<VendorContact> vendorContactPageModel, VendorContact vendorContact){
         Map<String,Object> map=new HashMap<>();
         vendorContactService.queryVendorContactPage(vendorContactPageModel, vendorContact);
         map.put("rows",vendorContactPageModel.getList());
@@ -60,7 +62,7 @@ public class VendorContactController {
         }
         vendorContact.setStatus("Y");
         vendorContact.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        vendorContact.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        vendorContact.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         if(!vendorContactService.insertVendorContact(vendorContact)){
             throw new GlobalException("error");
         }
@@ -73,8 +75,8 @@ public class VendorContactController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        vendorContact.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        vendorContact.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        vendorContact.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        vendorContact.setUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         if(!vendorContactService.updateVendorContact(vendorContact,Old_Vendor_Code[0])){
             throw new GlobalException("error");
         }
@@ -124,21 +126,21 @@ public class VendorContactController {
             List<VendorContact> list=vendorContactService.queryVendorContactForDownLoadAll(vendorContact);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getVendor_Code());
-                if(list.get(j-1).getVendor_Chinese_Abbreviation()!=null){
-                    row.createCell(1).setCellValue(list.get(j-1).getVendor_Chinese_Abbreviation());
+                row.createCell(0).setCellValue(list.get(j-1).getVendorCode());
+                if(list.get(j-1).getVendorChineseAbbreviation()!=null){
+                    row.createCell(1).setCellValue(list.get(j-1).getVendorChineseAbbreviation());
                 }
-                if(list.get(j-1).getCountry_Area()!=null){
-                    row.createCell(2).setCellValue(list.get(j-1).getCountry_Area());
+                if(list.get(j-1).getCountryArea()!=null){
+                    row.createCell(2).setCellValue(list.get(j-1).getCountryArea());
                 }
                 if(list.get(j-1).getCity()!=null){
                     row.createCell(3).setCellValue(list.get(j-1).getCity());
                 }
-                if(list.get(j-1).getContact_Chinese_Name()!=null){
-                    row.createCell(4).setCellValue(list.get(j-1).getContact_Chinese_Name());
+                if(list.get(j-1).getContactChineseName()!=null){
+                    row.createCell(4).setCellValue(list.get(j-1).getContactChineseName());
                 }
-                if(list.get(j-1).getContact_English_Name()!=null){
-                    row.createCell(5).setCellValue(list.get(j-1).getContact_English_Name());
+                if(list.get(j-1).getContactEnglishName()!=null){
+                    row.createCell(5).setCellValue(list.get(j-1).getContactEnglishName());
                 }
                 if(list.get(j-1).getSex()!=null){
                     row.createCell(6).setCellValue(list.get(j-1).getSex());
@@ -155,20 +157,20 @@ public class VendorContactController {
                 if(list.get(j-1).getLanguage()!=null){
                     row.createCell(10).setCellValue(list.get(j-1).getLanguage());
                 }
-                if(list.get(j-1).getCompany_Telephone()!=null){
-                    row.createCell(11).setCellValue(list.get(j-1).getCompany_Telephone());
+                if(list.get(j-1).getCompanyTelephone()!=null){
+                    row.createCell(11).setCellValue(list.get(j-1).getCompanyTelephone());
                 }
-                if(list.get(j-1).getPhone_Number()!=null){
-                    row.createCell(12).setCellValue(list.get(j-1).getPhone_Number());
+                if(list.get(j-1).getPhoneNumber()!=null){
+                    row.createCell(12).setCellValue(list.get(j-1).getPhoneNumber());
                 }
-                if(list.get(j-1).getCompany_Mail()!=null){
-                    row.createCell(13).setCellValue(list.get(j-1).getCompany_Mail());
+                if(list.get(j-1).getCompanyMail()!=null){
+                    row.createCell(13).setCellValue(list.get(j-1).getCompanyMail());
                 }
-                if(list.get(j-1).getPrivate_Mail()!=null){
-                    row.createCell(14).setCellValue(list.get(j-1).getPrivate_Mail());
+                if(list.get(j-1).getPrivateMail()!=null){
+                    row.createCell(14).setCellValue(list.get(j-1).getPrivateMail());
                 }
-                if(list.get(j-1).getWeChat_Number()!=null){
-                    row.createCell(15).setCellValue(list.get(j-1).getWeChat_Number());
+                if(list.get(j-1).getWechatNumber()!=null){
+                    row.createCell(15).setCellValue(list.get(j-1).getWechatNumber());
                 }
                 if(list.get(j-1).getStatus()!=null){
                     row.createCell(16).setCellValue(list.get(j-1).getStatus());
@@ -177,9 +179,9 @@ public class VendorContactController {
                     row.createCell(17).setCellValue(list.get(j-1).getPurchase());
                 }
                 row.createCell(18).setCellValue(list.get(j-1).getCreator());
-                row.createCell(19).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(20).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(21).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(19).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(20).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(21).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -235,21 +237,21 @@ public class VendorContactController {
             }
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getVendor_Code());
-                if(list.get(j-1).getVendor_Chinese_Abbreviation()!=null){
-                    row.createCell(1).setCellValue(list.get(j-1).getVendor_Chinese_Abbreviation());
+                row.createCell(0).setCellValue(list.get(j-1).getVendorCode());
+                if(list.get(j-1).getVendorChineseAbbreviation()!=null){
+                    row.createCell(1).setCellValue(list.get(j-1).getVendorChineseAbbreviation());
                 }
-                if(list.get(j-1).getCountry_Area()!=null){
-                    row.createCell(2).setCellValue(list.get(j-1).getCountry_Area());
+                if(list.get(j-1).getCountryArea()!=null){
+                    row.createCell(2).setCellValue(list.get(j-1).getCountryArea());
                 }
                 if(list.get(j-1).getCity()!=null){
                     row.createCell(3).setCellValue(list.get(j-1).getCity());
                 }
-                if(list.get(j-1).getContact_Chinese_Name()!=null){
-                    row.createCell(4).setCellValue(list.get(j-1).getContact_Chinese_Name());
+                if(list.get(j-1).getContactChineseName()!=null){
+                    row.createCell(4).setCellValue(list.get(j-1).getContactChineseName());
                 }
-                if(list.get(j-1).getContact_English_Name()!=null){
-                    row.createCell(5).setCellValue(list.get(j-1).getContact_English_Name());
+                if(list.get(j-1).getContactEnglishName()!=null){
+                    row.createCell(5).setCellValue(list.get(j-1).getContactEnglishName());
                 }
                 if(list.get(j-1).getSex()!=null){
                     row.createCell(6).setCellValue(list.get(j-1).getSex());
@@ -266,20 +268,20 @@ public class VendorContactController {
                 if(list.get(j-1).getLanguage()!=null){
                     row.createCell(10).setCellValue(list.get(j-1).getLanguage());
                 }
-                if(list.get(j-1).getCompany_Telephone()!=null){
-                    row.createCell(11).setCellValue(list.get(j-1).getCompany_Telephone());
+                if(list.get(j-1).getCompanyTelephone()!=null){
+                    row.createCell(11).setCellValue(list.get(j-1).getCompanyTelephone());
                 }
-                if(list.get(j-1).getPhone_Number()!=null){
-                    row.createCell(12).setCellValue(list.get(j-1).getPhone_Number());
+                if(list.get(j-1).getPhoneNumber()!=null){
+                    row.createCell(12).setCellValue(list.get(j-1).getPhoneNumber());
                 }
-                if(list.get(j-1).getCompany_Mail()!=null){
-                    row.createCell(13).setCellValue(list.get(j-1).getCompany_Mail());
+                if(list.get(j-1).getCompanyMail()!=null){
+                    row.createCell(13).setCellValue(list.get(j-1).getCompanyMail());
                 }
-                if(list.get(j-1).getPrivate_Mail()!=null){
-                    row.createCell(14).setCellValue(list.get(j-1).getPrivate_Mail());
+                if(list.get(j-1).getPrivateMail()!=null){
+                    row.createCell(14).setCellValue(list.get(j-1).getPrivateMail());
                 }
-                if(list.get(j-1).getWeChat_Number()!=null){
-                    row.createCell(15).setCellValue(list.get(j-1).getWeChat_Number());
+                if(list.get(j-1).getWechatNumber()!=null){
+                    row.createCell(15).setCellValue(list.get(j-1).getWechatNumber());
                 }
                 if(list.get(j-1).getStatus()!=null){
                     row.createCell(16).setCellValue(list.get(j-1).getStatus());
@@ -288,9 +290,9 @@ public class VendorContactController {
                     row.createCell(17).setCellValue(list.get(j-1).getPurchase());
                 }
                 row.createCell(18).setCellValue(list.get(j-1).getCreator());
-                row.createCell(19).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(20).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(21).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(19).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(20).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(21).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -369,7 +371,7 @@ public class VendorContactController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

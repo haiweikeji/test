@@ -12,7 +12,6 @@ import java.util.Date;
 public class CustomerEquipmentData {
     /**
      * id
-
      */
     @Id
     @Column(name = "Id")
@@ -145,5 +144,6 @@ public class CustomerEquipmentData {
      */
     @Column(name = "Update_Date")
     private Date updateDate;
+
 
 }

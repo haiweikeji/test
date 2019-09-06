@@ -1,6 +1,10 @@
 package hwkj.hwkj.service.User;
 
+import hwkj.hwkj.entity.HR.EmployeePersonalData;
+import hwkj.hwkj.entity.HUser.Menu;
+import hwkj.hwkj.entity.HUser.User;
 import hwkj.hwkj.entity.pagingquery.PageModel;
+
 import java.util.List;
 
 public interface UserService {
@@ -52,7 +56,7 @@ public interface UserService {
      * @param Job_Number
      * @param Name
      */
-    public void queryUserPage(PageModel<User> userPageModel,String Job_Number,String Name);
+    public void queryUserPage(PageModel<User> userPageModel, String Job_Number, String Name);
 
     /**
      * 给用户分配角色

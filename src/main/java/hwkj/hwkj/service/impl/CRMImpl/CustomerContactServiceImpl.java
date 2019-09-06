@@ -3,6 +3,7 @@ package hwkj.hwkj.service.impl.CRMImpl;
 import hwkj.hwkj.dao.CRM.CustomerBaseDataDao;
 import hwkj.hwkj.dao.CRM.CustomerContactDao;
 import hwkj.hwkj.dao.User.UserRoleDao;
+import hwkj.hwkj.entity.CRM.CustomerContact;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.CRM.CustomerContactService;
@@ -35,22 +36,22 @@ public class CustomerContactServiceImpl implements CustomerContactService {
     @Transactional
     @Override
     public boolean insertCustomerContact(CustomerContact customerContact){
-        if(customerContactDao.queryCustomerContactForExist(customerContact.getCustomer_Code(),customerContact.getContact_Chinese_Name())!=0){
+        if(customerContactDao.queryCustomerContactForExist(customerContact.getCustomerCode(),customerContact.getContact_Chinese_Name())!=0){
             throw new GlobalException("exist");
         }
-        if(customerContact.getCompany_Telephone()!=null && customerContact.getCompany_Telephone().trim().length()!=0){
+        if(customerContact.getCompanyTelephone()!=null && customerContact.getCompanyTelephone().trim().length()!=0){
             String Company_Telephone_Regex="^[0-9]+([+-][0-9]+)+$";
-            if(!customerContact.getCompany_Telephone().trim().matches(Company_Telephone_Regex)){
+            if(!customerContact.getCompanyTelephone().trim().matches(Company_Telephone_Regex)){
                 throw new GlobalException("company_Telephone");
             }
         }
-        if(customerContact.getPhone_Number()!=null && customerContact.getPhone_Number().trim().length()!=0){
+        if(customerContact.getPhoneNumber()!=null && customerContact.getPhoneNumber().trim().length()!=0){
             String Phone_Number_Regex="^[0-9]+$";
-            if(!customerContact.getPhone_Number().trim().matches(Phone_Number_Regex)){
+            if(!customerContact.getPhoneNumber().trim().matches(Phone_Number_Regex)){
                 throw new GlobalException("phone_Number");
             }
         }
-        if(customerContact.getId_Card()!=null && customerContact.getId_Card().trim().length()!=0){
+        if(customerContact.getIdCard()!=null && customerContact.getId_Card().trim().length()!=0){
             String Id_Card_Regex="^([0-9]{17})([0-9]|[X]|[x])$";
             if(!customerContact.getId_Card().trim().matches(Id_Card_Regex)){
                 throw new GlobalException("id_Card");

@@ -1,5 +1,7 @@
 package hwkj.hwkj.service.User;
 
+import hwkj.hwkj.entity.HR.EmployeePersonalData;
+import hwkj.hwkj.entity.HUser.UserRole;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 
 import java.util.List;
@@ -39,7 +41,7 @@ public interface UserRoleService {
      * @param Job_Number
      * @param Role_Name
      */
-    public void queryUserRolePage(PageModel<UserRole> userRolePageModel,String Job_Number,String Role_Name);
+    public void queryUserRolePage(PageModel<UserRole> userRolePageModel, String Job_Number, String Role_Name);
 
     /**
      * by Job_Number And Role_Name查询UserRole

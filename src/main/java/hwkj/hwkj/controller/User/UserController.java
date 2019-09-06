@@ -1,6 +1,8 @@
 package hwkj.hwkj.controller.User;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HUser.Menu;
+import hwkj.hwkj.entity.HUser.User;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.httpSessionListener.MyHttpSessionListener;
@@ -40,7 +42,7 @@ public class UserController {
 
     @RequestMapping(value = "/queryUser.do",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryUser(PageModel<User> userPageModel, @RequestParam("Job_Number") String Job_Number,@RequestParam("Name") String Name){
+    public JSONObject queryUser(PageModel<User> userPageModel, @RequestParam("Job_Number") String Job_Number, @RequestParam("Name") String Name){
         Map<String,Object> map =new HashMap<>();
         userService.queryUserPage(userPageModel,Job_Number,Name);
         map.put("rows",userPageModel.getList());
@@ -120,7 +122,7 @@ public class UserController {
     @RequestMapping(value = "/userRoleMenu.do",method = RequestMethod.POST)
     @ResponseBody
     public List<Menu> userRoleMenu(HttpServletRequest request){
-        List<Menu> list=userService.userRoleMenu(((User)request.getSession().getAttribute("user")).getJob_Number());
+        List<Menu> list=userService.userRoleMenu(((User)request.getSession().getAttribute("user")).getJobNumber());
         return list;
     }
 
@@ -161,7 +163,7 @@ public class UserController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

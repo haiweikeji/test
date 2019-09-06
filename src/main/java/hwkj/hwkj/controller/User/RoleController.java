@@ -1,6 +1,9 @@
 package hwkj.hwkj.controller.User;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HUser.Menu;
+import hwkj.hwkj.entity.HUser.Role;
+import hwkj.hwkj.entity.HUser.User;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.User.MenuService;
@@ -78,7 +81,7 @@ public class RoleController {
         for(int i=0;i<list.size();i++){
             Map<String,Object> AddMap =new HashMap<>();
             AddMap.put("id",list.get(i).getId());
-            AddMap.put("pId",list.get(i).getpId());
+            AddMap.put("pId",list.get(i).getPid());
             AddMap.put("name",list.get(i).getName());
             AddMap.put("page",list.get(i).getPage());
             AddList.add(AddMap);
@@ -97,7 +100,7 @@ public class RoleController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

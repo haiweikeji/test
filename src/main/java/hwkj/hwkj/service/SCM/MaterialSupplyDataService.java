@@ -1,5 +1,6 @@
 package hwkj.hwkj.service.SCM;
 
+import hwkj.hwkj.entity.SCM.MaterialSupplyData;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 
@@ -36,7 +37,7 @@ public interface MaterialSupplyDataService {
      * @param materialSupplyData
      * @return
      */
-    public void queryMaterialSupplyDataPage(PageModel<MaterialSupplyData> materialSupplyDataPageModel,MaterialSupplyData materialSupplyData) throws Exception;
+    public void queryMaterialSupplyDataPage(PageModel<MaterialSupplyData> materialSupplyDataPageModel, MaterialSupplyData materialSupplyData) throws Exception;
 
 
     /**

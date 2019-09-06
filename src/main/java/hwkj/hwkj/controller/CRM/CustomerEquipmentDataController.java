@@ -80,6 +80,7 @@ public class CustomerEquipmentDataController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
+
         customerEquipmentData.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
         customerEquipmentData.setUpdateDate(new Date());
         if(!customerEquipmentDataService.updateCustomerEquipmentData(customerEquipmentData)){

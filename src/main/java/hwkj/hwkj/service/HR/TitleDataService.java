@@ -1,5 +1,6 @@
 package hwkj.hwkj.service.HR;
 
+import hwkj.hwkj.entity.HR.TitleData;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 
@@ -35,7 +36,7 @@ public interface TitleDataService {
      * @param titleDataPageModel
      * @param titleData
      */
-    public void queryTitleDataPage(PageModel<TitleData> titleDataPageModel,TitleData titleData);
+    public void queryTitleDataPage(PageModel<TitleData> titleDataPageModel, TitleData titleData);
 
     /**
      * for download all

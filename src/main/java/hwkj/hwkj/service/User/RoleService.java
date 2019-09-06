@@ -1,5 +1,6 @@
 package hwkj.hwkj.service.User;
 
+import hwkj.hwkj.entity.HUser.Role;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public interface RoleService {
      * @param Role_Name
      * @return
      */
-    public Role queryRoleByRoleIdAndRoleName(Integer Role_Id,String Role_Name);
+    public Role queryRoleByRoleIdAndRoleName(Integer Role_Id, String Role_Name);
 
     /**
      * Role分页查询

@@ -1,6 +1,8 @@
 package hwkj.hwkj.controller.HR;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HR.TitleData;
+import hwkj.hwkj.entity.HUser.User;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.HR.TitleDataService;
@@ -38,7 +40,7 @@ public class TitleDataController {
 
     @RequestMapping(value = "/queryTitleData.do",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryTitleData(PageModel<TitleData> titleDataPageModel,TitleData titleData){
+    public JSONObject queryTitleData(PageModel<TitleData> titleDataPageModel, TitleData titleData){
         Map<String,Object> map =new HashMap<>();
         titleDataService.queryTitleDataPage(titleDataPageModel,titleData);
         map.put("rows",titleDataPageModel.getList());
@@ -53,7 +55,7 @@ public class TitleDataController {
             throw new GlobalException("timeOut");
         }
         titleData.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        titleData.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        titleData.setCreateDate(new Date());
         if(!titleDataService.insertTitleData(titleData)){
             throw new GlobalException("error");
         }
@@ -66,8 +68,8 @@ public class TitleDataController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        titleData.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        titleData.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        titleData.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        titleData.setUpdateDate(new Date());
         if(!titleDataService.updateTitleData(titleData)){
             throw new GlobalException("error");
         }
@@ -138,13 +140,13 @@ public class TitleDataController {
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
                 row.createCell(0).setCellValue(list.get(j-1).getManagement());
-                row.createCell(1).setCellValue(list.get(j-1).getManagement_Code());
+                row.createCell(1).setCellValue(list.get(j-1).getManagementCode());
                 row.createCell(2).setCellValue(list.get(j-1).getUpper());
                 row.createCell(3).setCellValue(list.get(j-1).getStatus());
                 row.createCell(4).setCellValue(list.get(j-1).getCreator());
-                row.createCell(5).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(6).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(7).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(5).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(6).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(7).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -194,13 +196,13 @@ public class TitleDataController {
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
                 row.createCell(0).setCellValue(list.get(j-1).getManagement());
-                row.createCell(1).setCellValue(list.get(j-1).getManagement_Code());
+                row.createCell(1).setCellValue(list.get(j-1).getManagementCode());
                 row.createCell(2).setCellValue(list.get(j-1).getUpper());
                 row.createCell(3).setCellValue(list.get(j-1).getStatus());
                 row.createCell(4).setCellValue(list.get(j-1).getCreator());
-                row.createCell(5).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(6).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(7).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(5).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(6).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(7).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -248,7 +250,7 @@ public class TitleDataController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

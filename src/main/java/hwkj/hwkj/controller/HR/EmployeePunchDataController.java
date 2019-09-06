@@ -2,6 +2,7 @@ package hwkj.hwkj.controller.HR;
 
 import com.alibaba.fastjson.JSONObject;
 import hwkj.hwkj.entity.HR.EmployeePunchData;
+import hwkj.hwkj.entity.HUser.User;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.HR.EmployeePunchDataService;
@@ -69,77 +70,77 @@ public class EmployeePunchDataController {
                 count++;
                 while (!(sheet.getRow(i).getCell(0).getStringCellValue().trim().equals(sheet.getRow(i+1).getCell(0).getStringCellValue().trim()))){
                     employeePunchData=new EmployeePunchData();
-                    employeePunchData.setJob_Number(sheet.getRow(i-count+1).getCell(2).getStringCellValue());
-                    employeePunchData.setAttendance_Date(Attendance_Date);
-                    employeePunchData.setMorning_Work_Time(Morning_Work_Time);
-                    employeePunchData.setMorning_Punch_Time(sheet.getRow(i-count+1).getCell(7).getStringCellValue());
+                    employeePunchData.setJobNumber(sheet.getRow(i-count+1).getCell(2).getStringCellValue());
+                    employeePunchData.setAttendanceDate(Attendance_Date);
+                    employeePunchData.setMorningWorkTime(Morning_Work_Time);
+                    employeePunchData.setMorningPunchTime(sheet.getRow(i-count+1).getCell(7).getStringCellValue());
                     if(count==1){
-                        employeePunchData.setMorning_Punch_Result("打卡次数异常");
-                        employeePunchData.setLater_Amount(0);
-                        employeePunchData.setLater_Time("0");
-                        employeePunchData.setAfternoon_Punch_Result("打卡次数异常");
-                        employeePunchData.setEarly_Amount(0);
-                        employeePunchData.setEarly_Time("0");
+                        employeePunchData.setMorningPunchResult("打卡次数异常");
+                        employeePunchData.setLaterAmount(0);
+                        employeePunchData.setLaterTime("0");
+                        employeePunchData.setAfternoonPunchResult("打卡次数异常");
+                        employeePunchData.setEarlyAmount(0);
+                        employeePunchData.setEarlyTime("0");
                     }else {
                         if("".equals(sheet.getRow(i-count+1).getCell(7).getStringCellValue().trim())){
-                            employeePunchData.setMorning_Punch_Result("上午未打卡或打卡异常");
-                            employeePunchData.setLater_Amount(0);
-                            employeePunchData.setLater_Time("0");
+                            employeePunchData.setMorningPunchResult("上午未打卡或打卡异常");
+                            employeePunchData.setLaterAmount(0);
+                            employeePunchData.setLaterTime("0");
                         }else {
                             if(UploadEmployeePunchData.compareTime1(Morning_Work_Time,sheet.getRow(i-count+1).getCell(7).getStringCellValue())){
                                 if("高尖科技园".equals(sheet.getRow(i-count+1).getCell(9).getStringCellValue())){
-                                    employeePunchData.setMorning_Punch_Result("上午打卡正常");
+                                    employeePunchData.setMorningPunchResult("上午打卡正常");
                                 }else {
-                                    employeePunchData.setMorning_Punch_Result("上午打卡外勤");
+                                    employeePunchData.setMorningPunchResult("上午打卡外勤");
                                 }
-                                employeePunchData.setLater_Amount(0);
-                                employeePunchData.setLater_Time("0");
+                                employeePunchData.setLaterAmount(0);
+                                employeePunchData.setLaterTime("0");
                             }else {
                                 if(!UploadEmployeePunchData.compareTime1("20"+Attendance_Date.trim().substring(0,8)+" 12:00",sheet.getRow(i-count+1).getCell(7).getStringCellValue())){
-                                    employeePunchData.setMorning_Punch_Result("上午迟到4小时");
-                                    employeePunchData.setLater_Amount(1);
-                                    employeePunchData.setLater_Time("4小时");
+                                    employeePunchData.setMorningPunchResult("上午迟到4小时");
+                                    employeePunchData.setLaterAmount(1);
+                                    employeePunchData.setLaterTime("4小时");
                                 }else {
                                     String Later_Time=UploadEmployeePunchData.getDistanceTime(Morning_Work_Time,sheet.getRow(i-count+1).getCell(7).getStringCellValue());
-                                    employeePunchData.setMorning_Punch_Result("上午迟到"+Later_Time);
-                                    employeePunchData.setLater_Amount(1);
-                                    employeePunchData.setLater_Time(Later_Time);
+                                    employeePunchData.setMorningPunchResult("上午迟到"+Later_Time);
+                                    employeePunchData.setLaterAmount(1);
+                                    employeePunchData.setLaterTime(Later_Time);
                                 }
                             }
                         }
                         if("".equals(sheet.getRow(i).getCell(7).getStringCellValue().trim())){
-                            employeePunchData.setAfternoon_Punch_Result("下午未打卡或打卡异常");
-                            employeePunchData.setEarly_Amount(0);
-                            employeePunchData.setEarly_Time("0");
+                            employeePunchData.setAfternoonPunchResult("下午未打卡或打卡异常");
+                            employeePunchData.setEarlyAmount(0);
+                            employeePunchData.setEarlyTime("0");
                         }else{
                             if(UploadEmployeePunchData.compareTime2(Afternoon_Work_Time,sheet.getRow(i).getCell(7).getStringCellValue())){
                                 if("高尖科技园".equals(sheet.getRow(i).getCell(9).getStringCellValue())){
-                                    employeePunchData.setAfternoon_Punch_Result("下午打卡正常");
+                                    employeePunchData.setAfternoonPunchResult("下午打卡正常");
                                 }else {
-                                    employeePunchData.setAfternoon_Punch_Result("下午打卡外勤");
+                                    employeePunchData.setAfternoonPunchResult("下午打卡外勤");
                                 }
-                                employeePunchData.setEarly_Amount(0);
-                                employeePunchData.setEarly_Time("0");
+                                employeePunchData.setEarlyAmount(0);
+                                employeePunchData.setEarlyTime("0");
                             }else {
                                 if(!UploadEmployeePunchData.compareTime2("20"+Attendance_Date.trim().substring(0,8)+" 13:30",sheet.getRow(i).getCell(7).getStringCellValue())){
-                                    employeePunchData.setAfternoon_Punch_Result("下午早退4小时");
-                                    employeePunchData.setEarly_Amount(1);
-                                    employeePunchData.setEarly_Time("4小时");
+                                    employeePunchData.setAfternoonPunchResult("下午早退4小时");
+                                    employeePunchData.setEarlyAmount(1);
+                                    employeePunchData.setEarlyTime("4小时");
                                 }else {
                                     String Early_Time=UploadEmployeePunchData.getDistanceTime(Afternoon_Work_Time,sheet.getRow(i).getCell(7).getStringCellValue());
-                                    employeePunchData.setAfternoon_Punch_Result("下午早退了"+Early_Time);
-                                    employeePunchData.setEarly_Amount(1);
-                                    employeePunchData.setEarly_Time(Early_Time);
+                                    employeePunchData.setAfternoonPunchResult("下午早退了"+Early_Time);
+                                    employeePunchData.setEarlyAmount(1);
+                                    employeePunchData.setEarlyTime(Early_Time);
                                 }
                             }
                         }
                     }
-                    employeePunchData.setMorning_Punch_Address(sheet.getRow(i-count+1).getCell(9).getStringCellValue());
-                    employeePunchData.setMorning_Punch_Equipment(sheet.getRow(i-count+1).getCell(14).getStringCellValue());
-                    employeePunchData.setAfternoon_Work_Time(Afternoon_Work_Time);
-                    employeePunchData.setAfternoon_Punch_Time(sheet.getRow(i).getCell(7).getStringCellValue());
-                    employeePunchData.setAfternoon_Punch_Address(sheet.getRow(i).getCell(9).getStringCellValue());
-                    employeePunchData.setAfternoon_Punch_Equipment(sheet.getRow(i).getCell(14).getStringCellValue());
+                    employeePunchData.setMorningPunchAddress(sheet.getRow(i-count+1).getCell(9).getStringCellValue());
+                    employeePunchData.setMorningPunchEquipment(sheet.getRow(i-count+1).getCell(14).getStringCellValue());
+                    employeePunchData.setAfternoonWorkTime(Afternoon_Work_Time);
+                    employeePunchData.setAfternoonPunchTime(sheet.getRow(i).getCell(7).getStringCellValue());
+                    employeePunchData.setAfternoonPunchAddress(sheet.getRow(i).getCell(9).getStringCellValue());
+                    employeePunchData.setAfternoonPunchEquipment(sheet.getRow(i).getCell(14).getStringCellValue());
                     list.add(employeePunchData);
                     count=0;
                     break;
@@ -147,73 +148,73 @@ public class EmployeePunchDataController {
             }
             if(sheet.getRow(sheet.getLastRowNum()-1).getCell(2).getStringCellValue().trim().equals(sheet.getRow(sheet.getLastRowNum()).getCell(2).getStringCellValue().trim())){
                 employeePunchData=new EmployeePunchData();
-                employeePunchData.setJob_Number(sheet.getRow(sheet.getLastRowNum()-1).getCell(2).getStringCellValue());
-                employeePunchData.setAttendance_Date(Attendance_Date);
-                employeePunchData.setMorning_Work_Time(Morning_Work_Time);
-                employeePunchData.setMorning_Punch_Time(sheet.getRow(sheet.getLastRowNum()-1).getCell(7).getStringCellValue());
+                employeePunchData.setJobNumber(sheet.getRow(sheet.getLastRowNum()-1).getCell(2).getStringCellValue());
+                employeePunchData.setAttendanceDate(Attendance_Date);
+                employeePunchData.setMorningWorkTime(Morning_Work_Time);
+                employeePunchData.setMorningPunchTime(sheet.getRow(sheet.getLastRowNum()-1).getCell(7).getStringCellValue());
                 if("".equals(sheet.getRow(sheet.getLastRowNum()-1).getCell(7).getStringCellValue().trim())){
-                    employeePunchData.setMorning_Punch_Result("上午未打卡或打卡异常");
-                    employeePunchData.setLater_Amount(0);
-                    employeePunchData.setLater_Time("0");
+                    employeePunchData.setMorningPunchResult("上午未打卡或打卡异常");
+                    employeePunchData.setLaterAmount(0);
+                    employeePunchData.setLaterTime("0");
                 }else {
                     if(UploadEmployeePunchData.compareTime1(Morning_Work_Time,sheet.getRow(sheet.getLastRowNum()-1).getCell(7).getStringCellValue())){
                         if("高尖科技园".equals(sheet.getRow(sheet.getLastRowNum()-1).getCell(9).getStringCellValue())){
-                            employeePunchData.setMorning_Punch_Result("上午打卡正常");
+                            employeePunchData.setMorningPunchResult("上午打卡正常");
                         }else {
-                            employeePunchData.setMorning_Punch_Result("上午打卡外勤");
+                            employeePunchData.setMorningPunchResult("上午打卡外勤");
                         }
-                        employeePunchData.setLater_Amount(0);
-                        employeePunchData.setLater_Time("0");
+                        employeePunchData.setLaterAmount(0);
+                        employeePunchData.setLaterTime("0");
                     }else {
                         if(!UploadEmployeePunchData.compareTime1("20"+Attendance_Date.trim().substring(0,8)+" 12:00",sheet.getRow(sheet.getLastRowNum()-1).getCell(7).getStringCellValue())){
-                            employeePunchData.setMorning_Punch_Result("上午迟到4小时");
-                            employeePunchData.setLater_Amount(1);
-                            employeePunchData.setLater_Time("4小时");
+                            employeePunchData.setMorningPunchResult("上午迟到4小时");
+                            employeePunchData.setLaterAmount(1);
+                            employeePunchData.setLaterTime("4小时");
                         }else {
                             String Later_Time=UploadEmployeePunchData.getDistanceTime(Morning_Work_Time,sheet.getRow(sheet.getLastRowNum()-1).getCell(7).getStringCellValue());
-                            employeePunchData.setMorning_Punch_Result("上午迟到"+Later_Time);
-                            employeePunchData.setLater_Amount(1);
-                            employeePunchData.setLater_Time(Later_Time);
+                            employeePunchData.setMorningPunchResult("上午迟到"+Later_Time);
+                            employeePunchData.setLaterAmount(1);
+                            employeePunchData.setLaterTime(Later_Time);
                         }
                     }
                 }
                 if("".equals(sheet.getRow(sheet.getLastRowNum()).getCell(7).getStringCellValue().trim())){
-                    employeePunchData.setAfternoon_Punch_Result("下午未打卡或打卡异常");
-                    employeePunchData.setEarly_Amount(0);
-                    employeePunchData.setEarly_Time("0");
+                    employeePunchData.setAfternoonPunchResult("下午未打卡或打卡异常");
+                    employeePunchData.setEarlyAmount(0);
+                    employeePunchData.setEarlyTime("0");
                 }else{
                     if(UploadEmployeePunchData.compareTime2(Afternoon_Work_Time,sheet.getRow(sheet.getLastRowNum()).getCell(7).getStringCellValue())){
                         if("高尖科技园".equals(sheet.getRow(sheet.getLastRowNum()).getCell(9).getStringCellValue())){
-                            employeePunchData.setAfternoon_Punch_Result("下午打卡正常");
+                            employeePunchData.setAfternoonPunchResult("下午打卡正常");
                         }else {
-                            employeePunchData.setAfternoon_Punch_Result("下午打卡外勤");
+                            employeePunchData.setAfternoonPunchResult("下午打卡外勤");
                         }
-                        employeePunchData.setEarly_Amount(0);
-                        employeePunchData.setEarly_Time("0");
+                        employeePunchData.setEarlyAmount(0);
+                        employeePunchData.setEarlyTime("0");
                     }else {
                         if(!UploadEmployeePunchData.compareTime2("20"+Attendance_Date.trim().substring(0,8)+" 13:30",sheet.getRow(sheet.getLastRowNum()).getCell(7).getStringCellValue())){
-                            employeePunchData.setAfternoon_Punch_Result("下午早退4小时");
-                            employeePunchData.setEarly_Amount(1);
-                            employeePunchData.setEarly_Time("4小时");
+                            employeePunchData.setAfternoonPunchResult("下午早退4小时");
+                            employeePunchData.setEarlyAmount(1);
+                            employeePunchData.setEarlyTime("4小时");
                         }else {
                             String Early_Time=UploadEmployeePunchData.getDistanceTime(Afternoon_Work_Time,sheet.getRow(sheet.getLastRowNum()).getCell(7).getStringCellValue());
-                            employeePunchData.setAfternoon_Punch_Result("下午早退了"+Early_Time);
-                            employeePunchData.setEarly_Amount(1);
-                            employeePunchData.setEarly_Time(Early_Time);
+                            employeePunchData.setAfternoonPunchResult("下午早退了"+Early_Time);
+                            employeePunchData.setEarlyAmount(1);
+                            employeePunchData.setEarlyTime(Early_Time);
                         }
                     }
                 }
-                employeePunchData.setMorning_Punch_Address(sheet.getRow(sheet.getLastRowNum()-1).getCell(9).getStringCellValue());
-                employeePunchData.setMorning_Punch_Equipment(sheet.getRow(sheet.getLastRowNum()-1).getCell(14).getStringCellValue());
-                employeePunchData.setAfternoon_Work_Time(Afternoon_Work_Time);
-                employeePunchData.setAfternoon_Punch_Time(sheet.getRow(sheet.getLastRowNum()).getCell(7).getStringCellValue());
-                employeePunchData.setAfternoon_Punch_Address(sheet.getRow(sheet.getLastRowNum()).getCell(9).getStringCellValue());
-                employeePunchData.setAfternoon_Punch_Equipment(sheet.getRow(sheet.getLastRowNum()).getCell(14).getStringCellValue());
+                employeePunchData.setMorningPunchAddress(sheet.getRow(sheet.getLastRowNum()-1).getCell(9).getStringCellValue());
+                employeePunchData.setMorningPunchEquipment(sheet.getRow(sheet.getLastRowNum()-1).getCell(14).getStringCellValue());
+                employeePunchData.setAfternoonWorkTime(Afternoon_Work_Time);
+                employeePunchData.setAfternoonPunchTime(sheet.getRow(sheet.getLastRowNum()).getCell(7).getStringCellValue());
+                employeePunchData.setAfternoonPunchAddress(sheet.getRow(sheet.getLastRowNum()).getCell(9).getStringCellValue());
+                employeePunchData.setAfternoonPunchEquipment(sheet.getRow(sheet.getLastRowNum()).getCell(14).getStringCellValue());
                 list.add(employeePunchData);
             }else {
                 for(int k=1;k>=0;k--){
                     employeePunchData=new EmployeePunchData();
-                    employeePunchData.setJob_Number(sheet.getRow(sheet.getLastRowNum()-k).getCell(2).getStringCellValue());
+                    employeePunchData.setJobNumber(sheet.getRow(sheet.getLastRowNum()-k).getCell(2).getStringCellValue());
                 }
             }
 
@@ -267,27 +268,27 @@ public class EmployeePunchDataController {
                 row=sheet.createRow(j);
                 row.createCell(0).setCellValue(list.get(j-1).getName());
                 row.createCell(1).setCellValue(list.get(j-1).getDept());
-                row.createCell(2).setCellValue(list.get(j-1).getJob_Number());
+                row.createCell(2).setCellValue(list.get(j-1).getJobNumber());
                 row.createCell(3).setCellValue(list.get(j-1).getStation());
-                row.createCell(4).setCellValue(list.get(j-1).getAttendance_Date());
-                row.createCell(5).setCellValue(list.get(j-1).getMorning_Work_Time());
-                row.createCell(6).setCellValue(list.get(j-1).getMorning_Punch_Time());
-                row.createCell(7).setCellValue(list.get(j-1).getMorning_Punch_Result());
-                row.createCell(8).setCellValue(list.get(j-1).getMorning_Punch_Address());
-                row.createCell(9).setCellValue(list.get(j-1).getMorning_Punch_Equipment());
-                row.createCell(10).setCellValue(list.get(j-1).getAfternoon_Work_Time());
-                row.createCell(11).setCellValue(list.get(j-1).getAfternoon_Punch_Time());
-                row.createCell(12).setCellValue(list.get(j-1).getAfternoon_Punch_Result());
-                row.createCell(13).setCellValue(list.get(j-1).getAfternoon_Punch_Address());
-                row.createCell(14).setCellValue(list.get(j-1).getAfternoon_Punch_Equipment());
-                if(list.get(j-1).getLater_Amount()!=null){
-                    row.createCell(15).setCellValue(list.get(j-1).getLater_Amount());
+                row.createCell(4).setCellValue(list.get(j-1).getAttendanceDate());
+                row.createCell(5).setCellValue(list.get(j-1).getMorningWorkTime());
+                row.createCell(6).setCellValue(list.get(j-1).getMorningPunchTime());
+                row.createCell(7).setCellValue(list.get(j-1).getMorningPunchResult());
+                row.createCell(8).setCellValue(list.get(j-1).getMorningPunchAddress());
+                row.createCell(9).setCellValue(list.get(j-1).getMorningPunchEquipment());
+                row.createCell(10).setCellValue(list.get(j-1).getAfternoonWorkTime());
+                row.createCell(11).setCellValue(list.get(j-1).getAfternoonPunchTime());
+                row.createCell(12).setCellValue(list.get(j-1).getAfternoonPunchResult());
+                row.createCell(13).setCellValue(list.get(j-1).getAfternoonPunchAddress());
+                row.createCell(14).setCellValue(list.get(j-1).getAfternoonPunchEquipment());
+                if(list.get(j-1).getLaterAmount()!=null){
+                    row.createCell(15).setCellValue(list.get(j-1).getLaterAmount());
                 }
-                row.createCell(16).setCellValue(list.get(j-1).getLater_Time());
-                if(list.get(j-1).getEarly_Amount()!=null){
-                    row.createCell(17).setCellValue(list.get(j-1).getEarly_Amount());
+                row.createCell(16).setCellValue(list.get(j-1).getLaterTime());
+                if(list.get(j-1).getEarlyAmount()!=null){
+                    row.createCell(17).setCellValue(list.get(j-1).getEarlyAmount());
                 }
-                row.createCell(18).setCellValue(list.get(j-1).getEarly_Time());
+                row.createCell(18).setCellValue(list.get(j-1).getEarlyTime());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -339,27 +340,27 @@ public class EmployeePunchDataController {
                 row=sheet.createRow(j);
                 row.createCell(0).setCellValue(list.get(j-1).getName());
                 row.createCell(1).setCellValue(list.get(j-1).getDept());
-                row.createCell(2).setCellValue(list.get(j-1).getJob_Number());
+                row.createCell(2).setCellValue(list.get(j-1).getJobNumber());
                 row.createCell(3).setCellValue(list.get(j-1).getStation());
-                row.createCell(4).setCellValue(list.get(j-1).getAttendance_Date());
-                row.createCell(5).setCellValue(list.get(j-1).getMorning_Work_Time());
-                row.createCell(6).setCellValue(list.get(j-1).getMorning_Punch_Time());
-                row.createCell(7).setCellValue(list.get(j-1).getMorning_Punch_Result());
-                row.createCell(8).setCellValue(list.get(j-1).getMorning_Punch_Address());
-                row.createCell(9).setCellValue(list.get(j-1).getMorning_Punch_Equipment());
-                row.createCell(10).setCellValue(list.get(j-1).getAfternoon_Work_Time());
-                row.createCell(11).setCellValue(list.get(j-1).getAfternoon_Punch_Time());
-                row.createCell(12).setCellValue(list.get(j-1).getAfternoon_Punch_Result());
-                row.createCell(13).setCellValue(list.get(j-1).getAfternoon_Punch_Address());
-                row.createCell(14).setCellValue(list.get(j-1).getAfternoon_Punch_Equipment());
-                if(list.get(j-1).getLater_Amount()!=null){
-                    row.createCell(15).setCellValue(list.get(j-1).getLater_Amount());
+                row.createCell(4).setCellValue(list.get(j-1).getAttendanceDate());
+                row.createCell(5).setCellValue(list.get(j-1).getMorningWorkTime());
+                row.createCell(6).setCellValue(list.get(j-1).getMorningPunchTime());
+                row.createCell(7).setCellValue(list.get(j-1).getMorningPunchResult());
+                row.createCell(8).setCellValue(list.get(j-1).getMorningPunchAddress());
+                row.createCell(9).setCellValue(list.get(j-1).getMorningPunchEquipment());
+                row.createCell(10).setCellValue(list.get(j-1).getAfternoonWorkTime());
+                row.createCell(11).setCellValue(list.get(j-1).getAfternoonPunchTime());
+                row.createCell(12).setCellValue(list.get(j-1).getAfternoonPunchResult());
+                row.createCell(13).setCellValue(list.get(j-1).getAfternoonPunchAddress());
+                row.createCell(14).setCellValue(list.get(j-1).getAfternoonPunchEquipment());
+                if(list.get(j-1).getLaterAmount()!=null){
+                    row.createCell(15).setCellValue(list.get(j-1).getLaterAmount());
                 }
-                row.createCell(16).setCellValue(list.get(j-1).getLater_Time());
-                if(list.get(j-1).getEarly_Amount()!=null){
-                    row.createCell(17).setCellValue(list.get(j-1).getEarly_Amount());
+                row.createCell(16).setCellValue(list.get(j-1).getLaterTime());
+                if(list.get(j-1).getEarlyAmount()!=null){
+                    row.createCell(17).setCellValue(list.get(j-1).getEarlyAmount());
                 }
-                row.createCell(18).setCellValue(list.get(j-1).getEarly_Time());
+                row.createCell(18).setCellValue(list.get(j-1).getEarlyTime());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -394,7 +395,7 @@ public class EmployeePunchDataController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

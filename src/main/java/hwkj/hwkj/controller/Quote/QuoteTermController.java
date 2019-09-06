@@ -1,6 +1,8 @@
 package hwkj.hwkj.controller.Quote;
 
 import com.alibaba.fastjson.JSONObject;
+import hwkj.hwkj.entity.HUser.User;
+import hwkj.hwkj.entity.Quote.QuoteTerm;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 import hwkj.hwkj.service.Quote.QuoteTermService;
@@ -24,7 +26,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class QuoteTermController {
@@ -35,7 +40,7 @@ public class QuoteTermController {
 
     @RequestMapping(value = "/queryQuoteTerm.do",method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject queryQuoteTerm(PageModel<QuoteTerm> quoteTermPageModel,QuoteTerm quoteTerm){
+    public JSONObject queryQuoteTerm(PageModel<QuoteTerm> quoteTermPageModel, QuoteTerm quoteTerm){
         Map<String,Object> map =new HashMap<>();
         quoteTermService.queryQuoteTermPage(quoteTermPageModel,quoteTerm);
         map.put("rows",quoteTermPageModel.getList());
@@ -50,7 +55,7 @@ public class QuoteTermController {
             throw new GlobalException("timeOut");
         }
         quoteTerm.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        quoteTerm.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        quoteTerm.setCreateDate(new Date());
         if(!quoteTermService.insertQuoteTerm(quoteTerm)){
             throw new GlobalException("error");
         }
@@ -66,8 +71,8 @@ public class QuoteTermController {
         if(quoteTerm.getPercent()!=null && quoteTerm.getPercent().trim().length()!=0){
             quoteTerm.setPercent(quoteTerm.getPercent()+"%");
         }
-        quoteTerm.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        quoteTerm.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        quoteTerm.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        quoteTerm.setUpdateDate(new Date());
         if(!quoteTermService.updateQuoteTerm(quoteTerm)){
             throw new GlobalException("error");
         }
@@ -138,8 +143,8 @@ public class QuoteTermController {
             List<QuoteTerm> list=quoteTermService.queryQuoteTermForDownLoadAll(quoteTerm);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getCondition_Type());
-                row.createCell(1).setCellValue(list.get(j-1).getCondition_Code());
+                row.createCell(0).setCellValue(list.get(j-1).getConditionType());
+                row.createCell(1).setCellValue(list.get(j-1).getConditionCode());
                 row.createCell(2).setCellValue(list.get(j-1).getClause());
                 row.createCell(3).setCellValue(list.get(j-1).getDescribed());
                 if(list.get(j-1).getDays()!=null){
@@ -149,9 +154,9 @@ public class QuoteTermController {
                 row.createCell(6).setCellValue(list.get(j-1).getStatus());
                 row.createCell(7).setCellValue(list.get(j-1).getRemark());
                 row.createCell(8).setCellValue(list.get(j-1).getCreator());
-                row.createCell(9).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(10).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(11).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(9).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(10).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(11).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -201,8 +206,8 @@ public class QuoteTermController {
             List<QuoteTerm> list=quoteTermService.queryQuoteTermForDownLoad(id);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getCondition_Type());
-                row.createCell(1).setCellValue(list.get(j-1).getCondition_Code());
+                row.createCell(0).setCellValue(list.get(j-1).getConditionType());
+                row.createCell(1).setCellValue(list.get(j-1).getConditionCode());
                 row.createCell(2).setCellValue(list.get(j-1).getClause());
                 row.createCell(3).setCellValue(list.get(j-1).getDescribed());
                 if(list.get(j-1).getDays()!=null){
@@ -212,9 +217,9 @@ public class QuoteTermController {
                 row.createCell(6).setCellValue(list.get(j-1).getStatus());
                 row.createCell(7).setCellValue(list.get(j-1).getRemark());
                 row.createCell(8).setCellValue(list.get(j-1).getCreator());
-                row.createCell(9).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(10).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(11).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(9).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(10).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(11).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -262,7 +267,7 @@ public class QuoteTermController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

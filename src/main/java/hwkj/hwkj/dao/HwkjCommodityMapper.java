@@ -1,6 +1,7 @@
 package hwkj.hwkj.dao;
 
+import hwkj.hwkj.entity.Engineering.Commodity;
 import tk.mybatis.mapper.common.Mapper;
 
-public interface HwkjCommodityMapper extends Mapper<HwkjCommodity> {
+public interface HwkjCommodityMapper extends Mapper<Commodity> {
 }

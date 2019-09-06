@@ -86,11 +86,11 @@ public class EmployeePersonalDataController {
                 }
             }
         }
-        if(employeePersonalData.getLeave_Date()!=null && employeePersonalData.getLeave_Date().trim().length()!=0){
+        if(employeePersonalData.getLeaveDate()!=null && employeePersonalData.getLeaveDate().trim().length()!=0){
             employeePersonalData.setStatus("N");
         }
-        employeePersonalData.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        employeePersonalData.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        employeePersonalData.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        employeePersonalData.setUpdateDate(new Date());
         if(!employeePersonalDataService.updateEmployeePersonalData(employeePersonalData)){
             throw new GlobalException("error");
         }
@@ -163,49 +163,49 @@ public class EmployeePersonalDataController {
             List<EmployeePersonalData> list=employeePersonalDataService.queryEmployeePersonalDataForDownLoadAll(employeePersonalData);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getJob_Number());
+                row.createCell(0).setCellValue(list.get(j-1).getJobNumber());
                 row.createCell(1).setCellValue(list.get(j-1).getPhoto());
-                row.createCell(2).setCellValue(list.get(j-1).getChina_Name());
-                row.createCell(3).setCellValue(list.get(j-1).getEnglish_Name());
+                row.createCell(2).setCellValue(list.get(j-1).getChinaName());
+                row.createCell(3).setCellValue(list.get(j-1).getEnglishName());
                 row.createCell(4).setCellValue(list.get(j-1).getSex());
                 if(list.get(j-1).getAge()!=null){
                     row.createCell(5).setCellValue(list.get(j-1).getAge());
                 }
-                row.createCell(6).setCellValue(list.get(j-1).getPhone_Number());
-                row.createCell(7).setCellValue(list.get(j-1).getWeChat_Number());
-                row.createCell(8).setCellValue(list.get(j-1).getCompany_Mail());
-                row.createCell(9).setCellValue(list.get(j-1).getPrivate_Mail());
-                row.createCell(10).setCellValue(list.get(j-1).getEntry_Date());
+                row.createCell(6).setCellValue(list.get(j-1).getPhoneNumber());
+                row.createCell(7).setCellValue(list.get(j-1).getWechatNumber());
+                row.createCell(8).setCellValue(list.get(j-1).getCompanyMail());
+                row.createCell(9).setCellValue(list.get(j-1).getPrivateMail());
+                row.createCell(10).setCellValue(list.get(j-1).getEntryDate());
                 row.createCell(11).setCellValue(list.get(j-1).getStatus());
-                row.createCell(12).setCellValue(list.get(j-1).getEntry_Position());
-                row.createCell(13).setCellValue(list.get(j-1).getLeave_Date());
-                row.createCell(14).setCellValue(list.get(j-1).getBirth_Date());
-                row.createCell(15).setCellValue(list.get(j-1).getId_Card());
-                row.createCell(16).setCellValue(list.get(j-1).getId_Card_Address());
-                row.createCell(17).setCellValue(list.get(j-1).getPresent_Address());
+                row.createCell(12).setCellValue(list.get(j-1).getEntryPosition());
+                row.createCell(13).setCellValue(list.get(j-1).getLeaveDate());
+                row.createCell(14).setCellValue(list.get(j-1).getBirthDate());
+                row.createCell(15).setCellValue(list.get(j-1).getIdCard());
+                row.createCell(16).setCellValue(list.get(j-1).getIdCardAddress());
+                row.createCell(17).setCellValue(list.get(j-1).getPresentAddress());
                 row.createCell(18).setCellValue(list.get(j-1).getEducation());
                 row.createCell(19).setCellValue(list.get(j-1).getMajor());
-                row.createCell(20).setCellValue(list.get(j-1).getGraduated_From());
-                row.createCell(21).setCellValue(list.get(j-1).getGraduated_Time());
+                row.createCell(20).setCellValue(list.get(j-1).getGraduatedFrom());
+                row.createCell(21).setCellValue(list.get(j-1).getGraduatedTime());
                 row.createCell(22).setCellValue(list.get(j-1).getLanguage());
-                row.createCell(23).setCellValue(list.get(j-1).getNative_Place());
+                row.createCell(23).setCellValue(list.get(j-1).getNativePlace());
                 row.createCell(24).setCellValue(list.get(j-1).getNation());
-                row.createCell(25).setCellValue(list.get(j-1).getReligious_Belief());
-                row.createCell(26).setCellValue(list.get(j-1).getMarital_Status());
-                row.createCell(27).setCellValue(list.get(j-1).getHistory_Disease());
-                row.createCell(28).setCellValue(list.get(j-1).getMember_Family());
+                row.createCell(25).setCellValue(list.get(j-1).getReligiousBelief());
+                row.createCell(26).setCellValue(list.get(j-1).getMaritalStatus());
+                row.createCell(27).setCellValue(list.get(j-1).getHistoryDisease());
+                row.createCell(28).setCellValue(list.get(j-1).getMemberFamily());
                 row.createCell(29).setCellValue(list.get(j-1).getRelationship());
-                row.createCell(30).setCellValue(list.get(j-1).getEmergency_Contact_Person());
-                row.createCell(31).setCellValue(list.get(j-1).getEmergency_Contact_Person_Relationship());
-                row.createCell(32).setCellValue(list.get(j-1).getRelationship_Phone());
-                row.createCell(33).setCellValue(list.get(j-1).getRecruitment_Sources());
-                row.createCell(34).setCellValue(list.get(j-1).getPeriods_Number());
+                row.createCell(30).setCellValue(list.get(j-1).getEmergencyContactPerson());
+                row.createCell(31).setCellValue(list.get(j-1).getEmergencyContactPersonRelationship());
+                row.createCell(32).setCellValue(list.get(j-1).getRelationshipPhone());
+                row.createCell(33).setCellValue(list.get(j-1).getRecruitmentSources());
+                row.createCell(34).setCellValue(list.get(j-1).getPeriodsNumber());
                 row.createCell(35).setCellValue(list.get(j-1).getReferee());
                 row.createCell(36).setCellValue(list.get(j-1).getRemarks());
                 row.createCell(37).setCellValue(list.get(j-1).getCreator());
-                row.createCell(38).setCellValue(list.get(j-1).getCreate_Date());
+                row.createCell(38).setCellValue(list.get(j-1).getCreateDate());
                 row.createCell(39).setCellValue(list.get(j-1).getUpdatedBy());
-                row.createCell(40).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(40).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -257,49 +257,49 @@ public class EmployeePersonalDataController {
             List<EmployeePersonalData> list=employeePersonalDataService.queryEmployeePersonalDataForDownLoad(id);
             for (int i=1,length=list.size();i<=length;i++){
                 row=sheet.createRow(i);
-                row.createCell(0).setCellValue(list.get(i-1).getJob_Number());
+                row.createCell(0).setCellValue(list.get(i-1).getJobNumber());
                 row.createCell(1).setCellValue(list.get(i-1).getPhoto());
-                row.createCell(2).setCellValue(list.get(i-1).getChina_Name());
-                row.createCell(3).setCellValue(list.get(i-1).getEnglish_Name());
+                row.createCell(2).setCellValue(list.get(i-1).getChinaName());
+                row.createCell(3).setCellValue(list.get(i-1).getEnglishName());
                 row.createCell(4).setCellValue(list.get(i-1).getSex());
                 if(list.get(i-1).getAge()!=null){
                     row.createCell(5).setCellValue(list.get(i-1).getAge());
                 }
-                row.createCell(6).setCellValue(list.get(i-1).getPhone_Number());
-                row.createCell(7).setCellValue(list.get(i-1).getWeChat_Number());
-                row.createCell(8).setCellValue(list.get(i-1).getCompany_Mail());
-                row.createCell(9).setCellValue(list.get(i-1).getPrivate_Mail());
-                row.createCell(10).setCellValue(list.get(i-1).getEntry_Date());
+                row.createCell(6).setCellValue(list.get(i-1).getPhoneNumber());
+                row.createCell(7).setCellValue(list.get(i-1).getWechatNumber());
+                row.createCell(8).setCellValue(list.get(i-1).getCompanyMail());
+                row.createCell(9).setCellValue(list.get(i-1).getPrivateMail());
+                row.createCell(10).setCellValue(list.get(i-1).getEntryDate());
                 row.createCell(11).setCellValue(list.get(i-1).getStatus());
-                row.createCell(12).setCellValue(list.get(i-1).getEntry_Position());
-                row.createCell(13).setCellValue(list.get(i-1).getLeave_Date());
-                row.createCell(14).setCellValue(list.get(i-1).getBirth_Date());
-                row.createCell(15).setCellValue(list.get(i-1).getId_Card());
-                row.createCell(16).setCellValue(list.get(i-1).getId_Card_Address());
-                row.createCell(17).setCellValue(list.get(i-1).getPresent_Address());
+                row.createCell(12).setCellValue(list.get(i-1).getEntryPosition());
+                row.createCell(13).setCellValue(list.get(i-1).getLeaveDate());
+                row.createCell(14).setCellValue(list.get(i-1).getBirthDate());
+                row.createCell(15).setCellValue(list.get(i-1).getIdCard());
+                row.createCell(16).setCellValue(list.get(i-1).getIdCardAddress());
+                row.createCell(17).setCellValue(list.get(i-1).getPresentAddress());
                 row.createCell(18).setCellValue(list.get(i-1).getEducation());
                 row.createCell(19).setCellValue(list.get(i-1).getMajor());
-                row.createCell(20).setCellValue(list.get(i-1).getGraduated_From());
-                row.createCell(21).setCellValue(list.get(i-1).getGraduated_Time());
+                row.createCell(20).setCellValue(list.get(i-1).getGraduatedFrom());
+                row.createCell(21).setCellValue(list.get(i-1).getGraduatedTime());
                 row.createCell(22).setCellValue(list.get(i-1).getLanguage());
-                row.createCell(23).setCellValue(list.get(i-1).getNative_Place());
+                row.createCell(23).setCellValue(list.get(i-1).getNativePlace());
                 row.createCell(24).setCellValue(list.get(i-1).getNation());
-                row.createCell(25).setCellValue(list.get(i-1).getReligious_Belief());
-                row.createCell(26).setCellValue(list.get(i-1).getMarital_Status());
-                row.createCell(27).setCellValue(list.get(i-1).getHistory_Disease());
-                row.createCell(28).setCellValue(list.get(i-1).getMember_Family());
+                row.createCell(25).setCellValue(list.get(i-1).getReligiousBelief());
+                row.createCell(26).setCellValue(list.get(i-1).getMaritalStatus());
+                row.createCell(27).setCellValue(list.get(i-1).getHistoryDisease());
+                row.createCell(28).setCellValue(list.get(i-1).getMemberFamily());
                 row.createCell(29).setCellValue(list.get(i-1).getRelationship());
-                row.createCell(30).setCellValue(list.get(i-1).getEmergency_Contact_Person());
-                row.createCell(31).setCellValue(list.get(i-1).getEmergency_Contact_Person_Relationship());
-                row.createCell(32).setCellValue(list.get(i-1).getRelationship_Phone());
-                row.createCell(33).setCellValue(list.get(i-1).getRecruitment_Sources());
-                row.createCell(34).setCellValue(list.get(i-1).getPeriods_Number());
+                row.createCell(30).setCellValue(list.get(i-1).getEmergencyContactPerson());
+                row.createCell(31).setCellValue(list.get(i-1).getEmergencyContactPersonRelationship());
+                row.createCell(32).setCellValue(list.get(i-1).getRelationshipPhone());
+                row.createCell(33).setCellValue(list.get(i-1).getRecruitmentSources());
+                row.createCell(34).setCellValue(list.get(i-1).getPeriodsNumber());
                 row.createCell(35).setCellValue(list.get(i-1).getReferee());
                 row.createCell(36).setCellValue(list.get(i-1).getRemarks());
                 row.createCell(37).setCellValue(list.get(i-1).getCreator());
-                row.createCell(38).setCellValue(list.get(i-1).getCreate_Date());
-                row.createCell(39).setCellValue(list.get(i-1).getUpdated_By());
-                row.createCell(40).setCellValue(list.get(i-1).getUpdate_Date());
+                row.createCell(38).setCellValue(list.get(i-1).getCreateDate());
+                row.createCell(39).setCellValue(list.get(i-1).getUpdatedBy());
+                row.createCell(40).setCellValue(list.get(i-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -347,7 +347,7 @@ public class EmployeePersonalDataController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }

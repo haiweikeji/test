@@ -1,5 +1,6 @@
 package hwkj.hwkj.service.Quote;
 
+import hwkj.hwkj.entity.Quote.QuoteTerm;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import hwkj.hwkj.exception.GlobalException;
 
@@ -36,7 +37,7 @@ public interface QuoteTermService {
      * @param quoteTerm
      * @return
      */
-    public void queryQuoteTermPage(PageModel<QuoteTerm> quoteTermPageModel,QuoteTerm quoteTerm);
+    public void queryQuoteTermPage(PageModel<QuoteTerm> quoteTermPageModel, QuoteTerm quoteTerm);
 
     /**
      * by Id 查询

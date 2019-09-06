@@ -4,14 +4,16 @@ import hwkj.hwkj.entity.CRM.CustomerAccountInfo;
 import hwkj.hwkj.entity.pagingquery.PageModel;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import tk.mybatis.mapper.common.sqlserver.InsertSelectiveMapper;
 
 import java.util.List;
 
 @Mapper
-public interface CustomerAccountInfoDao {
+public interface CustomerAccountInfoDao extends tk.mybatis.mapper.common.Mapper<CustomerAccountInfo>, InsertSelectiveMapper<CustomerAccountInfo> {
 
     /**
      * 新增数据
+     *
      * @param customerAccountInfo
      * @return
      */
@@ -19,6 +21,7 @@ public interface CustomerAccountInfoDao {
 
     /**
      * 删除数据
+     *
      * @param Id
      * @return
      */
@@ -26,6 +29,7 @@ public interface CustomerAccountInfoDao {
 
     /**
      * 更新数据
+     *
      * @param customerAccountInfo
      * @return
      */
@@ -33,22 +37,25 @@ public interface CustomerAccountInfoDao {
 
     /**
      * 分页集合List
+     *
      * @param customerAccountInfoPageModel
      * @param customerAccountInfo
      * @return
      */
-    public List<CustomerAccountInfo> queryCustomerAccountInfoList(@Param("customerAccountInfoPageModel")PageModel<CustomerAccountInfo> customerAccountInfoPageModel,@Param("customerAccountInfo") CustomerAccountInfo customerAccountInfo);
+    public List<CustomerAccountInfo> queryCustomerAccountInfoList(@Param("customerAccountInfoPageModel") PageModel<CustomerAccountInfo> customerAccountInfoPageModel, @Param("customerAccountInfo") CustomerAccountInfo customerAccountInfo);
 
     /**
      * 分页总数count
+     *
      * @param customerAccountInfoPageModel
      * @param customerAccountInfo
      * @return
      */
-    public int queryCustomerAccountInfoCount(@Param("customerAccountInfoPageModel")PageModel<CustomerAccountInfo> customerAccountInfoPageModel,@Param("customerAccountInfo") CustomerAccountInfo customerAccountInfo);
+    public int queryCustomerAccountInfoCount(@Param("customerAccountInfoPageModel") PageModel<CustomerAccountInfo> customerAccountInfoPageModel, @Param("customerAccountInfo") CustomerAccountInfo customerAccountInfo);
 
     /**
      * by Id 查询
+     *
      * @param Id
      * @return
      */
@@ -56,6 +63,7 @@ public interface CustomerAccountInfoDao {
 
     /**
      * for download all
+     *
      * @param customerAccountInfo
      * @return
      */
@@ -63,6 +71,7 @@ public interface CustomerAccountInfoDao {
 
     /**
      * for download
+     *
      * @param Id
      * @return
      */
@@ -70,6 +79,7 @@ public interface CustomerAccountInfoDao {
 
     /**
      * 检查customer_code是否已经存在
+     *
      * @param Customer_Code
      * @return
      */
@@ -77,6 +87,7 @@ public interface CustomerAccountInfoDao {
 
     /**
      * 检查用户有没有更新内容
+     *
      * @param customerAccountInfo
      * @return
      */

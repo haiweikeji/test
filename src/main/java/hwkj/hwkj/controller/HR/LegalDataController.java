@@ -55,7 +55,7 @@ public class LegalDataController {
             throw new GlobalException("timeOut");
         }
         legalData.setCreator(((User)request.getSession().getAttribute("user")).getName());
-        legalData.setCreate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        legalData.setCreateDate(new Date());
         if(!legalDataService.insertLegalData(legalData)){
             throw new GlobalException("error");
         }
@@ -68,8 +68,8 @@ public class LegalDataController {
         if(((User)(request.getSession().getAttribute("user")))==null){
             throw new GlobalException("timeOut");
         }
-        legalData.setUpdated_By(((User)request.getSession().getAttribute("user")).getName());
-        legalData.setUpdate_Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        legalData.setUpdatedBy(((User)request.getSession().getAttribute("user")).getName());
+        legalData.setUpdateDate(new Date());
         if(!legalDataService.updateLegalData(legalData)){
             throw new GlobalException("error");
         }
@@ -90,7 +90,7 @@ public class LegalDataController {
     public JSONObject optionQuery(HttpServletRequest request,LegalData legalData){
         Map<String,Object> map =new HashMap<>();
         String Legal_Name2=request.getParameter("legal_Name2");
-        legalData.setLegal_Name(Legal_Name2);
+        legalData.setLegalName(Legal_Name2);
         List<LegalData> list =legalDataService.queryLegalDataByLegalName(legalData);
         map.put("legaldata",list);
         return (JSONObject)JSONObject.toJSON(map);
@@ -152,29 +152,29 @@ public class LegalDataController {
             List<LegalData> list=legalDataService.queryLegalDataForDownLoadAll(legalData);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getLegal_Name());
-                row.createCell(1).setCellValue(list.get(j-1).getTwo_Initials());
-                row.createCell(2).setCellValue(list.get(j-1).getCompany_Code());
+                row.createCell(0).setCellValue(list.get(j-1).getLegalName());
+                row.createCell(1).setCellValue(list.get(j-1).getTwoInitials());
+                row.createCell(2).setCellValue(list.get(j-1).getCompanyCode());
                 row.createCell(3).setCellValue(list.get(j-1).getCountry());
                 row.createCell(4).setCellValue(list.get(j-1).getCity());
                 row.createCell(5).setCellValue(list.get(j-1).getIndustry());
                 row.createCell(6).setCellValue(list.get(j-1).getLegal());
-                row.createCell(7).setCellValue(list.get(j-1).getTaxpayer_Number());
-                row.createCell(8).setCellValue(list.get(j-1).getRegistration_Number());
-                row.createCell(9).setCellValue(list.get(j-1).getRegistered_Time());
-                if(list.get(j-1).getRegistered_Capital()!=null){
-                    row.createCell(10).setCellValue(list.get(j-1).getRegistered_Capital());
+                row.createCell(7).setCellValue(list.get(j-1).getTaxpayerNumber());
+                row.createCell(8).setCellValue(list.get(j-1).getRegistrationNumber());
+                row.createCell(9).setCellValue(list.get(j-1).getRegisteredTime());
+                if(list.get(j-1).getRegisteredCapital()!=null){
+                    row.createCell(10).setCellValue(list.get(j-1).getRegisteredCapital());
                 }
-                row.createCell(11).setCellValue(list.get(j-1).getRegistered_Address());
+                row.createCell(11).setCellValue(list.get(j-1).getRegisteredAddress());
                 row.createCell(12).setCellValue(list.get(j-1).getBank());
-                row.createCell(13).setCellValue(list.get(j-1).getBank_Account());
-                row.createCell(14).setCellValue(list.get(j-1).getBank_Address());
+                row.createCell(13).setCellValue(list.get(j-1).getBankAccount());
+                row.createCell(14).setCellValue(list.get(j-1).getBankAddress());
                 row.createCell(15).setCellValue(list.get(j-1).getCurrency());
-                row.createCell(16).setCellValue(list.get(j-1).getOffice_Address());
+                row.createCell(16).setCellValue(list.get(j-1).getOfficeAddress());
                 row.createCell(17).setCellValue(list.get(j-1).getCreator());
-                row.createCell(18).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(19).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(20).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(18).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(19).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(20).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -225,29 +225,29 @@ public class LegalDataController {
             List<LegalData> list=legalDataService.queryLegalDataForDownLoad(id);
             for (int j=1,length=list.size();j<=length;j++){
                 row=sheet.createRow(j);
-                row.createCell(0).setCellValue(list.get(j-1).getLegal_Name());
-                row.createCell(1).setCellValue(list.get(j-1).getTwo_Initials());
-                row.createCell(2).setCellValue(list.get(j-1).getCompany_Code());
+                row.createCell(0).setCellValue(list.get(j-1).getLegalName());
+                row.createCell(1).setCellValue(list.get(j-1).getTwoInitials());
+                row.createCell(2).setCellValue(list.get(j-1).getCompanyCode());
                 row.createCell(3).setCellValue(list.get(j-1).getCountry());
                 row.createCell(4).setCellValue(list.get(j-1).getCity());
                 row.createCell(5).setCellValue(list.get(j-1).getIndustry());
                 row.createCell(6).setCellValue(list.get(j-1).getLegal());
-                row.createCell(7).setCellValue(list.get(j-1).getTaxpayer_Number());
-                row.createCell(8).setCellValue(list.get(j-1).getRegistration_Number());
-                row.createCell(9).setCellValue(list.get(j-1).getRegistered_Time());
-                if(list.get(j-1).getRegistered_Capital()!=null){
-                    row.createCell(10).setCellValue(list.get(j-1).getRegistered_Capital());
+                row.createCell(7).setCellValue(list.get(j-1).getTaxpayerNumber());
+                row.createCell(8).setCellValue(list.get(j-1).getRegistrationNumber());
+                row.createCell(9).setCellValue(list.get(j-1).getRegisteredTime());
+                if(list.get(j-1).getRegisteredCapital()!=null){
+                    row.createCell(10).setCellValue(list.get(j-1).getRegisteredCapital());
                 }
-                row.createCell(11).setCellValue(list.get(j-1).getRegistered_Address());
+                row.createCell(11).setCellValue(list.get(j-1).getRegisteredAddress());
                 row.createCell(12).setCellValue(list.get(j-1).getBank());
-                row.createCell(13).setCellValue(list.get(j-1).getBank_Account());
-                row.createCell(14).setCellValue(list.get(j-1).getBank_Address());
+                row.createCell(13).setCellValue(list.get(j-1).getBankAccount());
+                row.createCell(14).setCellValue(list.get(j-1).getBankAddress());
                 row.createCell(15).setCellValue(list.get(j-1).getCurrency());
-                row.createCell(16).setCellValue(list.get(j-1).getOffice_Address());
+                row.createCell(16).setCellValue(list.get(j-1).getOfficeAddress());
                 row.createCell(17).setCellValue(list.get(j-1).getCreator());
-                row.createCell(18).setCellValue(list.get(j-1).getCreate_Date());
-                row.createCell(19).setCellValue(list.get(j-1).getUpdated_By());
-                row.createCell(20).setCellValue(list.get(j-1).getUpdate_Date());
+                row.createCell(18).setCellValue(list.get(j-1).getCreateDate());
+                row.createCell(19).setCellValue(list.get(j-1).getUpdatedBy());
+                row.createCell(20).setCellValue(list.get(j-1).getUpdateDate());
             }
             outputStream=response.getOutputStream();
             xssfWorkbook.write(outputStream);
@@ -295,7 +295,7 @@ public class LegalDataController {
             map.put("list","timeOut");
         }else {
             User user=(User) request.getSession().getAttribute("user");
-            map.put("list",roleMenuService.queryFunction(user.getJob_Number(), Url_Page));
+            map.put("list",roleMenuService.queryFunction(user.getJobNumber(), Url_Page));
         }
         return (JSONObject)JSONObject.toJSON(map);
     }
