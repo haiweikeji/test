@@ -99,5 +99,6 @@ public class CustomerStrategyAndSupport {
     @Column(name = "Update_Date")
     private Date updateDate;
 
+    public String  newAnnualRevenue;
 
 }

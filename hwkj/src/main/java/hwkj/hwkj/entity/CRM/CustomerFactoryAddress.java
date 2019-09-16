@@ -79,4 +79,7 @@ public class CustomerFactoryAddress {
      */
     @Column(name = "City")
     private String City;
+
+    private String OldCustomerCode;
+    private  String OldFactoryAddress;
 }

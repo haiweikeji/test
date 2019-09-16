@@ -146,4 +146,5 @@ public class CustomerEquipmentData {
     @Column(name = "Update_Date")
     private Date updateDate;
 
+    private String  NewOperationRate;
 }
